@@ -6,6 +6,11 @@ public enum TextType
 {
 	Title, Region, Mountain_range, Other_mountains, City, Lake, River;
 
+    public String toStringNonLocalized()
+    {
+        return name().replace("_", " ");
+    }
+
 	public String toString()
 	{
         return switch (this) {

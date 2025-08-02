@@ -6,6 +6,11 @@ public enum LineBreak
 {
 	Auto, One_line, Two_lines;
 
+    public String toStringNonLocalized()
+    {
+        return name().replace("_", " ");
+    }
+
     @Override
 	public String toString()
 	{

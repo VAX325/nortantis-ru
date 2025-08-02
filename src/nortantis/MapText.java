@@ -127,7 +127,7 @@ public class MapText implements Serializable
 	@Override
 	public String toString()
 	{
-		return "MapText [value=" + value + ", type=" + type + ", angle=" + angle + ", location=" + location + ", lineBreak=" + lineBreak
+		return "MapText [value=" + value + ", type=" + type.toStringNonLocalized() + ", angle=" + angle + ", location=" + location + ", lineBreak=" + lineBreak.toStringNonLocalized()
 				+ ", colorOverride=" + colorOverride + ", boldBackgroundColorOverride=" + boldBackgroundColorOverride + "]";
 	}
 

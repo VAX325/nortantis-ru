@@ -473,8 +473,8 @@ public class MapSettings implements Serializable
 			mpObj.put("locationX", text.location.x);
 			mpObj.put("locationY", text.location.y);
 			mpObj.put("angle", text.angle);
-			mpObj.put("type", text.type.toString());
-			mpObj.put("lineBreak", text.lineBreak.toString());
+			mpObj.put("type", text.type.toStringNonLocalized());
+			mpObj.put("lineBreak", text.lineBreak.toStringNonLocalized());
 			if (text.colorOverride != null)
 			{
 				mpObj.put("colorOverride", colorToString(text.colorOverride));
@@ -628,7 +628,7 @@ public class MapSettings implements Serializable
 		}
 		else
 		{
-			return "";
+			return "0,0,0,0";
 		}
 	}
 

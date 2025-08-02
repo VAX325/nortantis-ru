@@ -184,13 +184,13 @@ public class MapCreatorTest
 	{
 		generateAndCompare("allTypesOfEdits.nort");
 	}
-	
+
 	@Test
 	public void rotatedAndFlippedTwiceWithEditsAndTransparencyTest()
 	{
 		generateAndCompare("rotatedAndFlippedTwiceWithEditsAndTransparency.nort");
 	}
-	
+
 	@Test
 	public void rotatedLeftWithTransparentOceanAndPartiallyGrungeTest()
 	{
