@@ -123,12 +123,12 @@ public class MapEditingPanel extends UnscaledImagePanel
 		highlightedEdges.add(edge);
 		edgeTypeToHighlight = edgeType;
 	}
-	
+
 	public void clearHighlightedEdges()
 	{
 		highlightedEdges.clear();
 	}
-	
+
 	public void addPolylinesToHighlight(List<Point> lines)
 	{
 		polylinesToHighlight.add(lines);
@@ -151,8 +151,12 @@ public class MapEditingPanel extends UnscaledImagePanel
 	public void setTextBoxToDraw(MapText text)
 	{
 		this.textBoxLocation = text.location == null ? null : new nortantis.geom.Point(text.location);
-		this.textBoxBoundsLine1 = text.line1Bounds == null ? null : AwtFactory.toAwtRectangle(text.line1Bounds.scaleAboutOrigin(resolution));
-		this.textBoxBoundsLine2 = text.line2Bounds == null ? null : AwtFactory.toAwtRectangle(text.line2Bounds.scaleAboutOrigin(resolution));
+		this.textBoxBoundsLine1 = text.line1Bounds == null
+				? null
+				: AwtFactory.toAwtRectangle(text.line1Bounds.scaleAboutOrigin(resolution));
+		this.textBoxBoundsLine2 = text.line2Bounds == null
+				? null
+				: AwtFactory.toAwtRectangle(text.line2Bounds.scaleAboutOrigin(resolution));
 		this.textBoxAngle = text.angle;
 	}
 
@@ -708,7 +712,7 @@ public class MapEditingPanel extends UnscaledImagePanel
 		}
 
 	}
-	
+
 	private void drawPolylines(Graphics g)
 	{
 		for (List<Point> line : polylinesToHighlight)
@@ -716,7 +720,7 @@ public class MapEditingPanel extends UnscaledImagePanel
 			drawPolyline(g, line);
 		}
 	}
-	
+
 	private void drawPolyline(Graphics g, List<Point> points)
 	{
 		int[] xPoints = new int[points.size()];

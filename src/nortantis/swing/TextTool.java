@@ -86,7 +86,7 @@ public class TextTool extends EditorTool
 		JPanel toolOptionsPanel = organizer.panel;
 		toolOptionsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
-                drawTextDisabledLabel = new JLabel(Localization.get("#TextToolDisabled"));
+		drawTextDisabledLabel = new JLabel(Localization.get("#TextToolDisabled"));
 		drawTextDisabledLabelHider = organizer.addLeftAlignedComponent(drawTextDisabledLabel);
 		drawTextDisabledLabelHider.setVisible(false);
 
@@ -104,28 +104,28 @@ public class TextTool extends EditorTool
 				}
 			};
 
-                        editButton = new JRadioButton(Localization.get("#EditButton"));
+			editButton = new JRadioButton(Localization.get("#EditButton"));
 			group.add(editButton);
 			radioButtons.add(editButton);
 			editButton.addActionListener(listener);
 			editButton.setMnemonic(KeyEvent.VK_T);
-                        editButton.setToolTipText(Localization.get("#EditTextTooltip"));
+			editButton.setToolTipText(Localization.get("#EditTextTooltip"));
 
-                        addButton = new JRadioButton(Localization.get("#AddButton"));
+			addButton = new JRadioButton(Localization.get("#AddButton"));
 			group.add(addButton);
 			radioButtons.add(addButton);
 			addButton.addActionListener(listener);
 			addButton.setMnemonic(KeyEvent.VK_A);
-                        addButton.setToolTipText(Localization.get("#AddTextTooltip"));
+			addButton.setToolTipText(Localization.get("#AddTextTooltip"));
 
-                        eraseButton = new JRadioButton(Localization.get("#EraseButton"));
+			eraseButton = new JRadioButton(Localization.get("#EraseButton"));
 			group.add(eraseButton);
 			radioButtons.add(eraseButton);
 			eraseButton.addActionListener(listener);
 			eraseButton.setMnemonic(KeyEvent.VK_E);
-                        eraseButton.setToolTipText(Localization.get("#EraseTextTooltip"));
+			eraseButton.setToolTipText(Localization.get("#EraseTextTooltip"));
 
-                        organizer.addLabelAndComponentsVertical(Localization.get("#ActionLabel"), "", radioButtons);
+			organizer.addLabelAndComponentsVertical(Localization.get("#ActionLabel"), "", radioButtons);
 		}
 
 		editTextField = new JTextField();
@@ -171,7 +171,7 @@ public class TextTool extends EditorTool
 				}
 			}
 		});
-		textTypeHider = organizer.addLabelAndComponent("Text type:", "", textTypeComboBox);
+		textTypeHider = organizer.addLabelAndComponent(Localization.get("#TextTypeLabel"), "", textTypeComboBox);
 		textTypeForAdds = TextType.City;
 
 		for (TextType type : TextType.values())
@@ -180,7 +180,7 @@ public class TextTool extends EditorTool
 		}
 
 		lineBreakComboBox = new JComboBoxFixed<>();
-		lineBreakHider = organizer.addLabelAndComponent("Number of lines:", "", lineBreakComboBox);
+		lineBreakHider = organizer.addLabelAndComponent(Localization.get("#NumLinesLabel"), "", lineBreakComboBox);
 		for (LineBreak type : LineBreak.values())
 		{
 			lineBreakComboBox.addItem(type);
@@ -201,8 +201,8 @@ public class TextTool extends EditorTool
 			}
 		});
 
-            JButton clearRotationButton = new JButton(Localization.get("#RotateToHorizontal"));
-		clearRotationButton.setToolTipText("Set the rotation angle of the selected text to 0 degrees.");
+		JButton clearRotationButton = new JButton(Localization.get("#RotateToHorizontal"));
+		clearRotationButton.setToolTipText(Localization.get("#RotateToHorizontalTooltip"));
 		clearRotationButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -220,8 +220,8 @@ public class TextTool extends EditorTool
 		});
 		clearRotationButtonHider = organizer.addLeftAlignedComponents(Arrays.asList(clearRotationButton));
 
-            useDefaultColorCheckbox = new JCheckBox(Localization.get("#UseDefaultColor"));
-		useDefaultColorCheckbox.setToolTipText("When checked, this text uses the text color in the Fonts tab.");
+		useDefaultColorCheckbox = new JCheckBox(Localization.get("#UseDefaultColor"));
+		useDefaultColorCheckbox.setToolTipText(Localization.get("#UseDefaultColorTooltip"));
 		useDefaultColorCheckbox.addActionListener(new ActionListener()
 		{
 			@Override
@@ -252,12 +252,12 @@ public class TextTool extends EditorTool
 		useDefaultColorCheckboxHider = organizer.addLeftAlignedComponent(useDefaultColorCheckbox);
 
 		colorOverrideDisplay = SwingHelper.createColorPickerPreviewPanel();
-            JButton buttonChooseColorOverride = new JButton(Localization.get("#Choose"));
+		JButton buttonChooseColorOverride = new JButton(Localization.get("#Choose"));
 		buttonChooseColorOverride.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				SwingHelper.showColorPicker(organizer.panel, colorOverrideDisplay, "Text Color", () ->
+				SwingHelper.showColorPicker(organizer.panel, colorOverrideDisplay, Localization.get("#TextColorTitle"), () ->
 				{
 					if (lastSelected != null)
 					{
@@ -268,11 +268,11 @@ public class TextTool extends EditorTool
 				});
 			}
 		});
-		colorOverrideHider = organizer.addLabelAndComponentsHorizontal("Color:", "Change the color of this text",
+		colorOverrideHider = organizer.addLabelAndComponentsHorizontal(Localization.get("#ColorLabel"), Localization.get("#ChangeTextColorTooltip"),
 				Arrays.asList(colorOverrideDisplay, buttonChooseColorOverride), SwingHelper.colorPickerLeftPadding);
 
 		boldBackgroundColorOverrideDisplay = SwingHelper.createColorPickerPreviewPanel();
-            JButton buttonChooseBoldBackgroundColorOverride = new JButton(Localization.get("#Choose"));
+		JButton buttonChooseBoldBackgroundColorOverride = new JButton(Localization.get("#Choose"));
 		buttonChooseBoldBackgroundColorOverride.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -288,8 +288,8 @@ public class TextTool extends EditorTool
 				});
 			}
 		});
-		boldBackgroundColorOverrideHider = organizer.addLabelAndComponentsHorizontal("Bold background color:",
-				"Change the color of the bold background of this text",
+		boldBackgroundColorOverrideHider = organizer.addLabelAndComponentsHorizontal(Localization.get("#BoldBackgroundColorLabel"),
+				Localization.get("#ChangeBoldBackgroundColorTooltip"),
 				Arrays.asList(boldBackgroundColorOverrideDisplay, buttonChooseBoldBackgroundColorOverride),
 				SwingHelper.colorPickerLeftPadding);
 
@@ -301,8 +301,8 @@ public class TextTool extends EditorTool
 		{
 			updater.reprocessBooks();
 		});
-		booksHider = organizer.addLeftAlignedComponentWithStackedLabel("Books for generating text:",
-				"Selected books will be used to generate new names.", booksWidget.getContentPanel());
+		booksHider = organizer.addLeftAlignedComponentWithStackedLabel(Localization.get("#BooksForGeneratingTextLabel"),
+				Localization.get("#BooksForGeneratingTextTooltip"), booksWidget.getContentPanel());
 
 		editButton.doClick();
 
@@ -368,7 +368,7 @@ public class TextTool extends EditorTool
 	@Override
 	public String getToolbarName()
 	{
-		return "Text";
+		return Localization.get("#Text");
 	}
 
 	@Override

@@ -7,16 +7,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import nortantis.util.*;
 import org.apache.commons.lang3.StringUtils;
 
 import nortantis.MapSettings.LineStyle;
 import nortantis.MapSettings.OceanWaves;
 import nortantis.geom.IntDimension;
 import nortantis.platform.Color;
-import nortantis.util.Assets;
-import nortantis.util.ProbabilityHelper;
-import nortantis.util.Range;
-import nortantis.util.Tuple2;
 
 /**
  * For randomly generating settings with which to generate a map.
@@ -325,15 +322,18 @@ public class SettingsGenerator
 	public static List<String> getAllowedDimmensions()
 	{
 		List<String> result = new ArrayList<>();
-		result.add("4096 x 4096 (square)");
-		result.add("4096 x 2304 (16 by 9)");
-		result.add("4096 x 2531 (golden ratio)");
+		result.add(Localization.get("#Square") + " 4096 x 4096");
+		result.add(Localization.get("#SixteenByNine") + " 4096 x 2304");
+		result.add(Localization.get("#GoldenRatio") + " 4096 x 2531");
 		return result;
 	}
 
 	public static IntDimension parseGeneratedBackgroundDimensionsFromDropdown(String selected)
 	{
-		selected = selected.substring(0, selected.indexOf("("));
+		if (selected.contains("("))
+		{
+			selected = selected.substring(selected.indexOf(") ") + 2);
+		}
 		String[] parts = selected.split("x");
 		return new IntDimension(Integer.parseInt(parts[0].trim()), Integer.parseInt(parts[1].trim()));
 	}

@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
+import nortantis.util.Localization;
 import nortantis.util.OSHelper;
 
 public class DrawModeWidget
@@ -86,26 +87,26 @@ public class DrawModeWidget
 		};
 
 		boolean isWindows = OSHelper.isWindows();
-		drawModeButton = new JToggleButton("<html><u>D</u>raw</html>");
+		drawModeButton = new JToggleButton(Localization.get("#DrawButton"));
 		drawModeButton.setToolTipText(drawTooltipWithoutKeyboardShortcut + " (Alt+D)");
 		drawModeButton.setSelected(true);
 		drawModeButton.addActionListener(modeListener);
 		drawModeButton.setMnemonic(KeyEvent.VK_D);
 		drawModeButton.setPreferredSize(new Dimension(isWindows ? 51 : 57, drawModeButton.getPreferredSize().height));
 
-		replaceModeButton = new JToggleButton("<html><u>R</u>eplace</html>");
+		replaceModeButton = new JToggleButton(Localization.get("#ReplaceButton"));
 		replaceModeButton.setToolTipText(replaceTooltipWithoutKeyboardShortcut + " (Alt+R)");
 		replaceModeButton.addActionListener(modeListener);
 		replaceModeButton.setMnemonic(KeyEvent.VK_R);
 		replaceModeButton.setPreferredSize(new Dimension(isWindows ? 65 : 75, replaceModeButton.getPreferredSize().height));
 
-		editModeButton = new JToggleButton("<html>Edi<u>t</u></html>");
+		editModeButton = new JToggleButton(Localization.get("#EditButton"));
 		editModeButton.setToolTipText(editTooltipWithoutKeyboardShortcut + " (Alt+T)");
 		editModeButton.addActionListener(modeListener);
 		editModeButton.setMnemonic(KeyEvent.VK_T);
 		editModeButton.setPreferredSize(new Dimension(isWindows ? 51 : 53, editModeButton.getPreferredSize().height));
 
-		eraseModeButton = new JToggleButton("<html><u>E</u>rase</html>");
+		eraseModeButton = new JToggleButton(Localization.get("#EraseButton"));
 		eraseModeButton.setToolTipText(eraseTooltipWithoutKeyboardShortcut + " (Alt+E)");
 		eraseModeButton.addActionListener(modeListener);
 		eraseModeButton.setMnemonic(KeyEvent.VK_E);
@@ -120,7 +121,7 @@ public class DrawModeWidget
 		container.setBorder(BorderFactory.createEmptyBorder(-5, -5, -5, -5));
 		addOptionsToContainer(true, true, includeReplaceButton, includeEditModeButton);
 
-		return organizer.addLabelAndComponent("Mode:", labelTooltip, container);
+		return organizer.addLabelAndComponent(Localization.get("#ModeLabel"), labelTooltip, container);
 	}
 
 	private void addOptionsToContainer(boolean showDrawMode, boolean showEraseMode, boolean showReplaceMode, boolean showEditMode)

@@ -67,7 +67,7 @@ public class OverlayTool extends EditorTool
 	@Override
 	public String getToolbarName()
 	{
-		return "Overlay";
+		return Localization.get("#Overlay");
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class OverlayTool extends EditorTool
 	@Override
 	public String getKeyboardShortcutText()
 	{
-		return "(Alt+V)";
+		return Localization.get("#OverlayShortcut");
 	}
 
 	@Override
@@ -163,10 +163,9 @@ public class OverlayTool extends EditorTool
 		JPanel toolOptionsPanel = organizer.panel;
 		toolOptionsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
-
-                {
-                        drawOverlayImageCheckbox = new JCheckBox(Localization.get("#EnableOverlayImage"));
-                        drawOverlayImageCheckbox.setToolTipText(Localization.get("#EnableOverlayImageTooltip"));
+		{
+			drawOverlayImageCheckbox = new JCheckBox(Localization.get("#EnableOverlayImage"));
+			drawOverlayImageCheckbox.setToolTipText(Localization.get("#EnableOverlayImageTooltip"));
 			drawOverlayImageCheckbox.addActionListener(new ActionListener()
 			{
 				@Override
@@ -207,7 +206,7 @@ public class OverlayTool extends EditorTool
 				}
 			});
 
-                        btnsBrowseOverlayImage = new JButton(Localization.get("#Browse"));
+			btnsBrowseOverlayImage = new JButton(Localization.get("#Browse"));
 			btnsBrowseOverlayImage.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -225,8 +224,8 @@ public class OverlayTool extends EditorTool
 			overlayImageChooseButtonPanel.add(btnsBrowseOverlayImage);
 			overlayImageChooseButtonPanel.add(Box.createHorizontalGlue());
 
-			organizer.addLabelAndComponentsVertical("Image:",
-					"Image to draw over the map (not including borders). This is useful when drawing a map from a reference image.",
+			organizer.addLabelAndComponentsVertical(Localization.get("#ImageLabel"),
+					Localization.get("#ImageTooltip"),
 					Arrays.asList(overlayImagePath, Box.createVerticalStrut(5), overlayImageChooseButtonPanel));
 		}
 
@@ -240,13 +239,13 @@ public class OverlayTool extends EditorTool
 			SwingHelper.setSliderWidthForSidePanel(overlayImageTransparencySlider);
 			SliderWithDisplayedValue sliderWithDisplay = new SliderWithDisplayedValue(overlayImageTransparencySlider,
 					(value) -> String.format("%s%%", value), null, 30);
-			sliderWithDisplay.addToOrganizer(organizer, "Transparency:",
-					"Transparency to add to the overlay image to help with seeing the map underneath it.");
+			sliderWithDisplay.addToOrganizer(organizer, Localization.get("#TransparencyLabel"),
+					Localization.get("#TransparencyTooltip"));
 		}
 
 		{
-                        fitToMapButton = new JButton(Localization.get("#FitToMap"));
-                        fitToMapButton.setToolTipText(Localization.get("#FitToMapTooltip"));
+			fitToMapButton = new JButton(Localization.get("#FitToMap"));
+			fitToMapButton.setToolTipText(Localization.get("#FitToMapTooltip"));
 			fitToMapButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -258,10 +257,8 @@ public class OverlayTool extends EditorTool
 				}
 			});
 
-
-                        fitInsideBorderButton = new JButton(Localization.get("#FitInsideBorder"));
-                        fitInsideBorderButton.setToolTipText(
-                                        Localization.get("#FitInsideBorderTooltip"));
+			fitInsideBorderButton = new JButton(Localization.get("#FitInsideBorder"));
+			fitInsideBorderButton.setToolTipText(Localization.get("#FitInsideBorderTooltip"));
 			fitInsideBorderButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -482,8 +479,7 @@ public class OverlayTool extends EditorTool
 			overlayImageTransparencySlider.setValue(settings.overlayImageTransparency);
 			overlayOffsetResolutionInvariant = settings.overlayOffsetResolutionInvariant;
 			overlayScale = settings.overlayScale;
-		}
-		finally
+		} finally
 		{
 			enableRedraws = true;
 		}
@@ -497,7 +493,8 @@ public class OverlayTool extends EditorTool
 		settings.drawOverlayImage = drawOverlayImageCheckbox.isSelected();
 		settings.overlayImagePath = FileHelper.replaceHomeFolderWithPlaceholder(overlayImagePath.getText());
 		settings.overlayImageTransparency = overlayImageTransparencySlider.getValue();
-		settings.overlayOffsetResolutionInvariant = overlayOffsetResolutionInvariant == null ? new Point(0, 0)
+		settings.overlayOffsetResolutionInvariant = overlayOffsetResolutionInvariant == null
+				? new Point(0, 0)
 				: overlayOffsetResolutionInvariant;
 		settings.overlayScale = overlayScale;
 	}

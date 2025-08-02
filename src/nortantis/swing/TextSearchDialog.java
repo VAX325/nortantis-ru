@@ -41,7 +41,7 @@ public class TextSearchDialog extends JDialog
 
 	public TextSearchDialog(MainWindow mainWindow)
 	{
-               super(mainWindow, Localization.get("#SearchTextDialogTitle"), Dialog.ModalityType.MODELESS);
+		super(mainWindow, Localization.get("#SearchTextDialogTitle"), Dialog.ModalityType.MODELESS);
 		setSize(450, 70);
 		setResizable(false);
 
@@ -53,7 +53,7 @@ public class TextSearchDialog extends JDialog
 		final int padding = 4;
 		container.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
 
-               notFoundLabel = new JLabel(Localization.get("#NotFound"));
+		notFoundLabel = new JLabel(Localization.get("#NotFound"));
 		notFoundLabel.setForeground(getColorForNotFoundMessage());
 		notFoundLabel.setVisible(false);
 
@@ -111,8 +111,8 @@ public class TextSearchDialog extends JDialog
 
 		boolean needsSpecialHandling = OSHelper.isLinux() && UserPreferences.getInstance().lookAndFeel == LookAndFeel.System;
 		final int fontSize = 24;
-               searchForward = new JButton(needsSpecialHandling ? Localization.get("#Next") : "→");
-               searchForward.setToolTipText(Localization.get("#SearchForwardTooltip"));
+		searchForward = new JButton(needsSpecialHandling ? Localization.get("#Next") : "→");
+		searchForward.setToolTipText(Localization.get("#SearchForwardTooltip"));
 		if (!needsSpecialHandling)
 		{
 			searchForward.setFont(new java.awt.Font(searchForward.getFont().getName(), searchForward.getFont().getStyle(), fontSize));
@@ -129,8 +129,8 @@ public class TextSearchDialog extends JDialog
 			}
 		});
 
-               searchBackward = new JButton(needsSpecialHandling ? Localization.get("#Prev") : "←");
-               searchBackward.setToolTipText(Localization.get("#SearchBackwardTooltip"));
+		searchBackward = new JButton(needsSpecialHandling ? Localization.get("#Prev") : "←");
+		searchBackward.setToolTipText(Localization.get("#SearchBackwardTooltip"));
 		if (!needsSpecialHandling)
 		{
 			searchBackward.setFont(new java.awt.Font(searchBackward.getFont().getName(), searchBackward.getFont().getStyle(), fontSize));
@@ -145,7 +145,7 @@ public class TextSearchDialog extends JDialog
 			}
 		});
 	}
-	
+
 	private Color getColorForNotFoundMessage()
 	{
 		if (UserPreferences.getInstance().lookAndFeel == LookAndFeel.Dark)
@@ -284,7 +284,7 @@ public class TextSearchDialog extends JDialog
 		searchField.requestFocus();
 		searchField.selectAll();
 	}
-	
+
 	public void handleLookAndFeelChange()
 	{
 		notFoundLabel.setForeground(getColorForNotFoundMessage());

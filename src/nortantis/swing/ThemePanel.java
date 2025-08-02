@@ -78,7 +78,7 @@ import nortantis.util.Tuple4;
 @SuppressWarnings("serial")
 public class ThemePanel extends JTabbedPane
 {
-	private MainWindow mainWindow;
+	private final MainWindow mainWindow;
 	private JSlider coastShadingSlider;
 	private JSlider rippleWavesLevelSlider;
 	private JSlider concentricWavesLevelSlider;
@@ -98,8 +98,7 @@ public class ThemePanel extends JTabbedPane
 	private JRadioButton rdbtnFractal;
 	private BGColorPreviewPanel oceanDisplayPanel;
 	private BGColorPreviewPanel landDisplayPanel;
-	private ActionListener backgroundImageButtonGroupListener;
-	private Dimension backgroundDisplaySize = new Dimension(150, 110);
+    private final Dimension backgroundDisplaySize = new Dimension(150, 110);
 	private JComboBox<LandColoringMethod> landColoringMethodComboBox;
 	private JSlider grungeSlider;
 	private JTextField textureImageFilename;
@@ -107,8 +106,7 @@ public class ThemePanel extends JTabbedPane
 	private JCheckBox colorizeOceanCheckbox;
 	private JButton btnChooseLandColor;
 	private JButton btnChooseOceanColor;
-	private JButton btnNewBackgroundSeed;
-	private ItemListener colorizeCheckboxListener;
+    private ItemListener colorizeCheckboxListener;
 	private JComboBox<NamedResource> borderTypeComboBox;
 	private JSlider borderWidthSlider;
 	private JCheckBox drawBorderCheckbox;
@@ -160,8 +158,7 @@ public class ThemePanel extends JTabbedPane
 	private RowHider regionBoundaryWidthSliderHider;
 	private JSlider oceanShadingSlider;
 	private JPanel oceanShadingColorDisplay;
-	private JButton btnChooseOceanShadingColor;
-	private JPanel borderColorDisplay;
+    private JPanel borderColorDisplay;
 	private JButton borderColorChooseButton;
 	private JComboBox<BorderColorOption> borderColorOptionComboBox;
 	private RowHider borderColorHider;
@@ -201,10 +198,10 @@ public class ThemePanel extends JTabbedPane
 		setPreferredSize(new Dimension(width, mainWindow.getContentPane().getHeight()));
 		setMinimumSize(new Dimension(SwingHelper.sidePanelMinimumWidth, getMinimumSize().height));
 
-		addTab("Background", createBackgroundPanel(mainWindow));
-		addTab("Border", createBorderPanel(mainWindow));
-		addTab("Effects", createEffectsPanel(mainWindow));
-		addTab("Fonts", createFontsPanel(mainWindow));
+		addTab(Localization.get("#Background"), createBackgroundPanel(mainWindow));
+		addTab(Localization.get("#Border"), createBorderPanel(mainWindow));
+		addTab(Localization.get("#Effects"), createEffectsPanel(mainWindow));
+		addTab(Localization.get("#Fonts"), createFontsPanel(mainWindow));
 	}
 
 	private Component createBackgroundPanel(MainWindow mainWindow)
@@ -212,27 +209,22 @@ public class ThemePanel extends JTabbedPane
 		GridBagOrganizer organizer = new GridBagOrganizer();
 		JPanel backgroundPanel = organizer.panel;
 
-		backgroundImageButtonGroupListener = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				updateBackgroundAndRegionFieldStates();
-				updateBackgroundImageDisplays();
-				if (!(e.getSource() == fileRadioButton && StringUtils.isEmpty(textureImageFilename.getText())))
-				{
-					handleFullRedraw();
-				}
-			}
-		};
+        ActionListener backgroundImageButtonGroupListener = e -> {
+            updateBackgroundAndRegionFieldStates();
+            updateBackgroundImageDisplays();
+            if (!(e.getSource() == fileRadioButton && StringUtils.isEmpty(textureImageFilename.getText()))) {
+                handleFullRedraw();
+            }
+        };
 
 		{
-                        rdbtnFractal = new JRadioButton(Localization.get("#FractalNoise"));
+			rdbtnFractal = new JRadioButton(Localization.get("#FractalNoise"));
 			rdbtnFractal.addActionListener(backgroundImageButtonGroupListener);
 
-                        rdbtnGeneratedFromTexture = new JRadioButton(Localization.get("#GeneratedFromTexture"));
+			rdbtnGeneratedFromTexture = new JRadioButton(Localization.get("#GeneratedFromTexture"));
 			rdbtnGeneratedFromTexture.addActionListener(backgroundImageButtonGroupListener);
 
-                        solidColorButton = new JRadioButton(Localization.get("#SolidColor"));
+			solidColorButton = new JRadioButton(Localization.get("#SolidColor"));
 			solidColorButton.addActionListener(backgroundImageButtonGroupListener);
 
 			ButtonGroup backgroundImageButtonGroup = new ButtonGroup();
@@ -240,29 +232,28 @@ public class ThemePanel extends JTabbedPane
 			backgroundImageButtonGroup.add(rdbtnFractal);
 			backgroundImageButtonGroup.add(solidColorButton);
 
-                        organizer.addLabelAndComponentsVertical(Localization.get("#BackgroundLabel"),
-                                        Localization.get("#BackgroundTooltip"),
-                                        Arrays.asList(rdbtnFractal, rdbtnGeneratedFromTexture, solidColorButton));
+			organizer.addLabelAndComponentsVertical(Localization.get("#BackgroundLabel"), Localization.get("#BackgroundTooltip"),
+					Arrays.asList(rdbtnFractal, rdbtnGeneratedFromTexture, solidColorButton));
 		}
 
 		{
-                        assetsRadioButton = new JRadioButton(Localization.get("#Assets"));
+			assetsRadioButton = new JRadioButton(Localization.get("#Assets"));
 			assetsRadioButton.addActionListener(backgroundImageButtonGroupListener);
 
-                        fileRadioButton = new JRadioButton(Localization.get("#File"));
+			fileRadioButton = new JRadioButton(Localization.get("#File"));
 			fileRadioButton.addActionListener(backgroundImageButtonGroupListener);
 
 			ButtonGroup buttonGroup = new ButtonGroup();
 			buttonGroup.add(assetsRadioButton);
 			buttonGroup.add(fileRadioButton);
-                        textureSourceButtonsHider = organizer.addLabelAndComponentsVertical(Localization.get("#TextureSourceLabel"),
-                                        Localization.get("#TextureSourceTooltip"), Arrays.asList(assetsRadioButton, fileRadioButton));
+			textureSourceButtonsHider = organizer.addLabelAndComponentsVertical(Localization.get("#TextureSourceLabel"),
+					Localization.get("#TextureSourceTooltip"), Arrays.asList(assetsRadioButton, fileRadioButton));
 		}
 
 		{
 			textureImageComboBox = new JComboBox<>();
-                        textureImageComboBoxHider = organizer.addLabelAndComponent(Localization.get("#TextureLabel"),
-                                        Localization.get("#TextureTooltip"), textureImageComboBox);
+			textureImageComboBoxHider = organizer.addLabelAndComponent(Localization.get("#TextureLabel"),
+					Localization.get("#TextureTooltip"), textureImageComboBox);
 			textureImageComboBox.addActionListener(backgroundImageButtonGroupListener);
 			textureImageComboBox.setMinimumSize(new Dimension(100, textureImageComboBox.getMinimumSize().height));
 		}
@@ -298,7 +289,7 @@ public class ThemePanel extends JTabbedPane
 			}
 		});
 
-                JButton btnsBrowseTextureImage = new JButton(Localization.get("#Browse"));
+		JButton btnsBrowseTextureImage = new JButton(Localization.get("#Browse"));
 		btnsBrowseTextureImage.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -316,9 +307,9 @@ public class ThemePanel extends JTabbedPane
 		textureFileChooseButtonPanel.add(btnsBrowseTextureImage);
 		textureFileChooseButtonPanel.add(Box.createHorizontalGlue());
 
-                textureImageHider = organizer.addLabelAndComponentsVertical(Localization.get("#TextureImageLabel"),
-                                Localization.get("#TextureImageTooltip"),
-                                Arrays.asList(textureImageFilename, Box.createVerticalStrut(5), textureFileChooseButtonPanel));
+		textureImageHider = organizer.addLabelAndComponentsVertical(Localization.get("#TextureImageLabel"),
+				Localization.get("#TextureImageTooltip"),
+				Arrays.asList(textureImageFilename, Box.createVerticalStrut(5), textureFileChooseButtonPanel));
 
 		organizer.addHorizontalSpacerRowToHelpComponentAlignment(0.65);
 
@@ -349,25 +340,19 @@ public class ThemePanel extends JTabbedPane
 			}
 		});
 
-                btnNewBackgroundSeed = new JButton(Localization.get("#NewSeed"));
-		btnNewBackgroundSeed.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				backgroundSeedTextField.setText(String.valueOf(Math.abs(new Random().nextInt())));
-				updateBackgroundImageDisplays();
-			}
-		});
-		btnNewBackgroundSeed.setToolTipText("Generate a new random seed.");
-		organizer.addLabelAndComponentsHorizontal("Random seed:",
-				"The random seed used to generate the background image. Note that the background texture will also change based on the"
-						+ " resolution you draw at.",
+        JButton btnNewBackgroundSeed = new JButton(Localization.get("#NewSeed"));
+		btnNewBackgroundSeed.addActionListener(arg0 -> {
+            backgroundSeedTextField.setText(String.valueOf(Math.abs(new Random().nextInt())));
+            updateBackgroundImageDisplays();
+        });
+		btnNewBackgroundSeed.setToolTipText(Localization.get("#NewSeedTooltip"));
+		organizer.addLabelAndComponentsHorizontal(Localization.get("#RandomSeed"), Localization.get("#RandomSeedTooltip"),
 				Arrays.asList(backgroundSeedTextField, btnNewBackgroundSeed));
 
 		organizer.addSeperator();
 
-                drawRegionBoundariesCheckbox = new JCheckBox(Localization.get("#DrawPoliticalRegionBoundaries"));
-		drawRegionBoundariesCheckbox.setToolTipText("Whether to show political region boundaires");
+		drawRegionBoundariesCheckbox = new JCheckBox(Localization.get("#DrawPoliticalRegionBoundaries"));
+		drawRegionBoundariesCheckbox.setToolTipText(Localization.get("#DrawPoliticalRegionBoundariesTooltip"));
 		drawRegionBoundariesCheckbox.addItemListener(new ItemListener()
 		{
 			@Override
@@ -380,7 +365,7 @@ public class ThemePanel extends JTabbedPane
 		organizer.addLeftAlignedComponent(drawRegionBoundariesCheckbox);
 
 		regionBoundaryTypeComboBox = new JComboBox<>(StrokeType.values());
-		regionBoundaryTypeComboBoxHider = organizer.addLabelAndComponent("Style:", "Line style for drawing region boundaries",
+		regionBoundaryTypeComboBoxHider = organizer.addLabelAndComponent(Localization.get("#StyleLabel"), Localization.get("#StyleTooltipRegion"),
 				regionBoundaryTypeComboBox);
 		createMapChangeListenerForTerrainChange(regionBoundaryTypeComboBox);
 
@@ -394,27 +379,26 @@ public class ThemePanel extends JTabbedPane
 			SwingHelper.setSliderWidthForSidePanel(regionBoundaryWidthSlider);
 			SliderWithDisplayedValue sliderWithDisplay = new SliderWithDisplayedValue(regionBoundaryWidthSlider,
 					(value) -> String.format("%.1f", value / SettingsGenerator.maxLineWidthInEditor), null);
-			regionBoundaryWidthSliderHider = sliderWithDisplay.addToOrganizer(organizer, "Width:", "Line width of region boundaries");
+			regionBoundaryWidthSliderHider = sliderWithDisplay.addToOrganizer(organizer, Localization.get("#Width"), Localization.get("#WidthTooltipRegion"));
 		}
 
 		regionBoundaryColorDisplay = SwingHelper.createColorPickerPreviewPanel();
-                JButton buttonChooseRegionBoundaryColor = new JButton(Localization.get("#Choose"));
+		JButton buttonChooseRegionBoundaryColor = new JButton(Localization.get("#Choose"));
 		buttonChooseRegionBoundaryColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				SwingHelper.showColorPicker(backgroundPanel, regionBoundaryColorDisplay, "Region Boundary Color",
+				SwingHelper.showColorPicker(backgroundPanel, regionBoundaryColorDisplay, Localization.get("#RegionBoundaryColor"),
 						() -> handleTerrainChange());
 			}
 		});
-		regionBoundaryColorHider = organizer.addLabelAndComponentsHorizontal("Color:", "The line color of region boundaries",
+		regionBoundaryColorHider = organizer.addLabelAndComponentsHorizontal(Localization.get("#ColorLabel"), Localization.get("#RegionBoundaryColorTooltip"),
 				Arrays.asList(regionBoundaryColorDisplay, buttonChooseRegionBoundaryColor), SwingHelper.colorPickerLeftPadding);
 
 		organizer.addSeperator();
 
-                colorizeLandCheckbox = new JCheckBox(Localization.get("#ColorLand"));
-		colorizeLandCheckbox
-				.setToolTipText("Whether to change the land texture to a custom color versus use the color of the texture image");
+		colorizeLandCheckbox = new JCheckBox(Localization.get("#ColorLand"));
+		colorizeLandCheckbox.setToolTipText(Localization.get("#ColorLandTooltip"));
 		colorizeLandCheckboxHider = organizer.addLeftAlignedComponent(colorizeLandCheckbox);
 
 		landColoringMethodComboBox = new JComboBox<LandColoringMethod>();
@@ -432,7 +416,7 @@ public class ThemePanel extends JTabbedPane
 				handleFullRedraw();
 			}
 		});
-		organizer.addLabelAndComponent("Land coloring method:", "How to color the land.", landColoringMethodComboBox);
+		organizer.addLabelAndComponent(Localization.get("#LandColoringMethodLabel"), Localization.get("#LandColoringMethodTooltip"), landColoringMethodComboBox);
 
 		colorizeCheckboxListener = new ItemListener()
 		{
@@ -451,7 +435,7 @@ public class ThemePanel extends JTabbedPane
 		landDisplayPanel.setMinimumSize(backgroundDisplaySize);
 		landDisplayPanel.setBackground(Color.BLACK);
 
-                btnChooseLandColor = new JButton(Localization.get("#Choose"));
+		btnChooseLandColor = new JButton(Localization.get("#Choose"));
 		btnChooseLandColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -471,7 +455,7 @@ public class ThemePanel extends JTabbedPane
 						handleFullRedraw();
 					}
 				};
-				Dialog dialog = JColorChooser.createDialog(mainWindow, "Land Color", false, colorChooser, okHandler, cancelHandler);
+				Dialog dialog = JColorChooser.createDialog(mainWindow, Localization.get("#LandColor"), false, colorChooser, okHandler, cancelHandler);
 				dialog.setVisible(true);
 			}
 		});
@@ -482,14 +466,13 @@ public class ThemePanel extends JTabbedPane
 			container.add(landDisplayPanel);
 			btnChooseLandColor.setAlignmentX(CENTER_ALIGNMENT);
 
-			landColorHider = organizer.addLabelAndComponentsVertical("Land color:", "The color of the land background.",
+			landColorHider = organizer.addLabelAndComponentsVertical(Localization.get("#LandColor") + ":", Localization.get("#LandColorTooltip"),
 					Arrays.asList(container, Box.createVerticalStrut(5), btnChooseLandColor));
 		}
 
 		organizer.addSeperator();
-                colorizeOceanCheckbox = new JCheckBox(Localization.get("#ColorOcean"));
-		colorizeOceanCheckbox
-				.setToolTipText("Whether to change the ocean texture to a custom color versus use the color of the texture image");
+		colorizeOceanCheckbox = new JCheckBox(Localization.get("#ColorOcean"));
+		colorizeOceanCheckbox.setToolTipText(Localization.get("#ColorOceanTooltip"));
 		colorizeOceanCheckboxHider = organizer.addLeftAlignedComponent(colorizeOceanCheckbox);
 
 		oceanDisplayPanel = new BGColorPreviewPanel();
@@ -498,7 +481,7 @@ public class ThemePanel extends JTabbedPane
 		oceanDisplayPanel.setMinimumSize(backgroundDisplaySize);
 		oceanDisplayPanel.setBackground(Color.BLACK);
 
-                btnChooseOceanColor = new JButton(Localization.get("#Choose"));
+		btnChooseOceanColor = new JButton(Localization.get("#Choose"));
 		btnChooseOceanColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -518,7 +501,7 @@ public class ThemePanel extends JTabbedPane
 						handleFullRedraw();
 					}
 				};
-				Dialog dialog = JColorChooser.createDialog(mainWindow, "Ocean Color", false, colorChooser, okHandler, cancelHandler);
+				Dialog dialog = JColorChooser.createDialog(mainWindow, Localization.get("#OceanColor"), false, colorChooser, okHandler, cancelHandler);
 				dialog.setVisible(true);
 			}
 		});
@@ -529,7 +512,7 @@ public class ThemePanel extends JTabbedPane
 			container.add(oceanDisplayPanel);
 			btnChooseOceanColor.setAlignmentX(CENTER_ALIGNMENT);
 
-			organizer.addLabelAndComponentsVertical("Ocean color:", "The color of the ocean.",
+			organizer.addLabelAndComponentsVertical(Localization.get("#OceanColorLabel"), Localization.get("#OceanColorTooltip"),
 					Arrays.asList(container, Box.createVerticalStrut(5), btnChooseOceanColor));
 		}
 
@@ -544,8 +527,8 @@ public class ThemePanel extends JTabbedPane
 		GridBagOrganizer organizer = new GridBagOrganizer();
 		JPanel borderPanel = organizer.panel;
 
-                drawBorderCheckbox = new JCheckBox(Localization.get("#CreateBorder"));
-		drawBorderCheckbox.setToolTipText("When checked, a border will be drawn around the map.");
+		drawBorderCheckbox = new JCheckBox(Localization.get("#CreateBorder"));
+		drawBorderCheckbox.setToolTipText(Localization.get("#CreateBorderTooltip"));
 		drawBorderCheckbox.addActionListener(new ActionListener()
 		{
 			@Override
@@ -559,7 +542,7 @@ public class ThemePanel extends JTabbedPane
 
 		borderTypeComboBox = new JComboBox<>();
 		createMapChangeListenerForFullRedraw(borderTypeComboBox);
-		organizer.addLabelAndComponent("Border type:", "The set of images to draw for the border", borderTypeComboBox);
+		organizer.addLabelAndComponent(Localization.get("#BorderTypeLabel"), Localization.get("#BorderTypeTooltip"), borderTypeComboBox);
 
 		{
 			borderWidthSlider = new JSlider();
@@ -573,8 +556,8 @@ public class ThemePanel extends JTabbedPane
 			borderWidthSlider.setMajorTickSpacing(200);
 			createMapChangeListenerForFullRedraw(borderWidthSlider);
 			SwingHelper.setSliderWidthForSidePanel(borderWidthSlider);
-			organizer.addLabelAndComponent("Border width:",
-					"Width of the border in pixels, scaled according to the resolution the map is drawn at.", borderWidthSlider);
+			organizer.addLabelAndComponent(Localization.get("#BorderWidthLabel"),
+					Localization.get("#BorderWidthTooltip"), borderWidthSlider);
 		}
 
 		borderColorOptionComboBox = new JComboBox<BorderColorOption>();
@@ -595,17 +578,17 @@ public class ThemePanel extends JTabbedPane
 		{
 			borderColorOptionComboBox.addItem(option);
 		}
-		organizer.addLabelAndComponent("Border color:",
-				"Transparent pixels in the border will show the background texture drawn with this color.", borderColorOptionComboBox);
+		organizer.addLabelAndComponent(Localization.get("#BorderColorLabel"),
+				Localization.get("#BorderColorTooltip"), borderColorOptionComboBox);
 
 		borderColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-                borderColorChooseButton = new JButton(Localization.get("#Choose"));
+		borderColorChooseButton = new JButton(Localization.get("#Choose"));
 		borderColorChooseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				SwingHelper.showColorPicker(borderPanel, borderColorDisplay, "Border Color", () -> handleFullRedraw());
+				SwingHelper.showColorPicker(borderPanel, borderColorDisplay, Localization.get("#BorderColorTitle"), () -> handleFullRedraw());
 			}
 		});
 		borderColorHider = organizer.addLabelAndComponentsHorizontal("", "", Arrays.asList(borderColorDisplay, borderColorChooseButton),
@@ -615,8 +598,8 @@ public class ThemePanel extends JTabbedPane
 		organizer.addHorizontalSpacerRowToHelpComponentAlignment(0.6);
 		organizer.addSeperator();
 
-                frayedEdgeCheckbox = new JCheckBox(Localization.get("#FrayEdges"));
-		frayedEdgeCheckbox.setToolTipText("Whether to fray the edges of the map.");
+		frayedEdgeCheckbox = new JCheckBox(Localization.get("#FrayEdges"));
+		frayedEdgeCheckbox.setToolTipText(Localization.get("#FrayEdgesTooltip"));
 		frayedEdgeCheckboxActionListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -637,8 +620,8 @@ public class ThemePanel extends JTabbedPane
 		frayedEdgeShadingSlider.setMajorTickSpacing(100);
 		createMapChangeListenerForFrayedEdgeOrGrungeChange(frayedEdgeShadingSlider);
 		SwingHelper.setSliderWidthForSidePanel(frayedEdgeShadingSlider);
-		organizer.addLabelAndComponent("Fray shading width:",
-				"The width of shading drawn around frayed edges. The color used is the grunge color.", frayedEdgeShadingSlider);
+		organizer.addLabelAndComponent(Localization.get("#FrayShadingWidthLabel"),
+				Localization.get("#FrayShadingWidthTooltip"), frayedEdgeShadingSlider);
 
 		frayedEdgeSizeSlider = new JSlider();
 		frayedEdgeSizeSlider.setPaintTicks(true);
@@ -649,8 +632,8 @@ public class ThemePanel extends JTabbedPane
 		frayedEdgeSizeSlider.setMajorTickSpacing(2);
 		createMapChangeListenerForFrayedEdgeOrGrungeChange(frayedEdgeSizeSlider);
 		SwingHelper.setSliderWidthForSidePanel(frayedEdgeSizeSlider);
-		organizer.addLabelAndComponent("Fray size:",
-				"Determines the number of polygons used when creating the frayed border. Higher values make the fray larger.",
+		organizer.addLabelAndComponent(Localization.get("#FraySizeLabel"),
+				Localization.get("#FraySizeTooltip"),
 				frayedEdgeSizeSlider);
 
 		frayedEdgesSeedTextField = new JTextField();
@@ -677,7 +660,7 @@ public class ThemePanel extends JTabbedPane
 			}
 		});
 
-                newFrayedEdgesSeedButton = new JButton(Localization.get("#NewSeed"));
+		newFrayedEdgesSeedButton = new JButton(Localization.get("#NewSeed"));
 		newFrayedEdgesSeedButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -685,14 +668,14 @@ public class ThemePanel extends JTabbedPane
 				frayedEdgesSeedTextField.setText(String.valueOf(Math.abs(new Random().nextInt())));
 			}
 		});
-		newFrayedEdgesSeedButton.setToolTipText("Generate a new random seed.");
-		organizer.addLabelAndComponentsHorizontal("Random seed:", "The random seed used to generate the frayed edges.",
+		newFrayedEdgesSeedButton.setToolTipText(Localization.get("#NewSeedTooltip"));
+		organizer.addLabelAndComponentsHorizontal(Localization.get("#RandomSeed"), Localization.get("#RandomSeedTooltip"),
 				Arrays.asList(frayedEdgesSeedTextField, newFrayedEdgesSeedButton));
 
 		organizer.addSeperator();
 
-                drawGrungeCheckbox = new JCheckBox(Localization.get("#DrawGrunge"));
-		drawGrungeCheckbox.setToolTipText("Whether to draw grunge around the edges of the map.");
+		drawGrungeCheckbox = new JCheckBox(Localization.get("#DrawGrunge"));
+		drawGrungeCheckbox.setToolTipText(Localization.get("#DrawGrungeTooltip"));
 		drawGrungeCheckboxActionListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -713,20 +696,20 @@ public class ThemePanel extends JTabbedPane
 		grungeSlider.setMajorTickSpacing(1000);
 		createMapChangeListenerForFrayedEdgeOrGrungeChange(grungeSlider);
 		SwingHelper.setSliderWidthForSidePanel(grungeSlider);
-		organizer.addLabelAndComponent("Grunge width:", "Determines the width of grunge on the edges of the map. 0 means none.",
+		organizer.addLabelAndComponent(Localization.get("#GrungeWidthLabel"), Localization.get("#GrungeWidthTooltip"),
 				grungeSlider);
 
 		grungeColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-                grungeColorChooseButton = new JButton(Localization.get("#Choose"));
+		grungeColorChooseButton = new JButton(Localization.get("#Choose"));
 		grungeColorChooseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				SwingHelper.showColorPicker(borderPanel, grungeColorDisplay, "Grunge Color", () -> handleFrayedEdgeOrGrungeChange());
+				SwingHelper.showColorPicker(borderPanel, grungeColorDisplay, Localization.get("#GrungeColorTitle"), () -> handleFrayedEdgeOrGrungeChange());
 			}
 		});
-		organizer.addLabelAndComponentsHorizontal("Grunge/frayed edge color:", "Grunge and frayed edge shading will be this color",
+		organizer.addLabelAndComponentsHorizontal(Localization.get("#GrungeColorLabel"), Localization.get("#GrungeColorTooltip"),
 				Arrays.asList(grungeColorDisplay, grungeColorChooseButton), SwingHelper.colorPickerLeftPadding);
 
 		organizer.addVerticalFillerRow();
@@ -739,18 +722,18 @@ public class ThemePanel extends JTabbedPane
 
 		JPanel effectsPanel = organizer.panel;
 
-                jaggedLinesButton = new JRadioButton(Localization.get("#Jagged"));
+		jaggedLinesButton = new JRadioButton(Localization.get("#Jagged"));
 		createMapChangeListenerForFullRedraw(jaggedLinesButton);
-                splinesLinesButton = new JRadioButton(Localization.get("#Splines"));
+		splinesLinesButton = new JRadioButton(Localization.get("#Splines"));
 		createMapChangeListenerForFullRedraw(splinesLinesButton);
-                splinesWithSmoothedCoastlinesButton = new JRadioButton(Localization.get("#SplinesWithSmoothedCoastlines"));
+		splinesWithSmoothedCoastlinesButton = new JRadioButton(Localization.get("#SplinesWithSmoothedCoastlines"));
 		createMapChangeListenerForFullRedraw(splinesWithSmoothedCoastlinesButton);
 		ButtonGroup lineStyleButtonGroup = new ButtonGroup();
 		lineStyleButtonGroup.add(jaggedLinesButton);
 		lineStyleButtonGroup.add(splinesLinesButton);
 		lineStyleButtonGroup.add(splinesWithSmoothedCoastlinesButton);
-		organizer.addLabelAndComponentsVertical("Line style:",
-				"The style of lines to use when drawing coastlines, lakeshores, and region boundaries",
+		organizer.addLabelAndComponentsVertical(Localization.get("#LineStyleLabel"),
+				Localization.get("#LineStyleTooltip"),
 				Arrays.asList(jaggedLinesButton, splinesLinesButton, splinesWithSmoothedCoastlinesButton));
 		organizer.addSeperator();
 
@@ -764,20 +747,20 @@ public class ThemePanel extends JTabbedPane
 			SwingHelper.setSliderWidthForSidePanel(coastlineWidthSlider);
 			SliderWithDisplayedValue sliderWithDisplay = new SliderWithDisplayedValue(coastlineWidthSlider,
 					(value) -> String.format("%.1f", value / SettingsGenerator.maxLineWidthInEditor), null);
-			sliderWithDisplay.addToOrganizer(organizer, "Coastline width:", "Line width of coastlines");
+			sliderWithDisplay.addToOrganizer(organizer, Localization.get("#CoastlineWidthLabel"), Localization.get("#CoastlineWidthTooltip"));
 		}
 
 		coastlineColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-                JButton buttonChooseCoastlineColor = new JButton(Localization.get("#Choose"));
+		JButton buttonChooseCoastlineColor = new JButton(Localization.get("#Choose"));
 		buttonChooseCoastlineColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				SwingHelper.showColorPicker(effectsPanel, coastlineColorDisplay, "Coastline Color", () -> handleTerrainChange());
+				SwingHelper.showColorPicker(effectsPanel, coastlineColorDisplay, Localization.get("#CoastlineColorTitle"), () -> handleTerrainChange());
 			}
 		});
-		organizer.addLabelAndComponentsHorizontal("Coastline color:", "The color of the coastline",
+		organizer.addLabelAndComponentsHorizontal(Localization.get("#CoastlineColorLabel"), Localization.get("#CoastlineColorTooltip"),
 				Arrays.asList(coastlineColorDisplay, buttonChooseCoastlineColor), SwingHelper.colorPickerLeftPadding);
 
 		coastShadingSlider = new JSlider();
@@ -789,8 +772,8 @@ public class ThemePanel extends JTabbedPane
 		coastShadingSlider.setMajorTickSpacing(20);
 		createMapChangeListenerForTerrainChange(coastShadingSlider);
 		SwingHelper.setSliderWidthForSidePanel(coastShadingSlider);
-		organizer.addLabelAndComponent("Coast shading width:",
-				"How far in from coastlines to shade land. Also applies to region boundaries if regions are drawn.", coastShadingSlider);
+		organizer.addLabelAndComponent(Localization.get("#CoastShadingWidthLabel"),
+				Localization.get("#CoastShadingWidthTooltip"), coastShadingSlider);
 
 		{
 			coastShadingTransparencySlider = new JSlider(0, 100);
@@ -802,32 +785,31 @@ public class ThemePanel extends JTabbedPane
 				updateCoastShadingColorDisplayFromCoastShadingTransparencySlider();
 				handleTerrainChange();
 			});
-			coastShadingTransparencyHider = sliderWithDisplay.addToOrganizer(organizer, "Coast shading transparency:",
-					"Transparency of shading of land near coastlines");
+			coastShadingTransparencyHider = sliderWithDisplay.addToOrganizer(organizer, Localization.get("#CoastShadingTransparencyLabel"),
+					Localization.get("#CoastShadingTransparencyTooltip"));
 		}
 
 		{
 			coastShadingColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-                btnChooseCoastShadingColor = new JButton(Localization.get("#Choose"));
+			btnChooseCoastShadingColor = new JButton(Localization.get("#Choose"));
 			btnChooseCoastShadingColor.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					SwingHelper.showColorPicker(effectsPanel, coastShadingColorDisplay, "Coast Shading Color", () ->
+					SwingHelper.showColorPicker(effectsPanel, coastShadingColorDisplay, Localization.get("#CoastShadingColorTitle"), () ->
 					{
 						updateCoastShadingTransparencySliderFromCoastShadingColorDisplay();
 						handleTerrainChange();
 					});
 				}
 			});
-			String coastShadingColorLabelText = "Coast shading color:";
+			String coastShadingColorLabelText = Localization.get("#CoastShadingColorLabel");
 			coastShadingColorHider = organizer.addLabelAndComponentsHorizontal(coastShadingColorLabelText,
-					"Land near coastlines and political region boundaries will be shaded this color.",
+					Localization.get("#CoastShadingColorTooltip"),
 					Arrays.asList(coastShadingColorDisplay, btnChooseCoastShadingColor), SwingHelper.colorPickerLeftPadding);
 
-			final String message = "<html>Disabled because the land coloring" + " method is '" + LandColoringMethod.ColorPoliticalRegions
-					+ "'.<html>";
+			final String message = Localization.get("#CoastShadingDisabledMessage", LandColoringMethod.ColorPoliticalRegions);
 			coastShadingColorDisabledMessageHider = organizer.addLabelAndComponent(coastShadingColorLabelText, "", new JLabel(message));
 			coastShadingColorDisabledMessageHider.setVisible(false);
 		}
@@ -842,23 +824,13 @@ public class ThemePanel extends JTabbedPane
 		oceanShadingSlider.setMajorTickSpacing(20);
 		createMapChangeListenerForTerrainChange(oceanShadingSlider);
 		SwingHelper.setSliderWidthForSidePanel(oceanShadingSlider);
-		organizer.addLabelAndComponent("Ocean shading width:", "How far from coastlines to shade ocean.", oceanShadingSlider);
+		organizer.addLabelAndComponent(Localization.get("#OceanShadingWidthLabel"), Localization.get("#OceanShadingWidthTooltip"), oceanShadingSlider);
 
 		{
 			oceanShadingColorDisplay = SwingHelper.createColorPickerPreviewPanel();
-                btnChooseOceanShadingColor = new JButton(Localization.get("#Choose"));
-			btnChooseOceanShadingColor.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-					SwingHelper.showColorPicker(effectsPanel, oceanShadingColorDisplay, "Ocean Shading Color", () ->
-					{
-						handleTerrainChange();
-					});
-				}
-			});
-			organizer.addLabelAndComponentsHorizontal("Ocean shading color:",
-					"Ocean near coastlines will be shaded this color.",
+            JButton btnChooseOceanShadingColor = new JButton(Localization.get("#Choose"));
+			btnChooseOceanShadingColor.addActionListener(e -> SwingHelper.showColorPicker(effectsPanel, oceanShadingColorDisplay, Localization.get("#OceanShadingColorLabel"), this::handleTerrainChange));
+			organizer.addLabelAndComponentsHorizontal(Localization.get("#OceanShadingColorTitle"), Localization.get("#OceanShadingColorTooltip"),
 					Arrays.asList(oceanShadingColorDisplay, btnChooseOceanShadingColor), SwingHelper.colorPickerLeftPadding);
 		}
 
@@ -866,43 +838,38 @@ public class ThemePanel extends JTabbedPane
 
 		ButtonGroup oceanEffectButtonGroup = new ButtonGroup();
 
-                concentricWavesButton = new JRadioButton(Localization.get("#ConcentricWaves"));
+		concentricWavesButton = new JRadioButton(Localization.get("#ConcentricWaves"));
 		oceanEffectButtonGroup.add(concentricWavesButton);
-		oceanEffectsListener = new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				concentricWavesLevelSlider.setVisible(concentricWavesButton.isSelected());
-				concentricWavesOptionsHider.setVisible(concentricWavesButton.isSelected());
-				concentricWavesLevelSliderHider.setVisible(concentricWavesButton.isSelected());
-				rippleWavesLevelSlider.setVisible(ripplesRadioButton.isSelected());
-				rippleWavesLevelSliderHider.setVisible(ripplesRadioButton.isSelected());
-				oceanWavesColorHider.setVisible(!noneRadioButton.isSelected());
-				handleTerrainChange();
-			}
-		};
+		oceanEffectsListener = e -> {
+            concentricWavesLevelSlider.setVisible(concentricWavesButton.isSelected());
+            concentricWavesOptionsHider.setVisible(concentricWavesButton.isSelected());
+            concentricWavesLevelSliderHider.setVisible(concentricWavesButton.isSelected());
+            rippleWavesLevelSlider.setVisible(ripplesRadioButton.isSelected());
+            rippleWavesLevelSliderHider.setVisible(ripplesRadioButton.isSelected());
+            oceanWavesColorHider.setVisible(!noneRadioButton.isSelected());
+            handleTerrainChange();
+        };
 		concentricWavesButton.addActionListener(oceanEffectsListener);
 
-                ripplesRadioButton = new JRadioButton(Localization.get("#Ripples"));
+		ripplesRadioButton = new JRadioButton(Localization.get("#Ripples"));
 		oceanEffectButtonGroup.add(ripplesRadioButton);
 		ripplesRadioButton.addActionListener(oceanEffectsListener);
 
-                noneRadioButton = new JRadioButton(Localization.get("#None"));
+		noneRadioButton = new JRadioButton(Localization.get("#None"));
 		oceanEffectButtonGroup.add(noneRadioButton);
 		noneRadioButton.addActionListener(oceanEffectsListener);
-		organizer.addLabelAndComponentsVertical("Wave type:", "Which type of wave to draw in the ocean along coastlines.",
+		organizer.addLabelAndComponentsVertical(Localization.get("#WaveTypeLabel"), Localization.get("#WaveTypeTooltip"),
 				Arrays.asList(concentricWavesButton, ripplesRadioButton, noneRadioButton));
 
-                fadeWavesCheckbox = new JCheckBox(Localization.get("#FadeOuterWaves"));
+		fadeWavesCheckbox = new JCheckBox(Localization.get("#FadeOuterWaves"));
 		createMapChangeListenerForTerrainChange(fadeWavesCheckbox);
 
-                jitterWavesCheckbox = new JCheckBox(Localization.get("#Jitter"));
+		jitterWavesCheckbox = new JCheckBox(Localization.get("#Jitter"));
 		createMapChangeListenerForTerrainChange(jitterWavesCheckbox);
 
-                brokenLinesCheckbox = new JCheckBox(Localization.get("#BrokenLines"));
+		brokenLinesCheckbox = new JCheckBox(Localization.get("#BrokenLines"));
 		createMapChangeListenerForTerrainChange(brokenLinesCheckbox);
-		concentricWavesOptionsHider = organizer.addLabelAndComponentsVertical("Style options:", "Options for how to draw concentric waves.",
+		concentricWavesOptionsHider = organizer.addLabelAndComponentsVertical(Localization.get("#StyleOptionsLabel"), Localization.get("#StyleOptionsTooltip"),
 				Arrays.asList(fadeWavesCheckbox, jitterWavesCheckbox, brokenLinesCheckbox));
 
 		concentricWavesLevelSlider = new JSlider();
@@ -914,7 +881,7 @@ public class ThemePanel extends JTabbedPane
 		concentricWavesLevelSlider.setMajorTickSpacing(1);
 		createMapChangeListenerForTerrainChange(concentricWavesLevelSlider);
 		SwingHelper.setSliderWidthForSidePanel(concentricWavesLevelSlider);
-		concentricWavesLevelSliderHider = organizer.addLabelAndComponent("Wave count:", "The number of concentric waves to draw.",
+		concentricWavesLevelSliderHider = organizer.addLabelAndComponent(Localization.get("#WaveCountLabel"), Localization.get("#WaveCountTooltip"),
 				concentricWavesLevelSlider);
 
 		rippleWavesLevelSlider = new JSlider();
@@ -925,27 +892,26 @@ public class ThemePanel extends JTabbedPane
 		rippleWavesLevelSlider.setMaximum(100);
 		createMapChangeListenerForTerrainChange(rippleWavesLevelSlider);
 		SwingHelper.setSliderWidthForSidePanel(rippleWavesLevelSlider);
-		rippleWavesLevelSliderHider = organizer.addLabelAndComponent("Wave width:", "How far from coastlines waves should draw.",
+		rippleWavesLevelSliderHider = organizer.addLabelAndComponent(Localization.get("#WaveWidthLabel"), Localization.get("#WaveWidthTooltip"),
 				rippleWavesLevelSlider);
 
 		{
 			oceanWavesColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-                JButton btnChooseOceanEffectsColor = new JButton(Localization.get("#Choose"));
+			JButton btnChooseOceanEffectsColor = new JButton(Localization.get("#Choose"));
 			btnChooseOceanEffectsColor.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					SwingHelper.showColorPicker(effectsPanel, oceanWavesColorDisplay, "Wave Color", () -> handleTerrainChange());
+					SwingHelper.showColorPicker(effectsPanel, oceanWavesColorDisplay, Localization.get("#WaveColorTitle"), () -> handleTerrainChange());
 				}
 			});
-			btnChooseOceanEffectsColor.setToolTipText("Choose a color for waves near coastlines.");
-			oceanWavesColorHider = organizer.addLabelAndComponentsHorizontal("Wave color:",
-					"The color of the ocean waves.",
+			btnChooseOceanEffectsColor.setToolTipText(Localization.get("#OceanEffectTooltip"));
+			oceanWavesColorHider = organizer.addLabelAndComponentsHorizontal(Localization.get("#WaveColorLabel"), Localization.get("#WaveColorTooltip"),
 					Arrays.asList(oceanWavesColorDisplay, btnChooseOceanEffectsColor), SwingHelper.colorPickerLeftPadding);
 		}
 
-                drawOceanEffectsInLakesCheckbox = new JCheckBox(Localization.get("#DrawOceanWavesInLakes"));
+		drawOceanEffectsInLakesCheckbox = new JCheckBox(Localization.get("#DrawOceanWavesInLakes"));
 		createMapChangeListenerForTerrainChange(drawOceanEffectsInLakesCheckbox);
 		organizer.addLeftAlignedComponent(drawOceanEffectsInLakesCheckbox);
 
@@ -953,22 +919,22 @@ public class ThemePanel extends JTabbedPane
 			organizer.addSeperator();
 			riverColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-                JButton riverColorChooseButton = new JButton(Localization.get("#Choose"));
+			JButton riverColorChooseButton = new JButton(Localization.get("#Choose"));
 			riverColorChooseButton.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					SwingHelper.showColorPicker(effectsPanel, riverColorDisplay, "River Color", () -> handleTerrainChange());
+					SwingHelper.showColorPicker(effectsPanel, riverColorDisplay, Localization.get("#RiverColorTitle"), () -> handleTerrainChange());
 				}
 			});
-			organizer.addLabelAndComponentsHorizontal("River color:", "Rivers will be drawn this color.",
+			organizer.addLabelAndComponentsHorizontal(Localization.get("#RiverColorLabel"), Localization.get("#RiverColorTooltip"),
 					Arrays.asList(riverColorDisplay, riverColorChooseButton), SwingHelper.colorPickerLeftPadding);
 		}
 
 		{
 			organizer.addSeperator();
-                drawRoadsCheckbox = new JCheckBox(Localization.get("#DrawRoads"));
-			drawRoadsCheckbox.setToolTipText("Whether to show/hide roads");
+			drawRoadsCheckbox = new JCheckBox(Localization.get("#DrawRoads"));
+			drawRoadsCheckbox.setToolTipText(Localization.get("#DrawRoadsTooltip"));
 			drawRoadsCheckbox.addItemListener(new ItemListener()
 			{
 				@Override
@@ -981,7 +947,7 @@ public class ThemePanel extends JTabbedPane
 			organizer.addLeftAlignedComponent(drawRoadsCheckbox);
 
 			roadStyleComboBox = new JComboBox<>(StrokeType.values());
-			roadStyleComboBoxHider = organizer.addLabelAndComponent("Style:", "Line style for drawing roads", roadStyleComboBox);
+			roadStyleComboBoxHider = organizer.addLabelAndComponent(Localization.get("#StyleLabel"), Localization.get("#StyleTooltipRoads"), roadStyleComboBox);
 			createMapChangeListenerForTerrainChange(roadStyleComboBox);
 
 			{
@@ -994,19 +960,13 @@ public class ThemePanel extends JTabbedPane
 				SwingHelper.setSliderWidthForSidePanel(roadWidthSlider);
 				SliderWithDisplayedValue sliderWithDisplay = new SliderWithDisplayedValue(roadWidthSlider,
 						(value) -> String.format("%.1f", value / SettingsGenerator.maxLineWidthInEditor), null);
-				roadWidthSliderHider = sliderWithDisplay.addToOrganizer(organizer, "Width:", "Line width of roads");
+				roadWidthSliderHider = sliderWithDisplay.addToOrganizer(organizer, Localization.get("#Width"), Localization.get("#WidthTooltipRoads"));
 			}
 
 			roadColorDisplay = SwingHelper.createColorPickerPreviewPanel();
-                JButton buttonRoadColor = new JButton(Localization.get("#Choose"));
-			buttonRoadColor.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-					SwingHelper.showColorPicker(effectsPanel, roadColorDisplay, "Road Color", () -> handleTerrainChange());
-				}
-			});
-			roadColorHider = organizer.addLabelAndComponentsHorizontal("Color:", "The color of roads",
+			JButton buttonRoadColor = new JButton(Localization.get("#Choose"));
+			buttonRoadColor.addActionListener(e -> SwingHelper.showColorPicker(effectsPanel, roadColorDisplay, Localization.get("#RoadColorTitle"), this::handleTerrainChange));
+			roadColorHider = organizer.addLabelAndComponentsHorizontal(Localization.get("#ColorLabel"), Localization.get("#RoadColorTooltip"),
 					Arrays.asList(roadColorDisplay, buttonRoadColor), SwingHelper.colorPickerLeftPadding);
 		}
 
@@ -1026,7 +986,7 @@ public class ThemePanel extends JTabbedPane
 			}
 		});
 		enableSizeSliderListeners = true;
-		organizer.addLabelAndComponent("Mountain size:", "Changes the size of all mountains on the map", mountainScaleSlider);
+		organizer.addLabelAndComponent(Localization.get("#MountainSizeLabel"), Localization.get("#MountainSizeTooltip"), mountainScaleSlider);
 
 		hillScaleSlider = new JSlider(minScaleSliderValue, maxScaleSliderValue);
 		hillScaleSlider.setMajorTickSpacing(2);
@@ -1042,7 +1002,7 @@ public class ThemePanel extends JTabbedPane
 				handleTerrainChange();
 			}
 		});
-		organizer.addLabelAndComponent("Hill size:", "Changes the size of all hills on the map", hillScaleSlider);
+		organizer.addLabelAndComponent(Localization.get("#HillSizeLabel"), Localization.get("#HillSizeTooltip"), hillScaleSlider);
 
 		duneScaleSlider = new JSlider(minScaleSliderValue, maxScaleSliderValue);
 		duneScaleSlider.setMajorTickSpacing(2);
@@ -1058,7 +1018,7 @@ public class ThemePanel extends JTabbedPane
 				handleTerrainChange();
 			}
 		});
-		organizer.addLabelAndComponent("Dune size:", "Changes the size of all sand dunes on the map", duneScaleSlider);
+		organizer.addLabelAndComponent(Localization.get("#DuneSizeLabel"), Localization.get("#DuneSizeTooltip"), duneScaleSlider);
 
 		// If I change the maximum here, also update densityScale in IconDrawer.drawTreesForCenters.
 		treeHeightSlider = new JSlider(minScaleSliderValue, maxScaleSliderValue);
@@ -1077,8 +1037,8 @@ public class ThemePanel extends JTabbedPane
 			}
 		});
 		enableSizeSliderListeners = true;
-		organizer.addLabelAndComponent("Tree height:",
-				"Changes the height of all trees on the map, and redistributes trees to preserve forest density", treeHeightSlider);
+		organizer.addLabelAndComponent(Localization.get("#TreeHeightLabel"),
+				Localization.get("#TreeHeightTooltip"), treeHeightSlider);
 
 		cityScaleSlider = new JSlider(minScaleSliderValue, maxScaleSliderValue);
 		cityScaleSlider.setMajorTickSpacing(2);
@@ -1094,7 +1054,7 @@ public class ThemePanel extends JTabbedPane
 				handleTerrainChange();
 			}
 		});
-		organizer.addLabelAndComponent("City size:", "Changes the size of all cities on the map", cityScaleSlider);
+		organizer.addLabelAndComponent(Localization.get("#CitySizeLabel"), Localization.get("#CitySizeTooltip"), cityScaleSlider);
 
 		updateRoadFieldVisibility();
 
@@ -1102,7 +1062,6 @@ public class ThemePanel extends JTabbedPane
 		organizer.addHorizontalSpacerRowToHelpComponentAlignment(0.6);
 		return organizer.createScrollPane();
 	}
-
 
 	private void unselectAnyIconBeingEdited()
 	{
@@ -1177,8 +1136,7 @@ public class ThemePanel extends JTabbedPane
 				assert density > 0;
 
 				CenterTrees cTrees = new CenterTrees(artPack, treeType, density, rand.nextLong());
-				CenterEdit cEdit = mainWindow.edits.centerEdits.get(centerIndex);
-				mainWindow.edits.centerEdits.put(centerIndex, cEdit.copyWithTrees(cTrees));
+                mainWindow.edits.centerEdits.computeIfPresent(centerIndex, (k, cEdit) -> cEdit.copyWithTrees(cTrees));
 			}
 		});
 	}
@@ -1313,63 +1271,62 @@ public class ThemePanel extends JTabbedPane
 
 		JPanel fontsPanel = organizer.panel;
 
-                enableTextCheckBox = new JCheckBox(Localization.get("#EnableText"));
-		enableTextCheckBox.setToolTipText("Enable/disable drawing text. When unselected, text will still exist, but will not be shown.");
+		enableTextCheckBox = new JCheckBox(Localization.get("#EnableText"));
+		enableTextCheckBox.setToolTipText(Localization.get("#EnableTextTooltip"));
 		organizer.addLeftAlignedComponent(enableTextCheckBox);
 		organizer.addSeperator();
 
-		Tuple2<JLabel, JButton> tupleTitle = organizer.addFontChooser("Title font:", 70, () -> handleFontsChange());
+		Tuple2<JLabel, JButton> tupleTitle = organizer.addFontChooser(Localization.get("#TitleFontLabel"), 70, () -> handleFontsChange());
 		titleFontDisplay = tupleTitle.getFirst();
 		btnTitleFont = tupleTitle.getSecond();
 
-		Tuple2<JLabel, JButton> tupleRegion = organizer.addFontChooser("Region font:", 40, () -> handleFontsChange());
+		Tuple2<JLabel, JButton> tupleRegion = organizer.addFontChooser(Localization.get("#RegionFontLabel"), 40, () -> handleFontsChange());
 		regionFontDisplay = tupleRegion.getFirst();
 		btnRegionFont = tupleRegion.getSecond();
 
-		Tuple2<JLabel, JButton> tupleMountainRange = organizer.addFontChooser("Mountain range font:", 30, () -> handleFontsChange());
+		Tuple2<JLabel, JButton> tupleMountainRange = organizer.addFontChooser(Localization.get("#MountainFontLabel"), 30, () -> handleFontsChange());
 		mountainRangeFontDisplay = tupleMountainRange.getFirst();
 		btnMountainRangeFont = tupleMountainRange.getSecond();
 
-		Tuple2<JLabel, JButton> tupleCitiesMountains = organizer.addFontChooser("Cities/mountains font:", 30, () -> handleFontsChange());
+		Tuple2<JLabel, JButton> tupleCitiesMountains = organizer.addFontChooser(Localization.get("#CitiesMountainsFontLabel"), 30, () -> handleFontsChange());
 		otherMountainsFontDisplay = tupleCitiesMountains.getFirst();
 		btnOtherMountainsFont = tupleCitiesMountains.getSecond();
 
-		Tuple2<JLabel, JButton> tupleRiver = organizer.addFontChooser("River/lake font:", 30, () -> handleFontsChange());
+		Tuple2<JLabel, JButton> tupleRiver = organizer.addFontChooser(Localization.get("#RiverLakeFontLabel"), 30, () -> handleFontsChange());
 		riverFontDisplay = tupleRiver.getFirst();
 		btnRiverFont = tupleRiver.getSecond();
 
 		organizer.addSeperator();
 		textColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-                btnChooseTextColor = new JButton(Localization.get("#Choose"));
+		btnChooseTextColor = new JButton(Localization.get("#Choose"));
 		btnChooseTextColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				SwingHelper.showColorPicker(fontsPanel, textColorDisplay, "Text Color", () -> handleFontsChange());
+				SwingHelper.showColorPicker(fontsPanel, textColorDisplay, Localization.get("#TextColorTitle"), () -> handleFontsChange());
 			}
 		});
-		organizer.addLabelAndComponentsHorizontal("Text color:", "", Arrays.asList(textColorDisplay, btnChooseTextColor),
+		organizer.addLabelAndComponentsHorizontal(Localization.get("#TextColorLabel"), "", Arrays.asList(textColorDisplay, btnChooseTextColor),
 				SwingHelper.colorPickerLeftPadding);
 
 		organizer.addSeperator();
-                drawBoldBackgroundCheckbox = new JCheckBox(Localization.get("#BoldBackgroundForRegionAndTitleNames"));
-		drawBoldBackgroundCheckbox.setToolTipText("Whether to draw bolded letters behind region and title text to highlight them.");
+		drawBoldBackgroundCheckbox = new JCheckBox(Localization.get("#BoldBackgroundForRegionAndTitleNames"));
+		drawBoldBackgroundCheckbox.setToolTipText(Localization.get("#BoldBackgroundCheckboxTooltip"));
 		organizer.addLeftAlignedComponent(drawBoldBackgroundCheckbox);
 
 		boldBackgroundColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-                btnChooseBoldBackgroundColor = new JButton(Localization.get("#Choose"));
+		btnChooseBoldBackgroundColor = new JButton(Localization.get("#Choose"));
 		btnChooseBoldBackgroundColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				SwingHelper.showColorPicker(fontsPanel, boldBackgroundColorDisplay, "Bold Background Color", () -> handleFontsChange());
+				SwingHelper.showColorPicker(fontsPanel, boldBackgroundColorDisplay, Localization.get("#BoldBackgroundColor"), () -> handleFontsChange());
 			}
 		});
-		organizer.addLabelAndComponentsHorizontal("Bold background color:",
-				"If '" + drawBoldBackgroundCheckbox.getText()
-						+ "' is checked, title and region names will be given a bold background in this color.",
+		organizer.addLabelAndComponentsHorizontal(Localization.get("#BoldBackgroundColorLabel"),
+				Localization.get("#BoldBackgroundColorTooltip", drawBoldBackgroundCheckbox.getText()),
 				Arrays.asList(boldBackgroundColorDisplay, btnChooseBoldBackgroundColor), SwingHelper.colorPickerLeftPadding);
 
 		drawBoldBackgroundCheckbox.addActionListener(new ActionListener()
@@ -1444,63 +1401,53 @@ public class ThemePanel extends JTabbedPane
 	{
 		IntDimension size = new IntDimension(backgroundDisplaySize.width, backgroundDisplaySize.height);
 
-		SwingWorker<Tuple4<Image, ImageHelper.ColorifyAlgorithm, Image, ImageHelper.ColorifyAlgorithm>, Void> worker = new SwingWorker<Tuple4<Image, ImageHelper.ColorifyAlgorithm, Image, ImageHelper.ColorifyAlgorithm>, Void>()
-		{
+		SwingWorker<Tuple4<Image, ImageHelper.ColorifyAlgorithm, Image, ImageHelper.ColorifyAlgorithm>, Void> worker = new SwingWorker<>() {
 
-			@Override
-			protected Tuple4<Image, ImageHelper.ColorifyAlgorithm, Image, ImageHelper.ColorifyAlgorithm> doInBackground() throws Exception
-			{
-				MapSettings tempSettings = new MapSettings();
-				getSettingsFromGUI(tempSettings);
-				String texturePath;
-				Tuple2<Path, String> texturePathWithWarning = tempSettings.getBackgroundImagePath();
-				if (texturePathWithWarning != null && texturePathWithWarning.getFirst() != null)
-				{
-					texturePath = tempSettings.getBackgroundImagePath().getFirst().toString();
-				}
-				else
-				{
-					return null;
-				}
+            @Override
+            protected Tuple4<Image, ImageHelper.ColorifyAlgorithm, Image, ImageHelper.ColorifyAlgorithm> doInBackground() throws Exception {
+                MapSettings tempSettings = new MapSettings();
+                getSettingsFromGUI(tempSettings);
+                String texturePath;
+                Tuple2<Path, String> texturePathWithWarning = tempSettings.getBackgroundImagePath();
+                if (texturePathWithWarning != null && texturePathWithWarning.getFirst() != null) {
+                    texturePath = tempSettings.getBackgroundImagePath().getFirst().toString();
+                } else {
+                    return null;
+                }
 
-				long seed = parseBackgroundSeed();
-				return createBackgroundImageDisplaysImages(size, seed, colorizeOceanCheckbox.isSelected(),
-						colorizeLandCheckbox.isSelected(), rdbtnFractal.isSelected(), rdbtnGeneratedFromTexture.isSelected(),
-						solidColorButton.isSelected(), texturePath);
-			}
+                long seed = parseBackgroundSeed();
+                return createBackgroundImageDisplaysImages(size, seed, colorizeOceanCheckbox.isSelected(),
+                        colorizeLandCheckbox.isSelected(), rdbtnFractal.isSelected(), rdbtnGeneratedFromTexture.isSelected(),
+                        solidColorButton.isSelected(), texturePath);
+            }
 
-			@Override
-			public void done()
-			{
-				Tuple4<Image, ImageHelper.ColorifyAlgorithm, Image, ImageHelper.ColorifyAlgorithm> tuple;
-				try
-				{
-					tuple = get();
-				}
-				catch (InterruptedException | ExecutionException e)
-				{
-					throw new RuntimeException(e);
-				}
+            @Override
+            public void done() {
+                Tuple4<Image, ImageHelper.ColorifyAlgorithm, Image, ImageHelper.ColorifyAlgorithm> tuple;
+                try {
+                    tuple = get();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
 
-				if (tuple == null)
-				{
-					return;
-				}
+                if (tuple == null) {
+                    return;
+                }
 
-				Image oceanBackground = tuple.getFirst();
-				ImageHelper.ColorifyAlgorithm oceanColorifyAlgorithm = tuple.getSecond();
-				Image landBackground = tuple.getThird();
-				ImageHelper.ColorifyAlgorithm landColorifyAlgorithm = tuple.getFourth();
+                Image oceanBackground = tuple.getFirst();
+                ImageHelper.ColorifyAlgorithm oceanColorifyAlgorithm = tuple.getSecond();
+                Image landBackground = tuple.getThird();
+                ImageHelper.ColorifyAlgorithm landColorifyAlgorithm = tuple.getFourth();
 
-				oceanDisplayPanel.setColorifyAlgorithm(oceanColorifyAlgorithm);
-				oceanDisplayPanel.setImage(AwtFactory.unwrap(oceanBackground));
-				oceanDisplayPanel.repaint();
+                oceanDisplayPanel.setColorifyAlgorithm(oceanColorifyAlgorithm);
+                oceanDisplayPanel.setImage(AwtFactory.unwrap(oceanBackground));
+                oceanDisplayPanel.repaint();
 
-				landDisplayPanel.setColorifyAlgorithm(landColorifyAlgorithm);
-				landDisplayPanel.setImage(AwtFactory.unwrap(landBackground));
-				landDisplayPanel.repaint();
-			}
-		};
+                landDisplayPanel.setColorifyAlgorithm(landColorifyAlgorithm);
+                landDisplayPanel.setImage(AwtFactory.unwrap(landBackground));
+                landDisplayPanel.repaint();
+            }
+        };
 
 		worker.execute();
 	}
@@ -1808,7 +1755,7 @@ public class ThemePanel extends JTabbedPane
 		else
 		{
 			double slope = (maxScaleSliderValue - sliderValueFor1Scale) / (scaleMax - 1.0);
-			double yIntercept = sliderValueFor1Scale - slope * (1.0);
+			double yIntercept = sliderValueFor1Scale - slope;
 			return (int) Math.round(scale * slope + yIntercept);
 		}
 	}
@@ -1824,7 +1771,7 @@ public class ThemePanel extends JTabbedPane
 		else
 		{
 			double slope = (maxScaleSliderValue - sliderValueFor1Scale) / (scaleMax - 1.0);
-			double yIntercept = sliderValueFor1Scale - slope * (1.0);
+			double yIntercept = sliderValueFor1Scale - slope;
 			return (sliderValue - yIntercept) / slope;
 		}
 	}
@@ -1930,7 +1877,8 @@ public class ThemePanel extends JTabbedPane
 		settings.oceanWavesLevel = rippleWavesLevelSlider.getValue();
 		settings.oceanShadingLevel = oceanShadingSlider.getValue();
 		settings.concentricWaveCount = concentricWavesLevelSlider.getValue();
-		settings.oceanWavesType = ripplesRadioButton.isSelected() ? OceanWaves.Ripples
+		settings.oceanWavesType = ripplesRadioButton.isSelected()
+				? OceanWaves.Ripples
 				: noneRadioButton.isSelected() ? OceanWaves.None : OceanWaves.ConcentricWaves;
 		settings.fadeConcentricWaves = fadeWavesCheckbox.isSelected();
 		settings.jitterToConcentricWaves = jitterWavesCheckbox.isSelected();
@@ -1954,7 +1902,8 @@ public class ThemePanel extends JTabbedPane
 
 		settings.drawGrunge = drawGrungeCheckbox.isSelected();
 		settings.grungeWidth = grungeSlider.getValue();
-		settings.lineStyle = jaggedLinesButton.isSelected() ? LineStyle.Jagged
+		settings.lineStyle = jaggedLinesButton.isSelected()
+				? LineStyle.Jagged
 				: splinesLinesButton.isSelected() ? LineStyle.Splines : LineStyle.SplinesWithSmoothedCoastlines;
 
 		// Background image settings
@@ -2027,7 +1976,7 @@ public class ThemePanel extends JTabbedPane
 
 	public enum LandColoringMethod
 	{
-		SingleColor("Single Color"), ColorPoliticalRegions("Color Political Regions");
+		SingleColor(Localization.get("#SingleColor")), ColorPoliticalRegions(Localization.get("#ColorPoliticalRegions"));
 
 		private final String name;
 
@@ -2045,7 +1994,7 @@ public class ThemePanel extends JTabbedPane
 
 	private void createMapChangeListenerForTerrainChange(Component component)
 	{
-		SwingHelper.addListener(component, () -> handleTerrainChange());
+		SwingHelper.addListener(component, this::handleTerrainChange);
 	}
 
 	private void handleTerrainChange()
@@ -2083,7 +2032,7 @@ public class ThemePanel extends JTabbedPane
 
 	private void createMapChangeListenerForFrayedEdgeOrGrungeChange(Component component)
 	{
-		SwingHelper.addListener(component, () -> handleFrayedEdgeOrGrungeChange());
+		SwingHelper.addListener(component, this::handleFrayedEdgeOrGrungeChange);
 	}
 
 	private void handleFrayedEdgeOrGrungeChange()

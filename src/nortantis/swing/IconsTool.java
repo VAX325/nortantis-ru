@@ -102,11 +102,11 @@ public class IconsTool extends EditorTool
 		groupPreviewCache = new ConcurrentHashMapF<>();
 	}
 
-        @Override
-        public String getToolbarName()
-        {
-                return Localization.get("#Icons");
-        }
+	@Override
+	public String getToolbarName()
+	{
+		return Localization.get("#Icons");
+	}
 
 	@Override
 	public int getMnemonic()
@@ -117,8 +117,8 @@ public class IconsTool extends EditorTool
 	@Override
 	public String getKeyboardShortcutText()
 	{
-                return Localization.get("#IconsShortcut");
-        }
+		return Localization.get("#IconsShortcut");
+	}
 
 	@Override
 	public String getImageIconFilePath()
@@ -155,16 +155,14 @@ public class IconsTool extends EditorTool
 				refreshImagesWithoutClearingCache(mainWindow.getSettingsFromGUI(false));
 			}
 		});
-                organizer.addLabelAndComponent(Localization.get("#ArtPackLabel"), Localization.get("#ArtPackTooltip")
-                                .replace("{installed}", Assets.installedArtPack).replace("{custom}", Assets.customArtPack),
-                                artPackComboBox);
+		organizer.addLabelAndComponent(Localization.get("#ArtPackLabel"), Localization.get("#ArtPackTooltip", Assets.installedArtPack, Assets.customArtPack), artPackComboBox);
 
 		// Tools
 		{
 			ButtonGroup group = new ButtonGroup();
 			List<JComponent> radioButtons = new ArrayList<>();
 
-                        mountainsButton = new JRadioButton(Localization.get("#Mountains"));
+			mountainsButton = new JRadioButton(Localization.get("#Mountains"));
 			group.add(mountainsButton);
 			radioButtons.add(mountainsButton);
 			mountainsButton.setSelected(true);
@@ -177,7 +175,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-                        hillsButton = new JRadioButton(Localization.get("#Hills"));
+			hillsButton = new JRadioButton(Localization.get("#Hills"));
 			group.add(hillsButton);
 			radioButtons.add(hillsButton);
 			hillsButton.addActionListener(new ActionListener()
@@ -189,7 +187,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-                        dunesButton = new JRadioButton(Localization.get("#Dunes"));
+			dunesButton = new JRadioButton(Localization.get("#Dunes"));
 			group.add(dunesButton);
 			radioButtons.add(dunesButton);
 			dunesButton.addActionListener(new ActionListener()
@@ -201,7 +199,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-                        treesButton = new JRadioButton(Localization.get("#Trees"));
+			treesButton = new JRadioButton(Localization.get("#Trees"));
 			group.add(treesButton);
 			radioButtons.add(treesButton);
 			treesButton.addActionListener(new ActionListener()
@@ -213,7 +211,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-                        citiesButton = new JRadioButton(Localization.get("#Cities"));
+			citiesButton = new JRadioButton(Localization.get("#Cities"));
 			group.add(citiesButton);
 			radioButtons.add(citiesButton);
 			citiesButton.addActionListener(new ActionListener()
@@ -225,7 +223,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-                        decorationsButton = new JRadioButton(Localization.get("#Decorations"));
+			decorationsButton = new JRadioButton(Localization.get("#Decorations"));
 			group.add(decorationsButton);
 			radioButtons.add(decorationsButton);
 			decorationsButton.addActionListener(new ActionListener()
@@ -237,7 +235,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-                        allButton = new JRadioButton(Localization.get("#All"));
+			allButton = new JRadioButton(Localization.get("#All"));
 			group.add(allButton);
 			radioButtons.add(allButton);
 			allButton.addActionListener(new ActionListener()
@@ -357,16 +355,16 @@ public class IconsTool extends EditorTool
 			radioButtons.add(button);
 		}
 
-                List<? extends Component> listToUse = radioButtons.size() > 0
-                                ? radioButtons
-                                : Arrays.asList(new JLabel(Localization.get("#ArtPackHasNoIcons")
-                                                .replace("{pack}", artPack)
-                                                .replace("{type}", iconType.toString().toLowerCase())));
+		List<? extends Component> listToUse = radioButtons.size() > 0
+				? radioButtons
+				: Arrays.asList(new JLabel(Localization.get("#ArtPackHasNoIcons").replace("{pack}", artPack).replace("{type}",
+						iconType.toString().toLowerCase())));
 		IconTypeButtons result;
 		if (existing == null)
 		{
 			JPanel buttonsPanel = new JPanel();
-			result = new IconTypeButtons(organizer.addLabelAndComponentsVerticalWithComponentPanel(iconType.getNameForGUI() + ":", "", listToUse, buttonsPanel),
+			result = new IconTypeButtons(
+					organizer.addLabelAndComponentsVerticalWithComponentPanel(iconType.getNameForGUI() + ":", "", listToUse, buttonsPanel),
 					radioButtons, buttonsPanel);
 		}
 		else
@@ -494,8 +492,8 @@ public class IconsTool extends EditorTool
 					protected List<Image> doInBackground() throws Exception
 					{
 						List<Image> previewImages = new ArrayList<>();
-						Map<String, ImageAndMasks> iconsInGroup = ImageCache
-								.getInstance(settings.artPack, settings.customImagesPath).getIconsByNameForGroup(selector.type, groupId);
+						Map<String, ImageAndMasks> iconsInGroup = ImageCache.getInstance(settings.artPack, settings.customImagesPath)
+								.getIconsByNameForGroup(selector.type, groupId);
 
 						for (Tuple2<String, UnscaledImageToggleButton> nameAndButton : namesAndButtons)
 						{
@@ -668,12 +666,11 @@ public class IconsTool extends EditorTool
 				selector.selectFirstButton();
 			}
 		}
-                else
-                {
-                        selector.typesPanel.add(new JLabel(Localization.get("#ArtPackHasNoIcons")
-                                        .replace("{pack}", artPack)
-                                        .replace("{type}", selector.type.toString())));
-                }
+		else
+		{
+			selector.typesPanel.add(new JLabel(
+					Localization.get("#ArtPackHasNoIcons").replace("{pack}", artPack).replace("{type}", selector.type.toString())));
+		}
 	}
 
 	private ConcurrentHashMapF<Tuple3<String, IconType, String>, Image> groupPreviewCache;
@@ -695,10 +692,10 @@ public class IconsTool extends EditorTool
 	private Image createIconPreview(MapSettings settings, List<Image> images, int scaledHeight, int padding, IconType iconType)
 	{
 		final double osScaling = SwingHelper.getOSScale();
-		final int maxRowWidth = (int)(168 * osScaling);
-		final int horizontalPaddingBetweenImages = (int)(2 * osScaling);;
-		padding = (int)(padding * osScaling);
-		scaledHeight = (int)(scaledHeight * osScaling);
+		final int maxRowWidth = (int) (168 * osScaling);
+		final int horizontalPaddingBetweenImages = (int) (2 * osScaling);;
+		padding = (int) (padding * osScaling);
+		scaledHeight = (int) (scaledHeight * osScaling);
 
 		// Find the size needed for the preview
 		int rowCount = 1;

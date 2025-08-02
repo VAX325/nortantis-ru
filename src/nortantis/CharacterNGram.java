@@ -9,6 +9,7 @@ import java.util.Set;
 
 import nortantis.util.ComparableList;
 import nortantis.util.ListCounterMap;
+import nortantis.util.Localization;
 import nortantis.util.Range;
 
 /**
@@ -96,7 +97,7 @@ public class CharacterNGram
 	private String generateName(String requiredPrefix)
 	{
 		if (lcMap.size() == 0)
-			throw new IllegalStateException("At least one book must be selected to generate text.");
+			throw new IllegalStateException(Localization.get("#AtLeastOneBook"));
 		List<Character> lastChars = new ComparableList<>();
 		for (@SuppressWarnings("unused")
 		int i : new Range(n - 1))

@@ -1,5 +1,6 @@
 package nortantis;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,12 +9,7 @@ import java.util.Random;
 import java.util.Set;
 
 import nortantis.geom.Point;
-import nortantis.util.Assets;
-import nortantis.util.Function0;
-import nortantis.util.Pair;
-import nortantis.util.ProbabilityHelper;
-import nortantis.util.Range;
-import nortantis.util.Tuple2;
+import nortantis.util.*;
 
 public class NameCreator
 {
@@ -100,13 +96,13 @@ public class NameCreator
 
 		if (!requireUnique)
 		{
-			return String.format(format, nameCreator.apply());
+			return MessageFormat.format(format, nameCreator.apply(), "");
 		}
 
 		for (@SuppressWarnings("unused")
 		int retry : new Range(maxRetries))
 		{
-			String name = String.format(format, nameCreator.apply());
+			String name = MessageFormat.format(format, nameCreator.apply(), "");
 			if (!namesGenerated.contains(name))
 			{
 				namesGenerated.add(name);
@@ -114,7 +110,6 @@ public class NameCreator
 			}
 		}
 		throw new NotEnoughNamesException();
-
 	}
 
 	public static List<CityType> findCityTypeFromCityFileName(String cityFileNameNoExtension)
@@ -136,8 +131,7 @@ public class NameCreator
 			{
 				result.add(CityType.Town);
 			}
-			if (words.contains("homestead") || words.contains("building") || words.contains("house")
-					|| words.contains("windmill"))
+			if (words.contains("homestead") || words.contains("building") || words.contains("house") || words.contains("windmill"))
 			{
 				result.add(CityType.Homestead);
 			}
@@ -174,14 +168,14 @@ public class NameCreator
 			case Decorated:
 				if (r.nextDouble() < probabilityOfPersonName)
 				{
-					return generatePersonName("The Land of %s", requireUnique);
+					return generatePersonName(Localization.get("#TheLandOf"), requireUnique);
 				}
 				else
 				{
-					return generatePlaceName("The Land of %s", requireUnique);
+					return generatePlaceName(Localization.get("#TheLandOf"), requireUnique);
 				}
 			case NameOnly:
-				return generatePlaceName("%s", requireUnique);
+				return generatePlaceName(Localization.get("#PlainName"), requireUnique);
 			default:
 				throw new IllegalArgumentException("Unknown title type: " + titleType);
 			}
@@ -192,13 +186,13 @@ public class NameCreator
 			if (r.nextDouble() < probabilityOfPersonName)
 			{
 				String format = ProbabilityHelper.sampleCategorical(r,
-						Arrays.asList(new Tuple2<>(0.2, "Kingdom of %s"), new Tuple2<>(0.04, "Empire of %s")));
+						Arrays.asList(new Tuple2<>(0.2, Localization.get("#KingdomOf")), new Tuple2<>(0.04, Localization.get("#EmpireOf"))));
 				return generatePersonName(format, requireUnique);
 			}
 			else
 			{
 				String format = ProbabilityHelper.sampleCategorical(r,
-						Arrays.asList(new Tuple2<>(0.1, "Kingdom of %s"), new Tuple2<>(0.02, "Empire of %s"), new Tuple2<>(0.85, "%s")));
+						Arrays.asList(new Tuple2<>(0.1, Localization.get("#KingdomOf")), new Tuple2<>(0.02, Localization.get("#EmpireOf")), new Tuple2<>(0.85, Localization.get("#PlainName"))));
 				return generatePlaceName(format, requireUnique);
 			}
 		}
@@ -207,11 +201,11 @@ public class NameCreator
 			double probabilityOfCompiledName = nameCompiler.isEmpty() ? 0.0 : 0.7;
 			if (r.nextDouble() < probabilityOfCompiledName)
 			{
-				return compileName("%s Range", requireUnique);
+				return compileName(Localization.get("#NameRange"), requireUnique);
 			}
 			else
 			{
-				return generatePlaceName("%s Range", requireUnique);
+				return generatePlaceName(Localization.get("#NameRange"), requireUnique);
 			}
 		}
 		else if (type.equals(TextType.Other_mountains))
@@ -230,7 +224,7 @@ public class NameCreator
 				{
 					// Person name
 					// Make the name possessive.
-					format = format.replace("%s", "%s's");
+					format = format.replace("{0}", Localization.get("#PossessiveName"));
 					return generatePersonName(format, requireUnique);
 				}
 				else
@@ -245,27 +239,27 @@ public class NameCreator
 			String structureName;
 			if (cityType.equals(CityType.Fortification))
 			{
-				structureName = ProbabilityHelper.sampleCategorical(r, Arrays.asList(new Tuple2<>(0.2, "Castle"), new Tuple2<>(0.2, "Fort"),
-						new Tuple2<>(0.2, "Fortress"), new Tuple2<>(0.2, "Keep"), new Tuple2<>(0.2, "Citadel")));
+				structureName = ProbabilityHelper.sampleCategorical(r, Arrays.asList(new Tuple2<>(0.2, Localization.get("#Castle")), new Tuple2<>(0.2, Localization.get("#Fort")),
+						new Tuple2<>(0.2, Localization.get("#Fortress")), new Tuple2<>(0.2, Localization.get("#Keep")), new Tuple2<>(0.2, Localization.get("#Citadel"))));
 			}
 			else if (cityType.equals(CityType.City))
 			{
 				structureName = ProbabilityHelper.sampleCategorical(r,
-						Arrays.asList(new Tuple2<>(0.75, "City"), new Tuple2<>(0.25, "Town")));
+						Arrays.asList(new Tuple2<>(0.75, Localization.get("#City")), new Tuple2<>(0.25, Localization.get("#Town"))));
 			}
 			else if (cityType.equals(CityType.Town))
 			{
 				structureName = ProbabilityHelper.sampleCategorical(r,
-						Arrays.asList(new Tuple2<>(0.2, "City"), new Tuple2<>(0.4, "Village"), new Tuple2<>(0.4, "Town")));
+						Arrays.asList(new Tuple2<>(0.2, Localization.get("#City")), new Tuple2<>(0.4, Localization.get("#Village")), new Tuple2<>(0.4, Localization.get("#Town"))));
 			}
 			else if (cityType.equals(CityType.Homestead))
 			{
-				structureName = "Village";
+				structureName = Localization.get("#Village");
 			}
 			else if (cityType.equals(CityType.Farm))
 			{
 				structureName = ProbabilityHelper.sampleCategorical(r,
-						Arrays.asList(new Tuple2<>(0.7, "Farm"), new Tuple2<>(0.3, "Ranch")));
+						Arrays.asList(new Tuple2<>(0.7, Localization.get("#Farm")), new Tuple2<>(0.3, Localization.get("#Ranch"))));
 			}
 			else
 			{
@@ -276,15 +270,15 @@ public class NameCreator
 			if (r.nextDouble() < probabilityOfPersonName)
 			{
 				String format = ProbabilityHelper.sampleCategorical(r,
-						Arrays.asList(new Tuple2<>(0.1, structureName + " of %s"), new Tuple2<>(0.04, "%s's " + structureName),
-								new Tuple2<>(0.04, structureName + " of %s"), new Tuple2<>(0.04, structureName + " of %s"),
-								new Tuple2<>(0.04, "%s's " + structureName), new Tuple2<>(0.04, "%s's " + structureName)));
+						Arrays.asList(new Tuple2<>(0.1, Localization.get("#StructureOfName", structureName, "{0}")), new Tuple2<>(0.04, Localization.get("#PossessiveStructure", "{0}", structureName)),
+								new Tuple2<>(0.04, Localization.get("#StructureOfName", structureName, "{0}")), new Tuple2<>(0.04, Localization.get("#StructureOfName", structureName, "{0}")),
+								new Tuple2<>(0.04, Localization.get("#PossessiveStructure", "{0}", structureName)), new Tuple2<>(0.04, Localization.get("#PossessiveStructure", "{0}", structureName))));
 				return generatePersonName(format, requireUnique);
 			}
 			else
 			{
-				String format = ProbabilityHelper.sampleCategorical(r, Arrays.asList(new Tuple2<>(0.2, structureName + " of %s"),
-						new Tuple2<>(0.2, "%s " + structureName), new Tuple2<>(0.02, "%s " + structureName), new Tuple2<>(0.3, "%s")));
+				String format = ProbabilityHelper.sampleCategorical(r, Arrays.asList(new Tuple2<>(0.2, Localization.get("#StructureOfName", structureName, "{0}")),
+						new Tuple2<>(0.2, Localization.get("#NameStructure", "{0}", structureName)), new Tuple2<>(0.02, Localization.get("#NameStructure", "{0}", structureName)), new Tuple2<>(0.3, Localization.get("#PlainName"))));
 				return generatePlaceName(format, requireUnique);
 			}
 		}
@@ -304,7 +298,7 @@ public class NameCreator
 				{
 					// Person name
 					// Make the name possessive.
-					format = format.replace("%s", "%s's");
+					format = format.replace("{0}", Localization.get("#PossessiveName"));
 					return generatePersonName(format, requireUnique);
 				}
 				else
@@ -315,9 +309,9 @@ public class NameCreator
 		}
 		else if (type.equals(TextType.Lake))
 		{
-			final String nameBeforeLakeFormat = "%s Lake";
+			final String nameBeforeLakeFormat = Localization.get("#NameLake");
 			String format = ProbabilityHelper.sampleCategorical(r,
-					Arrays.asList(new Tuple2<>(0.6, nameBeforeLakeFormat), new Tuple2<>(0.4, "Lake %s")));
+					Arrays.asList(new Tuple2<>(0.6, nameBeforeLakeFormat), new Tuple2<>(0.4, Localization.get("#LakeName"))));
 
 			if (format.equals(nameBeforeLakeFormat))
 			{
@@ -333,7 +327,7 @@ public class NameCreator
 					{
 						// Person name
 						// Make the name possessive.
-						format = format.replace("%s", "%s's");
+						format = format.replace("{0}", Localization.get("#PossessiveName"));
 						return generatePersonName(format, requireUnique);
 					}
 					else
@@ -357,14 +351,14 @@ public class NameCreator
 	{
 		switch (mountainType)
 		{
-		case Mountains:
-			return "%s Mountains";
-		case Peak:
-			return "%s Peak";
-		case Peaks:
-			return "%s Peaks";
-		default:
-			throw new RuntimeException("Unknown mountain group type: " + mountainType);
+			case Mountains:
+				return Localization.get("#NameMountains");
+			case Peak:
+				return Localization.get("#NamePeak");
+			case Peaks:
+				return Localization.get("#NamePeaks");
+			default:
+				throw new RuntimeException("Unknown mountain group type: " + mountainType);
 		}
 
 	}
@@ -382,21 +376,15 @@ public class NameCreator
 
 	private String getRiverNameFormat(RiverType riverType)
 	{
-		String format;
-		switch (riverType)
-		{
-		case Large:
-			format = ProbabilityHelper.sampleCategorical(r, Arrays.asList(new Tuple2<>(0.1, "%s Wash"), new Tuple2<>(0.8, "%s River")));
-			break;
-		case Small:
-			format = ProbabilityHelper.sampleCategorical(r, Arrays.asList(new Tuple2<>(0.1, "%s Bayou"), new Tuple2<>(0.2, "%s Creek"),
-					new Tuple2<>(0.2, "%s Brook"), new Tuple2<>(0.5, "%s Stream")));
-			break;
-		default:
-			throw new RuntimeException("Unknown river type: " + riverType);
-		}
 
-		return format;
+        return switch (riverType) {
+case Large ->
+ProbabilityHelper.sampleCategorical(r, Arrays.asList(new Tuple2<>(0.1, Localization.get("#NameWash")), new Tuple2<>(0.8, Localization.get("#NameRiver"))));
+case Small ->
+ProbabilityHelper.sampleCategorical(r, Arrays.asList(new Tuple2<>(0.1, Localization.get("#NameBayou")), new Tuple2<>(0.2, Localization.get("#NameCreek")),
+new Tuple2<>(0.2, Localization.get("#NameBrook")), new Tuple2<>(0.5, Localization.get("#NameStream"))));
+default -> throw new RuntimeException("Unknown river type: " + riverType);
+};
 	}
 
 	/**
@@ -439,7 +427,7 @@ public class NameCreator
 		catch (Exception e)
 		{
 			// This can happen if the selected books don't have enough names.
-			return "name";
+			return Localization.get("#FallbackName");
 		}
 	}
 

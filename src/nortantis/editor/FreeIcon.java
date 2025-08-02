@@ -98,7 +98,7 @@ public class FreeIcon
 	{
 		return new FreeIcon(locationResolutionInvariant, scale, type, artPack, groupId, iconIndex, iconName, centerIndex, density);
 	}
-	
+
 	public FreeIcon copyWithName(String iconName)
 	{
 		return new FreeIcon(locationResolutionInvariant, scale, type, artPack, groupId, iconIndex, iconName, centerIndex, density);
@@ -154,16 +154,15 @@ public class FreeIcon
 	 * @param typeLevelScale
 	 *            The scaling from the sliders that scale all icons of a type.
 	 * @param baseWidth
-	 *            The width of the icon before type-level scaling. Should already be
-	 *            adjusted for resolution.
+	 *            The width of the icon before type-level scaling. Should already be adjusted for resolution.
 	 * @return a new IconDrawTask.
 	 */
 	public IconDrawTask toIconDrawTask(String customImagesFolder, double resolutionScale, double typeLevelScale, double baseWidth)
 	{
 		if (iconName != null && !iconName.isEmpty())
 		{
-			Map<String, ImageAndMasks> iconsWithWidths = ImageCache.getInstance(artPack, customImagesFolder)
-					.getIconsByNameForGroup(type, groupId);
+			Map<String, ImageAndMasks> iconsWithWidths = ImageCache.getInstance(artPack, customImagesFolder).getIconsByNameForGroup(type,
+					groupId);
 			if (iconsWithWidths == null || iconsWithWidths.isEmpty())
 			{
 				return null;

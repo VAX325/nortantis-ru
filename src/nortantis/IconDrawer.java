@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import nortantis.util.*;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,17 +33,6 @@ import nortantis.platform.Color;
 import nortantis.platform.Image;
 import nortantis.platform.ImageType;
 import nortantis.swing.MapEdits;
-import nortantis.util.Assets;
-import nortantis.util.Function;
-import nortantis.util.Helper;
-import nortantis.util.ImageHelper;
-import nortantis.util.ListMap;
-import nortantis.util.Logger;
-import nortantis.util.ProbabilityHelper;
-import nortantis.util.Range;
-import nortantis.util.ThreadHelper;
-import nortantis.util.Tuple2;
-import nortantis.util.Tuple3;
 
 public class IconDrawer
 {
@@ -616,8 +606,7 @@ public class IconDrawer
 			String newGroupId = chooseNewGroupId(ImageCache.getInstance(artPackToUse, customImagesPath).getIconGroupNames(type), groupId);
 			if (newGroupId == null)
 			{
-				warningLogger.addWarningMessage("Unable to find the " + type.getSingularName() + " image group '" + groupId
-						+ "' in art pack '" + artPack + "'. There are no " + type.getSingularName() + " icons, so none will be drawn.");
+				warningLogger.addWarningMessage(Localization.get("#ImageGroupNotFoundNoIcons", type.getSingularName(), groupId, artPack));
 				return null;
 			}
 			imagesInGroup = ImageCache.getInstance(artPackToUse, customImagesPath).getIconsByNameForGroup(type, newGroupId);
@@ -628,8 +617,7 @@ public class IconDrawer
 				assert false;
 				return null;
 			}
-			warningLogger.addWarningMessage("Unable to find the " + type.getSingularName() + " image group '" + groupId + "' in art pack '"
-					+ artPack + "'. The group '" + newGroupId + "' in art pack '" + artPackToUse + "' will be used instead.");
+			warningLogger.addWarningMessage(Localization.get("#ImageGroupNotFoundUsingOther", type.getSingularName(), groupId, artPack, newGroupId, artPackToUse));
 			groupId = newGroupId;
 		}
 
@@ -649,8 +637,7 @@ public class IconDrawer
 			}
 			if (name != null)
 			{
-				warningLogger.addWarningMessage("Unable to find the " + type.getSingularName() + " icon '" + oldName + "' in art pack '"
-						+ artPack + "'. The icon '" + name + "' in art pack '" + artPackToUse + "' will be used instead.");
+				warningLogger.addWarningMessage(Localization.get("#IconNotFoundUsingOther", type.getSingularName(), oldName, artPack, name, artPackToUse));
 			}
 		}
 
@@ -736,7 +723,7 @@ public class IconDrawer
 	{
 
 		String dormantTreesMessage = isForDormantTrees
-				? " These trees are not visible because they were drawn at low density, but may become visible if you change the tree height in the Effects tab."
+				? Localization.get("#DormantTreesMessage")
 				: "";
 
 		if (!iconsByGroup.containsKey(groupId))
@@ -746,14 +733,12 @@ public class IconDrawer
 			if (newGroupId == null)
 			{
 				warningLogger.addWarningMessage(
-						"Unable to find the " + type.getSingularName() + " image group '" + groupId + "' in art pack '" + artPack
-								+ "'. There are no " + type.getSingularName() + " icons in that art pack, so none will be drawn.");
+						Localization.get("#ImageGroupNotFoundNoIconsInArtPack", type.getSingularName(), groupId, artPack));
 			}
 			else
 			{
 				warningLogger.addWarningMessage(
-						"Unable to find the " + type.getSingularName() + " image group '" + groupId + "' in art pack '" + artPack
-								+ "'. The group '" + newGroupId + "' in that art pack will be used instead." + dormantTreesMessage);
+						Localization.get("#ImageGroupNotFoundUsingOtherInArtPack", type.getSingularName(), groupId, artPack, newGroupId, dormantTreesMessage));
 			}
 			return newGroupId;
 		}
@@ -814,7 +799,7 @@ public class IconDrawer
 			WarningLogger warningLogger, boolean isForDormantTrees)
 	{
 		String dormantTreesMessage = isForDormantTrees
-				? " These trees are not visible because they were drawn at low density, but may become visible if you change the tree height in the Effects tab."
+				? Localization.get("#DormantTreesMessage")
 				: "";
 
 		List<String> allArtPacks = Assets.listArtPacks(!StringUtils.isEmpty(customImagesPath));
@@ -831,9 +816,7 @@ public class IconDrawer
 				{
 					if (ImageCache.getInstance(artPack, customImagesPath).hasGroupName(type, oldGroupId))
 					{
-						warningLogger.addWarningMessage("Unable to find the art pack '" + oldArtPack + "' to load the "
-								+ type.getSingularName() + " image group '" + oldGroupId + "'. The art pack '" + artPack
-								+ "' will be used instead because it has the same image group folder name." + dormantTreesMessage);
+						warningLogger.addWarningMessage(Localization.get("#ArtPackNotFoundForGroupUsingOther", oldArtPack, type.getSingularName(), oldGroupId, artPack, dormantTreesMessage));
 						return artPack;
 					}
 				}
@@ -841,9 +824,7 @@ public class IconDrawer
 				{
 					if (ImageCache.getInstance(artPack, customImagesPath).hasNamedIcon(type, oldGroupId, oldIconName))
 					{
-						warningLogger.addWarningMessage("Unable to find the art pack '" + oldArtPack + "' to load the icon '" + oldIconName
-								+ "' from " + type.getSingularName() + " image group '" + oldGroupId + "'. The art pack '" + artPack
-								+ "' will be used instead because it has the same image group folder and image name.");
+						warningLogger.addWarningMessage(Localization.get("#ArtPackNotFoundForIconUsingOther", oldArtPack, oldIconName, type.getSingularName(), oldGroupId, artPack));
 						return artPack;
 					}
 				}
@@ -855,14 +836,11 @@ public class IconDrawer
 			if (StringUtils.isEmpty(oldIconName))
 			{
 				warningLogger.addWarningMessage(
-						"Unable to find the art pack '" + oldArtPack + "' to load the " + type.getSingularName() + " image group '"
-								+ oldGroupId + "'. The art pack '" + artPackToUse + "' will be used instead." + dormantTreesMessage);
+						Localization.get("#ArtPackNotFoundUsingRandom", oldArtPack, type.getSingularName(), oldGroupId, artPackToUse, dormantTreesMessage));
 			}
 			else
 			{
-				warningLogger.addWarningMessage("Unable to find the art pack '" + oldArtPack + "' to load the icon '" + oldIconName
-						+ "' from " + type.getSingularName() + " image group '" + oldGroupId + "'. The art pack '" + artPackToUse
-						+ "' will be used instead.");
+				warningLogger.addWarningMessage(Localization.get("#ArtPackNotFoundForIconUsingRandom", oldArtPack, oldIconName, type.getSingularName(), oldGroupId, artPackToUse));
 			}
 
 			return allArtPacks.get(index);
@@ -880,10 +858,7 @@ public class IconDrawer
 				{
 					if (ImageCache.getInstance(artPack, customImagesPath).hasGroupName(type, oldGroupId))
 					{
-						warningLogger.addWarningMessage("The art pack '" + oldArtPack + "' no longer has " + type.getSingularName()
-								+ " images, so it does not have the " + type.getSingularName() + " image group '" + oldGroupId
-								+ "'. The art pack '" + artPack + "' will be used instead because it has the same image group folder name."
-								+ dormantTreesMessage);
+						warningLogger.addWarningMessage(Localization.get("#ArtPackHasNoImagesUsingOther", oldArtPack, type.getSingularName(), oldGroupId, artPack, dormantTreesMessage));
 						return artPack;
 					}
 				}
@@ -891,10 +866,7 @@ public class IconDrawer
 				{
 					if (ImageCache.getInstance(artPack, customImagesPath).hasNamedIcon(type, oldGroupId, oldIconName))
 					{
-						warningLogger.addWarningMessage("The art pack '" + oldArtPack + "' no longer has " + type.getSingularName()
-								+ " images, so it does not have the icon '" + oldIconName + "' from " + type.getSingularName()
-								+ " image group '" + oldGroupId + "'. The art pack '" + artPack
-								+ "' will be used instead because it has the same image group folder and image name.");
+						warningLogger.addWarningMessage(Localization.get("#ArtPackHasNoImagesForIconUsingOther", oldArtPack, type.getSingularName(), oldIconName, oldGroupId, artPack));
 						return artPack;
 					}
 				}
@@ -907,18 +879,12 @@ public class IconDrawer
 
 					if (StringUtils.isEmpty(oldIconName))
 					{
-						warningLogger.addWarningMessage("The art pack '" + oldArtPack + "' no longer has " + type.getSingularName()
-								+ " images, so it does not have the " + type.getSingularName() + " image group '" + oldGroupId
-								+ "'. The art pack '" + artPack + "' will be used instead because it has " + type.getSingularName()
-								+ " images." + dormantTreesMessage);
+						warningLogger.addWarningMessage(Localization.get("#ArtPackHasNoImagesUsingFirstAvailable", oldArtPack, type.getSingularName(), oldGroupId, artPack, dormantTreesMessage));
 						return artPack;
 					}
 					else
 					{
-						warningLogger.addWarningMessage("The art pack '" + oldArtPack + "' no longer has " + type.getSingularName()
-								+ " images, so it does not have the icon '" + oldIconName + "' from " + type.getSingularName()
-								+ " image group '" + oldGroupId + "'. The art pack '" + artPack + "' will be used instead because it has "
-								+ type.getSingularName() + " images.");
+						warningLogger.addWarningMessage(Localization.get("#ArtPackHasNoImagesForIconUsingFirstAvailable", oldArtPack, type.getSingularName(), oldIconName, oldGroupId, artPack));
 						return artPack;
 					}
 			}
@@ -1048,9 +1014,11 @@ public class IconDrawer
 
 					if (type == IconType.decorations)
 					{
-						bgColor = closest.isWater ? Color.create(oceanTexture.getRGB(xLoc, yLoc), oceanTexture.hasAlpha())
+						bgColor = closest.isWater
+								? Color.create(oceanTexture.getRGB(xLoc, yLoc), oceanTexture.hasAlpha())
 								: Color.create(backgroundOrSnippet.getRGB(xLoc, yLoc), backgroundOrSnippet.hasAlpha());
-						landTextureColor = closest.isWater ? Color.create(oceanTexture.getRGB(xLoc, yLoc), oceanTexture.hasAlpha())
+						landTextureColor = closest.isWater
+								? Color.create(oceanTexture.getRGB(xLoc, yLoc), oceanTexture.hasAlpha())
 								: Color.create(backgroundOrSnippet.getRGB(xLoc, yLoc), backgroundOrSnippet.hasAlpha());
 					}
 					else
@@ -1082,7 +1050,7 @@ public class IconDrawer
 					// that are partially transparent.
 					landBackgroundColorScale = 1.0 - Math.pow(1.0 - landTextureAlpha, 10);
 				}
-				
+
 				double mapAlpha = mapColor.getAlpha() / 255.0;
 				double mapColorScale;
 				if (mapAlpha == 1.0)
@@ -1104,14 +1072,17 @@ public class IconDrawer
 				// the land background texture when the shading mask is white, so that icons extending into the ocean draw the land texture
 				// behind them rather than the ocean texture.
 				int red = (int) (Helper.linearCombo(iconAlpha, iconColor.getRed(),
-						Helper.linearCombo(contentMaskLevel, Helper.linearCombo(shadingMaskLevel, landBackgroundColorScale * bgColor.getRed(),
-								landBackgroundColorScale * landTextureColor.getRed()), mapColorScale * mapColor.getRed())));
+						Helper.linearCombo(contentMaskLevel, Helper.linearCombo(shadingMaskLevel,
+								landBackgroundColorScale * bgColor.getRed(), landBackgroundColorScale * landTextureColor.getRed()),
+								mapColorScale * mapColor.getRed())));
 				int green = (int) (Helper.linearCombo(iconAlpha, iconColor.getGreen(),
-						Helper.linearCombo(contentMaskLevel, Helper.linearCombo(shadingMaskLevel, landBackgroundColorScale * bgColor.getGreen(),
-								landBackgroundColorScale * landTextureColor.getGreen()), mapColorScale * mapColor.getGreen())));
+						Helper.linearCombo(contentMaskLevel, Helper.linearCombo(shadingMaskLevel,
+								landBackgroundColorScale * bgColor.getGreen(), landBackgroundColorScale * landTextureColor.getGreen()),
+								mapColorScale * mapColor.getGreen())));
 				int blue = (int) (Helper.linearCombo(iconAlpha, iconColor.getBlue(),
-						Helper.linearCombo(contentMaskLevel, Helper.linearCombo(shadingMaskLevel, landBackgroundColorScale * bgColor.getBlue(),
-								landBackgroundColorScale * landTextureColor.getBlue()), mapColorScale * mapColor.getBlue())));
+						Helper.linearCombo(contentMaskLevel, Helper.linearCombo(shadingMaskLevel,
+								landBackgroundColorScale * bgColor.getBlue(), landBackgroundColorScale * landTextureColor.getBlue()),
+								mapColorScale * mapColor.getBlue())));
 				int alpha = (int) (iconAlphaInt + (1.0 - iconAlpha) * (Helper.linearCombo(contentMaskLevel,
 						(Helper.linearCombo(shadingMaskLevel, bgColor.getAlpha(), landTextureColor.getAlpha())), mapColor.getAlpha())));
 				mapOrSnippet.setRGB(xLoc, yLoc, Color.create(red, green, blue, alpha).getRGB());
@@ -1170,8 +1141,8 @@ public class IconDrawer
 
 		for (final IconDrawTask task : tasks)
 		{
-			drawIconWithBackgroundAndMasks(mapOrSnippet, task.scaledImageAndMasks, background, landTexture, oceanWithWavesAndShading, task.type,
-					((int) task.centerLoc.x) - xToSubtract, ((int) task.centerLoc.y) - yToSubtract, (int) task.centerLoc.x,
+			drawIconWithBackgroundAndMasks(mapOrSnippet, task.scaledImageAndMasks, background, landTexture, oceanWithWavesAndShading,
+					task.type, ((int) task.centerLoc.x) - xToSubtract, ((int) task.centerLoc.y) - yToSubtract, (int) task.centerLoc.x,
 					(int) task.centerLoc.y);
 		}
 

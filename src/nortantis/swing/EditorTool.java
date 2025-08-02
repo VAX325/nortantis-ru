@@ -66,12 +66,12 @@ public abstract class EditorTool
 	public abstract void onSwitchingAway();
 
 	protected abstract JPanel createToolOptionsPanel();
-	
+
 	public JPanel getToolOptionsPanel()
 	{
 		return toolOptionsPanel;
 	}
-	
+
 	public JScrollPane getToolOptionsPane()
 	{
 		return toolsOptionsPanelContainer;
@@ -100,13 +100,13 @@ public abstract class EditorTool
 	public void updateBorder()
 	{
 		final int width = 4;
-		
+
 		if (UserPreferences.getInstance().lookAndFeel == LookAndFeel.System)
 		{
 			toggleButton.setBorder(BorderFactory.createEmptyBorder(width, width, width, width));
 			return;
 		}
-		
+
 		if (toggleButton.isSelected())
 		{
 			toggleButton.setBorder(BorderFactory.createLineBorder(ToolsPanel.getColorForToggledButtons(), width));
@@ -199,7 +199,7 @@ public abstract class EditorTool
 							selected.add(edge);
 						}
 					}
-					
+
 				}
 			}
 			return selected;
@@ -307,7 +307,7 @@ public abstract class EditorTool
 	{
 
 	}
-	
+
 	protected boolean isSelected()
 	{
 		return toggleButton.isSelected();

@@ -33,9 +33,9 @@ public class BooksWidget
 			booksScrollPane.getVerticalScrollBar().setUnitIncrement(SwingHelper.sidePanelScrollSpeed);
 		}
 
-                JPanel buttonsPanel = new JPanel();
-                buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-                JButton checkAll = new JButton(Localization.get("#CheckAll"));
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		JButton checkAll = new JButton(Localization.get("#CheckAll"));
 		checkAll.addActionListener(new ActionListener()
 		{
 			@Override
@@ -46,7 +46,7 @@ public class BooksWidget
 			}
 		});
 
-                JButton uncheckAll = new JButton(Localization.get("#UncheckAll"));
+		JButton uncheckAll = new JButton(Localization.get("#UncheckAll"));
 		uncheckAll.addActionListener(new ActionListener()
 		{
 			@Override

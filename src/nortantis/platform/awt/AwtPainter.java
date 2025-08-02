@@ -28,7 +28,7 @@ class AwtPainter extends Painter
 	{
 		g.drawImage(((AwtImage) image).image, x, y, null);
 	}
-	
+
 	@Override
 	public void drawImage(Image image, int x, int y, int width, int height)
 	{
@@ -149,7 +149,7 @@ class AwtPainter extends Painter
 		// Use CAP_ROUND to avoid corners sticking out of the sides of thick lines (like rivers) when drawn piecewise.
 		g.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1f, null, 0f));
 	}
-	
+
 	@Override
 	public void setStrokeToSolidLineWithNoEndDecorations(float width)
 	{
@@ -292,14 +292,15 @@ class AwtPainter extends Painter
 		}
 		else
 		{
-			throw new UnsupportedOperationException("Unimplemented alpha composite method with alpha parameter. Composite method: " + composite);
+			throw new UnsupportedOperationException(
+					"Unimplemented alpha composite method with alpha parameter. Composite method: " + composite);
 		}
 	}
-	
+
 	@Override
 	public void setClip(int x, int y, int width, int height)
 	{
 		g.setClip(x, y, width, height);
-		
+
 	}
 }

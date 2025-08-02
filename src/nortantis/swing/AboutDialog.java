@@ -28,7 +28,7 @@ public class AboutDialog extends JDialog
 {
 	public AboutDialog(MainWindow mainWindow)
 	{
-               super(mainWindow, Localization.get("#AboutTitle"), Dialog.ModalityType.APPLICATION_MODAL);
+		super(mainWindow, Localization.get("#AboutTitle"), Dialog.ModalityType.APPLICATION_MODAL);
 		setResizable(false);
 		setLayout(new BorderLayout());
 		JPanel content = new JPanel();
@@ -42,17 +42,17 @@ public class AboutDialog extends JDialog
 		JPanel rightPanel = new JPanel();
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.setPreferredSize(new Dimension(nortantisImage.getWidth(), nortantisImage.getHeight()));
-               JLabel text = new JLabel(Localization.get("#AboutVersion").replace("{version}", MapSettings.currentVersion));
+		JLabel text = new JLabel(Localization.get("#AboutVersion", MapSettings.currentVersion));
 		rightPanel.add(text);
 
 		rightPanel.add(new JLabel(" "));
 
-               rightPanel.add(new JLabel(Localization.get("#BugReportPrompt")));
+		rightPanel.add(new JLabel(Localization.get("#BugReportPrompt")));
 		rightPanel
 				.add(SwingHelper.createHyperlink("github.com/jeheydorn/nortantis/issues", "https://github.com/jeheydorn/nortantis/issues"));
 
 		rightPanel.add(new JLabel(" "));
-               rightPanel.add(new JLabel(Localization.get("#SupportPrompt")));
+		rightPanel.add(new JLabel(Localization.get("#SupportPrompt")));
 		rightPanel.add(SwingHelper.createHyperlink("jandjheydorn.com/", "https://jandjheydorn.com/"));
 
 		rightPanel.add(Box.createVerticalGlue());
@@ -62,7 +62,7 @@ public class AboutDialog extends JDialog
 		JPanel bottomPanel = new JPanel();
 		content.add(bottomPanel, BorderLayout.SOUTH);
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-               JButton closeButton = new JButton(Localization.get("#CloseButton"));
+		JButton closeButton = new JButton(Localization.get("#CloseButton"));
 		closeButton.setMnemonic(KeyEvent.VK_C);
 		closeButton.addActionListener(new ActionListener()
 		{

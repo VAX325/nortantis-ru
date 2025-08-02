@@ -119,8 +119,7 @@ public class AwtFactory extends PlatformFactory
 
 					writer.write(null, new IIOImage(((AwtImage) convertARGBToRGB(image)).image, null, null), param);
 
-				}
-				finally
+				} finally
 				{
 					if (writer != null)
 					{

@@ -154,7 +154,7 @@ public abstract class Image
 	{
 		return copySubImage(bounds, false);
 	}
-	
+
 	public abstract Image copySubImage(IntRectangle bounds, boolean addAlphaChanel);
 
 	public abstract int[] getDataIntBased();

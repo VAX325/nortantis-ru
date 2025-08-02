@@ -36,7 +36,7 @@ public class IntRectangle
 	{
 		return contains(other.x, other.y) && contains(other.x + other.width, other.y + other.height);
 	}
-	
+
 	public IntPoint upperLeftCorner()
 	{
 		return new IntPoint(x, y);
@@ -94,7 +94,7 @@ public class IntRectangle
 		return add(other.x, other.y).add(other.x, other.y + other.height).add(other.x + other.width, other.y).add(other.x + other.width,
 				other.y + other.height);
 	}
-	
+
 	public IntRectangle findIntersection(IntRectangle r2)
 	{
 		int x1 = Math.max(this.x, r2.x);

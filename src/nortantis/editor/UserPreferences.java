@@ -37,10 +37,10 @@ public class UserPreferences
 	public Set<String> collapsedPanels = new TreeSet<>();
 	public String lastVersionFromCheck;
 	public LocalDateTime lastVersionCheckTime;
-        public LookAndFeel lookAndFeel = LookAndFeel.Dark;
-        public int toolsPanelWidth;
-        public int themePanelWidth;
-        public String languageCode = Locale.getDefault().getLanguage();
+	public LookAndFeel lookAndFeel = LookAndFeel.Dark;
+	public int toolsPanelWidth;
+	public int themePanelWidth;
+	public String languageCode = Locale.getDefault().getLanguage();
 
 	public static UserPreferences instance;
 
@@ -110,29 +110,29 @@ public class UserPreferences
 					lastVersionCheckTime = LocalDateTime.parse(props.getProperty("lastVersionCheckTime"),
 							DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 				}
-				
+
 				if (props.containsKey("lookAndFeel") && !StringUtils.isEmpty(props.getProperty("lookAndFeel")))
 				{
 					lookAndFeel = LookAndFeel.valueOf(props.getProperty("lookAndFeel"));
 				}
-				
+
 				if (props.containsKey("toolsPanelWidth"))
 				{
 					toolsPanelWidth = Integer.parseInt(props.getProperty("toolsPanelWidth"));
 				}
-				
-                                if (props.containsKey("themePanelWidth"))
-                                {
-                                        themePanelWidth = Integer.parseInt(props.getProperty("themePanelWidth"));
-                                }
 
-                                if (props.containsKey("languageCode"))
-                                {
-                                        languageCode = props.getProperty("languageCode");
-                                }
-                        }
-                }
-                catch (Exception e)
+				if (props.containsKey("themePanelWidth"))
+				{
+					themePanelWidth = Integer.parseInt(props.getProperty("themePanelWidth"));
+				}
+
+				if (props.containsKey("languageCode"))
+				{
+					languageCode = props.getProperty("languageCode");
+				}
+			}
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			Logger.printError("Error while loading user preferences:", e);
@@ -165,10 +165,10 @@ public class UserPreferences
 		props.setProperty("lastVersionFromCheck", lastVersionFromCheck == null ? "" : lastVersionFromCheck);
 		props.setProperty("lastVersionCheckTime",
 				(lastVersionCheckTime == null ? LocalDateTime.MIN : lastVersionCheckTime).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                props.setProperty("lookAndFeel", lookAndFeel.name());
-                props.setProperty("toolsPanelWidth", toolsPanelWidth + "");
-                props.setProperty("themePanelWidth", themePanelWidth + "");
-                props.setProperty("languageCode", languageCode);
+		props.setProperty("lookAndFeel", lookAndFeel.name());
+		props.setProperty("toolsPanelWidth", toolsPanelWidth + "");
+		props.setProperty("themePanelWidth", themePanelWidth + "");
+		props.setProperty("languageCode", languageCode);
 
 		try
 		{
