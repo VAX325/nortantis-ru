@@ -37,6 +37,7 @@ import nortantis.geom.RotatedRectangle;
 import nortantis.platform.Color;
 import nortantis.platform.awt.AwtFactory;
 import nortantis.util.Assets;
+import nortantis.util.Localization;
 import nortantis.util.Tuple2;
 
 public class TextTool extends EditorTool
@@ -85,7 +86,7 @@ public class TextTool extends EditorTool
 		JPanel toolOptionsPanel = organizer.panel;
 		toolOptionsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
-		drawTextDisabledLabel = new JLabel("<html>This tool is disabled because drawing text is disabled in the Fonts tab.</html>");
+                drawTextDisabledLabel = new JLabel(Localization.get("#TextToolDisabled"));
 		drawTextDisabledLabelHider = organizer.addLeftAlignedComponent(drawTextDisabledLabel);
 		drawTextDisabledLabelHider.setVisible(false);
 
@@ -103,28 +104,28 @@ public class TextTool extends EditorTool
 				}
 			};
 
-			editButton = new JRadioButton("<HTML>Edi<U>t</U></HTML>");
+                        editButton = new JRadioButton(Localization.get("#EditButton"));
 			group.add(editButton);
 			radioButtons.add(editButton);
 			editButton.addActionListener(listener);
 			editButton.setMnemonic(KeyEvent.VK_T);
-			editButton.setToolTipText("Edit text (Alt+T)");
+                        editButton.setToolTipText(Localization.get("#EditTextTooltip"));
 
-			addButton = new JRadioButton("<HTML><U>A</U>dd</HTML>");
+                        addButton = new JRadioButton(Localization.get("#AddButton"));
 			group.add(addButton);
 			radioButtons.add(addButton);
 			addButton.addActionListener(listener);
 			addButton.setMnemonic(KeyEvent.VK_A);
-			addButton.setToolTipText("Add new text of the selected text type (Alt+A)");
+                        addButton.setToolTipText(Localization.get("#AddTextTooltip"));
 
-			eraseButton = new JRadioButton("<HTML><U>E</U>rase</HTML>");
+                        eraseButton = new JRadioButton(Localization.get("#EraseButton"));
 			group.add(eraseButton);
 			radioButtons.add(eraseButton);
 			eraseButton.addActionListener(listener);
 			eraseButton.setMnemonic(KeyEvent.VK_E);
-			eraseButton.setToolTipText("Erase text (Alt+E)");
+                        eraseButton.setToolTipText(Localization.get("#EraseTextTooltip"));
 
-			organizer.addLabelAndComponentsVertical("Action:", "", radioButtons);
+                        organizer.addLabelAndComponentsVertical(Localization.get("#ActionLabel"), "", radioButtons);
 		}
 
 		editTextField = new JTextField();
@@ -200,7 +201,7 @@ public class TextTool extends EditorTool
 			}
 		});
 
-		JButton clearRotationButton = new JButton("Rotate to Horizontal");
+            JButton clearRotationButton = new JButton(Localization.get("#RotateToHorizontal"));
 		clearRotationButton.setToolTipText("Set the rotation angle of the selected text to 0 degrees.");
 		clearRotationButton.addActionListener(new ActionListener()
 		{
@@ -219,7 +220,7 @@ public class TextTool extends EditorTool
 		});
 		clearRotationButtonHider = organizer.addLeftAlignedComponents(Arrays.asList(clearRotationButton));
 
-		useDefaultColorCheckbox = new JCheckBox("Use default color");
+            useDefaultColorCheckbox = new JCheckBox(Localization.get("#UseDefaultColor"));
 		useDefaultColorCheckbox.setToolTipText("When checked, this text uses the text color in the Fonts tab.");
 		useDefaultColorCheckbox.addActionListener(new ActionListener()
 		{
@@ -251,7 +252,7 @@ public class TextTool extends EditorTool
 		useDefaultColorCheckboxHider = organizer.addLeftAlignedComponent(useDefaultColorCheckbox);
 
 		colorOverrideDisplay = SwingHelper.createColorPickerPreviewPanel();
-		JButton buttonChooseColorOverride = new JButton("Choose");
+            JButton buttonChooseColorOverride = new JButton(Localization.get("#Choose"));
 		buttonChooseColorOverride.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -271,7 +272,7 @@ public class TextTool extends EditorTool
 				Arrays.asList(colorOverrideDisplay, buttonChooseColorOverride), SwingHelper.colorPickerLeftPadding);
 
 		boldBackgroundColorOverrideDisplay = SwingHelper.createColorPickerPreviewPanel();
-		JButton buttonChooseBoldBackgroundColorOverride = new JButton("Choose");
+            JButton buttonChooseBoldBackgroundColorOverride = new JButton(Localization.get("#Choose"));
 		buttonChooseBoldBackgroundColorOverride.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)

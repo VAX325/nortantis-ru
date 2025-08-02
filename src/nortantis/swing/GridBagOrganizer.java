@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import nortantis.geom.Point;
+import nortantis.util.Localization;
 import nortantis.util.Tuple2;
 
 public class GridBagOrganizer
@@ -357,7 +358,7 @@ public class GridBagOrganizer
 		displayHolder.add(fontDisplay);
 		displayHolder.setPreferredSize(new Dimension(displayHolder.getPreferredSize().width, height));
 
-		final JButton chooseButton = new JButton("Choose");
+                final JButton chooseButton = new JButton(Localization.get("#Choose"));
 		chooseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -423,7 +424,7 @@ public class GridBagOrganizer
 		JPanel brushSizeContainer = new JPanel();
 		brushSizeContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		brushSizeContainer.add(brushSizeComboBox);
-		RowHider brushSizeHider = addLabelAndComponent("Brush size:", "", brushSizeContainer);
+                RowHider brushSizeHider = addLabelAndComponent(Localization.get("#BrushSizeLabel"), "", brushSizeContainer);
 
 		return new Tuple2<>(brushSizeComboBox, brushSizeHider);
 	}

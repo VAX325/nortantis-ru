@@ -50,6 +50,7 @@ import nortantis.util.Assets;
 import nortantis.util.ComparableCounter;
 import nortantis.util.Counter;
 import nortantis.util.GeometryHelper;
+import nortantis.util.Localization;
 import nortantis.util.Tuple2;
 
 public class LandWaterTool extends EditorTool
@@ -93,8 +94,8 @@ public class LandWaterTool extends EditorTool
 	private JToggleButton newRegionButton;
 	private RowHider newRegionButtonHider;
 	private JRadioButton roadsButton;
-	static String toolbarName = "Land and Water";
-	static String colorGeneratorSettingsName = "Color Generator Settings";
+        static String toolbarName = Localization.get("#LandWater");
+        static String colorGeneratorSettingsName = Localization.get("#ColorGeneratorSettings");
 
 	public LandWaterTool(MainWindow mainWindow, ToolsPanel toolsPanel, MapUpdater mapUpdater)
 	{
@@ -104,7 +105,7 @@ public class LandWaterTool extends EditorTool
 	@Override
 	public String getToolbarName()
 	{
-		return toolbarName;
+                return Localization.get("#LandWater");
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class LandWaterTool extends EditorTool
 	@Override
 	public String getKeyboardShortcutText()
 	{
-		return "(Alt+Z)";
+                return Localization.get("#LandWaterShortcut");
 	}
 
 	@Override
@@ -140,7 +141,7 @@ public class LandWaterTool extends EditorTool
 
 		List<JComponent> radioButtons = new ArrayList<>();
 		ButtonGroup group = new ButtonGroup();
-		oceanButton = new JRadioButton("Ocean");
+                oceanButton = new JRadioButton(Localization.get("#Ocean"));
 		group.add(oceanButton);
 		radioButtons.add(oceanButton);
 		brushActionListener = new ActionListener()
@@ -182,23 +183,22 @@ public class LandWaterTool extends EditorTool
 		};
 		oceanButton.addActionListener(brushActionListener);
 
-		lakesButton = new JRadioButton("Lakes");
+                lakesButton = new JRadioButton(Localization.get("#Lakes"));
 		group.add(lakesButton);
 		radioButtons.add(lakesButton);
-		lakesButton.setToolTipText(
-				"Lakes are the same as ocean except ocean effects (waves or shading) along their shores can be disabled, and they don't do coastline smoothing when enabled.");
+                lakesButton.setToolTipText(Localization.get("#LakesTooltip"));
 		lakesButton.addActionListener(brushActionListener);
 
-		riversButton = new JRadioButton("Rivers");
+                riversButton = new JRadioButton(Localization.get("#Rivers"));
 		group.add(riversButton);
 		radioButtons.add(riversButton);
 		riversButton.addActionListener(brushActionListener);
 
-		paintRegionButton = new JRadioButton("Paint region");
-		fillRegionColorButton = new JRadioButton("Fill region color");
-		mergeRegionsButton = new JRadioButton("Merge regions");
-		landButton = new JRadioButton("Land");
-		roadsButton = new JRadioButton("Roads");
+                paintRegionButton = new JRadioButton(Localization.get("#PaintRegion"));
+                fillRegionColorButton = new JRadioButton(Localization.get("#FillRegionColor"));
+                mergeRegionsButton = new JRadioButton(Localization.get("#MergeRegions"));
+                landButton = new JRadioButton(Localization.get("#Land"));
+                roadsButton = new JRadioButton(Localization.get("#Roads"));
 
 		group.add(paintRegionButton);
 		radioButtons.add(paintRegionButton);
@@ -221,53 +221,56 @@ public class LandWaterTool extends EditorTool
 		roadsButton.addActionListener(brushActionListener);
 
 		oceanButton.setSelected(true); // Selected by default
-		organizer.addLabelAndComponentsVertical("Brush:", "", radioButtons);
+                organizer.addLabelAndComponentsVertical(Localization.get("#BrushLabel"), "", radioButtons);
 
 		// Create new region button
 		{
-			newRegionButton = new JToggleButton("Create New Political Region");
-			newRegionButtonHider = organizer.addLabelAndComponent("",
-					"Toggle this to start a new political region with the next brushstroke.", newRegionButton);
+                        newRegionButton = new JToggleButton(Localization.get("#CreateNewPoliticalRegion"));
+                        newRegionButtonHider = organizer.addLabelAndComponent("",
+                                        Localization.get("#NewRegionTooltip"), newRegionButton);
 		}
 
 		// River options
 		{
-			modeWidget = new DrawModeWidget("Draw rivers", "Erase rivers", false, "", false, "",
-					() -> brushActionListener.actionPerformed(null));
-			modeHider = modeWidget.addToOrganizer(organizer, "Whether to draw or erase rivers");
+                        modeWidget = new DrawModeWidget(Localization.get("#DrawRivers"), Localization.get("#EraseRivers"), false,
+                                        "", false, "", () -> brushActionListener.actionPerformed(null));
+                        modeHider = modeWidget.addToOrganizer(organizer,
+                                        Localization.get("#DrawEraseRiversTooltip"));
 
 			riverWidthSlider = new JSlider(1, 15);
 			final int initialValue = 1;
 			riverWidthSlider.setValue(initialValue);
 			SwingHelper.setSliderWidthForSidePanel(riverWidthSlider);
 			SliderWithDisplayedValue sliderWithDisplay = new SliderWithDisplayedValue(riverWidthSlider);
-			riverOptionHider = sliderWithDisplay.addToOrganizer(organizer, "Width:",
-					"River width to draw. Note that different widths might look the same depending on the resolution the map is drawn at.");
+                        riverOptionHider = sliderWithDisplay.addToOrganizer(organizer, Localization.get("#Width"),
+                                        Localization.get("#RiverWidthTooltip"));
 		}
 
 		// Color chooser
 		colorDisplay = SwingHelper.createColorPickerPreviewPanel();
 		colorDisplay.setBackground(Color.black);
 
-		JButton chooseButton = new JButton("Choose");
+                JButton chooseButton = new JButton(Localization.get("#Choose"));
 		chooseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
 				cancelSelectColorFromMap();
-				SwingHelper.showColorPickerWithPreviewPanel(toolOptionsPanel, colorDisplay, "Region Color");
+                                SwingHelper.showColorPickerWithPreviewPanel(toolOptionsPanel, colorDisplay,
+                                                Localization.get("#RegionColor"));
 			}
 		});
-		colorChooserHider = organizer.addLabelAndComponentsHorizontal("Color:", "", Arrays.asList(colorDisplay, chooseButton),
-				SwingHelper.colorPickerLeftPadding);
+                colorChooserHider = organizer.addLabelAndComponentsHorizontal(Localization.get("#ColorLabel"), "",
+                                Arrays.asList(colorDisplay, chooseButton),
+                                SwingHelper.colorPickerLeftPadding);
 
-		selectColorFromMapButton = new JToggleButton("Select Color From Map");
-		selectColorFromMapButton
-				.setToolTipText("To select the color of an existing region, click this button, then click that region on the map.");
+                selectColorFromMapButton = new JToggleButton(Localization.get("#SelectColorFromMap"));
+                selectColorFromMapButton
+                                .setToolTipText(Localization.get("#SelectColorFromMapTooltip"));
 		selectColorHider = organizer.addLabelAndComponent("", "", selectColorFromMapButton, 0);
 
-		JButton generateColorButton = new JButton("Generate Color");
-		generateColorButton.setToolTipText("Generate a new color based on the random generation settings below.");
+                JButton generateColorButton = new JButton(Localization.get("#GenerateColor"));
+                generateColorButton.setToolTipText(Localization.get("#GenerateColorTooltip"));
 		generateColorButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -286,8 +289,8 @@ public class LandWaterTool extends EditorTool
 		brushSizeComboBox = brushSizeTuple.getFirst();
 		brushSizeHider = brushSizeTuple.getSecond();
 
-		onlyUpdateLandCheckbox = new JCheckBox("Only update existing land");
-		onlyUpdateLandCheckbox.setToolTipText("Causes the paint region brush to not create new land in the ocean.");
+                onlyUpdateLandCheckbox = new JCheckBox(Localization.get("#OnlyUpdateExistingLand"));
+                onlyUpdateLandCheckbox.setToolTipText(Localization.get("#OnlyUpdateExistingLandTooltip"));
 		onlyUpdateLandCheckboxHider = organizer.addLabelAndComponent("", "", onlyUpdateLandCheckbox);
 
 		colorGeneratorSettingsHider = organizer.addLeftAlignedComponent(createColorGeneratorOptionsPanel(toolOptionsPanel));
@@ -308,22 +311,24 @@ public class LandWaterTool extends EditorTool
 	private JPanel createColorGeneratorOptionsPanel(JPanel toolOptionsPanel)
 	{
 		GridBagOrganizer organizer = new GridBagOrganizer();
-		organizer.panel.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(EtchedBorder.LOWERED), colorGeneratorSettingsName));
+                organizer.panel.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(EtchedBorder.LOWERED),
+                                Localization.get("#ColorGeneratorSettings")));
 
 		baseColorPanel = SwingHelper.createColorPickerPreviewPanel();
-		final JButton baseColorChooseButton = new JButton("Choose");
+                final JButton baseColorChooseButton = new JButton(Localization.get("#Choose"));
 		baseColorChooseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				SwingHelper.showColorPicker(toolOptionsPanel, baseColorPanel, "Base Color", () ->
-				{
-				});
+                                SwingHelper.showColorPicker(toolOptionsPanel, baseColorPanel,
+                                                Localization.get("#BaseColorTitle"), () ->
+                                {
+                                });
 			}
 		});
-		organizer.addLabelAndComponentsHorizontal("Base color:",
-				"The base color for generating new region colors. This is the map's land color when not coloring regions.",
-				Arrays.asList(baseColorPanel, baseColorChooseButton), SwingHelper.borderWidthBetweenComponents);
+                organizer.addLabelAndComponentsHorizontal(Localization.get("#BaseColorLabel"),
+                                Localization.get("#BaseColorTooltip"),
+                                Arrays.asList(baseColorPanel, baseColorChooseButton), SwingHelper.borderWidthBetweenComponents);
 
 		hueSlider = new JSlider();
 		hueSlider.setPaintTicks(true);
@@ -331,8 +336,8 @@ public class LandWaterTool extends EditorTool
 		hueSlider.setMinorTickSpacing(20);
 		hueSlider.setMajorTickSpacing(100);
 		hueSlider.setMaximum(360);
-		organizer.addLabelAndComponent("Hue range:",
-				"The possible range of hue values for generated region colors. The range is centered at the base color hue.", hueSlider);
+                organizer.addLabelAndComponent(Localization.get("#HueRangeLabel"),
+                                Localization.get("#HueRangeTooltip"), hueSlider);
 
 		saturationSlider = new JSlider();
 		saturationSlider.setPaintTicks(true);
@@ -340,9 +345,8 @@ public class LandWaterTool extends EditorTool
 		saturationSlider.setMinorTickSpacing(20);
 		saturationSlider.setMaximum(255);
 		saturationSlider.setMajorTickSpacing(100);
-		organizer.addLabelAndComponent("Saturation range:",
-				"The possible range of saturation values for generated region colors. The range is centered at the land color saturation.",
-				saturationSlider);
+                organizer.addLabelAndComponent(Localization.get("#SaturationRangeLabel"),
+                                Localization.get("#SaturationRangeTooltip"), saturationSlider);
 
 		brightnessSlider = new JSlider();
 		brightnessSlider.setPaintTicks(true);
@@ -350,9 +354,9 @@ public class LandWaterTool extends EditorTool
 		brightnessSlider.setMinorTickSpacing(20);
 		brightnessSlider.setMaximum(255);
 		brightnessSlider.setMajorTickSpacing(100);
-		organizer.addLabelAndComponent("Brightness range:",
-				"The possible range of brightness values for generated region colors. The range is centered at the land color brightness.",
-				brightnessSlider);
+                organizer.addLabelAndComponent(Localization.get("#BrightnessRangeLabel"),
+                                Localization.get("#BrightnessRangeTooltip"),
+                                brightnessSlider);
 
 		return organizer.panel;
 	}

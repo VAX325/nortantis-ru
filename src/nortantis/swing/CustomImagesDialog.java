@@ -36,6 +36,7 @@ import nortantis.util.Assets;
 import nortantis.util.FileHelper;
 import nortantis.util.Logger;
 import nortantis.util.OSHelper;
+import nortantis.util.Localization;
 
 @SuppressWarnings("serial")
 public class CustomImagesDialog extends JDialog
@@ -44,7 +45,7 @@ public class CustomImagesDialog extends JDialog
 
 	public CustomImagesDialog(MainWindow mainWindow, String currentCustomImagesPath, Consumer<String> storeResult)
 	{
-		super(mainWindow, "Custom Images Folder", Dialog.ModalityType.APPLICATION_MODAL);
+                super(mainWindow, Localization.get("#CustomImagesFolder"), Dialog.ModalityType.APPLICATION_MODAL);
 		setSize(OSHelper.isWindows() ? new Dimension(860, 750) : new Dimension(1020, 840));
 		JPanel content = new JPanel();
 		add(content);
@@ -121,7 +122,7 @@ public class CustomImagesDialog extends JDialog
 				new JLabel("<html>To revert back to using installed images/art packs, clear out the" + " field below.</html>"), space, 10,
 				false);
 
-		JButton openButton = new JButton("Open");
+                JButton openButton = new JButton(Localization.get("#Open"));
 
 		customImagesFolderField = new JTextField();
 		customImagesFolderField.getDocument().addDocumentListener(new DocumentListener()
@@ -146,7 +147,7 @@ public class CustomImagesDialog extends JDialog
 			}
 		});
 		customImagesFolderField.setText(FileHelper.replaceHomeFolderPlaceholder(currentCustomImagesPath));
-		JButton browseButton = new JButton("Browse");
+                JButton browseButton = new JButton(Localization.get("#Browse"));
 		browseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -195,7 +196,7 @@ public class CustomImagesDialog extends JDialog
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		panel.add(new JLabel("Custom images folder:"));
+                panel.add(new JLabel(Localization.get("#CustomImagesFolderLabel")));
 		panel.add(Box.createHorizontalStrut(10));
 		panel.add(customImagesFolderField);
 		panel.add(Box.createHorizontalStrut(5));
@@ -205,7 +206,7 @@ public class CustomImagesDialog extends JDialog
 
 		organizer.addLeftAlignedComponent(panel, false);
 
-		JCheckBox makeDefaultCheckbox = new JCheckBox("Make this the default for new random maps");
+                JCheckBox makeDefaultCheckbox = new JCheckBox(Localization.get("#MakeDefaultForNewMaps"));
 		organizer.addLeftAlignedComponent(makeDefaultCheckbox);
 
 		organizer.addVerticalFillerRow();
@@ -213,7 +214,7 @@ public class CustomImagesDialog extends JDialog
 		JPanel bottomPanel = new JPanel();
 		content.add(bottomPanel, BorderLayout.SOUTH);
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		JButton okayButton = new JButton("<html><u>O</u>K</html>");
+                JButton okayButton = new JButton(Localization.get("#OKButton"));
 		okayButton.setMnemonic(KeyEvent.VK_O);
 		okayButton.addActionListener(new ActionListener()
 		{
@@ -264,7 +265,7 @@ public class CustomImagesDialog extends JDialog
 		});
 		bottomPanel.add(okayButton);
 
-		JButton cancelButton = new JButton("<html><u>C</u>ancel</html>");
+                JButton cancelButton = new JButton(Localization.get("#CancelButton"));
 		cancelButton.setMnemonic(KeyEvent.VK_C);
 		cancelButton.addActionListener(new ActionListener()
 		{

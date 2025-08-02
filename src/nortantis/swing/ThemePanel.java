@@ -38,6 +38,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import nortantis.BackgroundGenerator;
+import nortantis.util.Localization;
 import nortantis.BorderColorOption;
 import nortantis.FractalBGGenerator;
 import nortantis.FreeIconCollection;
@@ -225,13 +226,13 @@ public class ThemePanel extends JTabbedPane
 		};
 
 		{
-			rdbtnFractal = new JRadioButton("Fractal noise");
+                        rdbtnFractal = new JRadioButton(Localization.get("#FractalNoise"));
 			rdbtnFractal.addActionListener(backgroundImageButtonGroupListener);
 
-			rdbtnGeneratedFromTexture = new JRadioButton("Generated from texture");
+                        rdbtnGeneratedFromTexture = new JRadioButton(Localization.get("#GeneratedFromTexture"));
 			rdbtnGeneratedFromTexture.addActionListener(backgroundImageButtonGroupListener);
 
-			solidColorButton = new JRadioButton("Solid color");
+                        solidColorButton = new JRadioButton(Localization.get("#SolidColor"));
 			solidColorButton.addActionListener(backgroundImageButtonGroupListener);
 
 			ButtonGroup backgroundImageButtonGroup = new ButtonGroup();
@@ -239,29 +240,29 @@ public class ThemePanel extends JTabbedPane
 			backgroundImageButtonGroup.add(rdbtnFractal);
 			backgroundImageButtonGroup.add(solidColorButton);
 
-			organizer.addLabelAndComponentsVertical("Background:", "Select how to generate the background image.",
-					Arrays.asList(rdbtnFractal, rdbtnGeneratedFromTexture, solidColorButton));
+                        organizer.addLabelAndComponentsVertical(Localization.get("#BackgroundLabel"),
+                                        Localization.get("#BackgroundTooltip"),
+                                        Arrays.asList(rdbtnFractal, rdbtnGeneratedFromTexture, solidColorButton));
 		}
 
 		{
-			assetsRadioButton = new JRadioButton("Assets");
+                        assetsRadioButton = new JRadioButton(Localization.get("#Assets"));
 			assetsRadioButton.addActionListener(backgroundImageButtonGroupListener);
 
-			fileRadioButton = new JRadioButton("File");
+                        fileRadioButton = new JRadioButton(Localization.get("#File"));
 			fileRadioButton.addActionListener(backgroundImageButtonGroupListener);
 
 			ButtonGroup buttonGroup = new ButtonGroup();
 			buttonGroup.add(assetsRadioButton);
 			buttonGroup.add(fileRadioButton);
-			textureSourceButtonsHider = organizer.addLabelAndComponentsVertical("Texture source:",
-					"Select where to get the texture seed image from.", Arrays.asList(assetsRadioButton, fileRadioButton));
+                        textureSourceButtonsHider = organizer.addLabelAndComponentsVertical(Localization.get("#TextureSourceLabel"),
+                                        Localization.get("#TextureSourceTooltip"), Arrays.asList(assetsRadioButton, fileRadioButton));
 		}
 
 		{
 			textureImageComboBox = new JComboBox<>();
-			textureImageComboBoxHider = organizer.addLabelAndComponent("Texture:",
-					"Select a texture image as a seed from installed images that came with Nortantis, or from art packs or a custom images folder.",
-					textureImageComboBox);
+                        textureImageComboBoxHider = organizer.addLabelAndComponent(Localization.get("#TextureLabel"),
+                                        Localization.get("#TextureTooltip"), textureImageComboBox);
 			textureImageComboBox.addActionListener(backgroundImageButtonGroupListener);
 			textureImageComboBox.setMinimumSize(new Dimension(100, textureImageComboBox.getMinimumSize().height));
 		}
@@ -297,7 +298,7 @@ public class ThemePanel extends JTabbedPane
 			}
 		});
 
-		JButton btnsBrowseTextureImage = new JButton("Browse");
+                JButton btnsBrowseTextureImage = new JButton(Localization.get("#Browse"));
 		btnsBrowseTextureImage.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -315,9 +316,9 @@ public class ThemePanel extends JTabbedPane
 		textureFileChooseButtonPanel.add(btnsBrowseTextureImage);
 		textureFileChooseButtonPanel.add(Box.createHorizontalGlue());
 
-		textureImageHider = organizer.addLabelAndComponentsVertical("Texture image:",
-				"Texture image that will be used to randomly generate a background.",
-				Arrays.asList(textureImageFilename, Box.createVerticalStrut(5), textureFileChooseButtonPanel));
+                textureImageHider = organizer.addLabelAndComponentsVertical(Localization.get("#TextureImageLabel"),
+                                Localization.get("#TextureImageTooltip"),
+                                Arrays.asList(textureImageFilename, Box.createVerticalStrut(5), textureFileChooseButtonPanel));
 
 		organizer.addHorizontalSpacerRowToHelpComponentAlignment(0.65);
 
@@ -348,7 +349,7 @@ public class ThemePanel extends JTabbedPane
 			}
 		});
 
-		btnNewBackgroundSeed = new JButton("New Seed");
+                btnNewBackgroundSeed = new JButton(Localization.get("#NewSeed"));
 		btnNewBackgroundSeed.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -365,7 +366,7 @@ public class ThemePanel extends JTabbedPane
 
 		organizer.addSeperator();
 
-		drawRegionBoundariesCheckbox = new JCheckBox("Draw political region boundaries");
+                drawRegionBoundariesCheckbox = new JCheckBox(Localization.get("#DrawPoliticalRegionBoundaries"));
 		drawRegionBoundariesCheckbox.setToolTipText("Whether to show political region boundaires");
 		drawRegionBoundariesCheckbox.addItemListener(new ItemListener()
 		{
@@ -397,7 +398,7 @@ public class ThemePanel extends JTabbedPane
 		}
 
 		regionBoundaryColorDisplay = SwingHelper.createColorPickerPreviewPanel();
-		JButton buttonChooseRegionBoundaryColor = new JButton("Choose");
+                JButton buttonChooseRegionBoundaryColor = new JButton(Localization.get("#Choose"));
 		buttonChooseRegionBoundaryColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -411,7 +412,7 @@ public class ThemePanel extends JTabbedPane
 
 		organizer.addSeperator();
 
-		colorizeLandCheckbox = new JCheckBox("Color land");
+                colorizeLandCheckbox = new JCheckBox(Localization.get("#ColorLand"));
 		colorizeLandCheckbox
 				.setToolTipText("Whether to change the land texture to a custom color versus use the color of the texture image");
 		colorizeLandCheckboxHider = organizer.addLeftAlignedComponent(colorizeLandCheckbox);
@@ -450,7 +451,7 @@ public class ThemePanel extends JTabbedPane
 		landDisplayPanel.setMinimumSize(backgroundDisplaySize);
 		landDisplayPanel.setBackground(Color.BLACK);
 
-		btnChooseLandColor = new JButton("Choose");
+                btnChooseLandColor = new JButton(Localization.get("#Choose"));
 		btnChooseLandColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -486,7 +487,7 @@ public class ThemePanel extends JTabbedPane
 		}
 
 		organizer.addSeperator();
-		colorizeOceanCheckbox = new JCheckBox("Color ocean");
+                colorizeOceanCheckbox = new JCheckBox(Localization.get("#ColorOcean"));
 		colorizeOceanCheckbox
 				.setToolTipText("Whether to change the ocean texture to a custom color versus use the color of the texture image");
 		colorizeOceanCheckboxHider = organizer.addLeftAlignedComponent(colorizeOceanCheckbox);
@@ -497,7 +498,7 @@ public class ThemePanel extends JTabbedPane
 		oceanDisplayPanel.setMinimumSize(backgroundDisplaySize);
 		oceanDisplayPanel.setBackground(Color.BLACK);
 
-		btnChooseOceanColor = new JButton("Choose");
+                btnChooseOceanColor = new JButton(Localization.get("#Choose"));
 		btnChooseOceanColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -543,7 +544,7 @@ public class ThemePanel extends JTabbedPane
 		GridBagOrganizer organizer = new GridBagOrganizer();
 		JPanel borderPanel = organizer.panel;
 
-		drawBorderCheckbox = new JCheckBox("Create border");
+                drawBorderCheckbox = new JCheckBox(Localization.get("#CreateBorder"));
 		drawBorderCheckbox.setToolTipText("When checked, a border will be drawn around the map.");
 		drawBorderCheckbox.addActionListener(new ActionListener()
 		{
@@ -599,7 +600,7 @@ public class ThemePanel extends JTabbedPane
 
 		borderColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-		borderColorChooseButton = new JButton("Choose");
+                borderColorChooseButton = new JButton(Localization.get("#Choose"));
 		borderColorChooseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -614,7 +615,7 @@ public class ThemePanel extends JTabbedPane
 		organizer.addHorizontalSpacerRowToHelpComponentAlignment(0.6);
 		organizer.addSeperator();
 
-		frayedEdgeCheckbox = new JCheckBox("Fray edges");
+                frayedEdgeCheckbox = new JCheckBox(Localization.get("#FrayEdges"));
 		frayedEdgeCheckbox.setToolTipText("Whether to fray the edges of the map.");
 		frayedEdgeCheckboxActionListener = new ActionListener()
 		{
@@ -676,7 +677,7 @@ public class ThemePanel extends JTabbedPane
 			}
 		});
 
-		newFrayedEdgesSeedButton = new JButton("New Seed");
+                newFrayedEdgesSeedButton = new JButton(Localization.get("#NewSeed"));
 		newFrayedEdgesSeedButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -690,7 +691,7 @@ public class ThemePanel extends JTabbedPane
 
 		organizer.addSeperator();
 
-		drawGrungeCheckbox = new JCheckBox("Draw grunge");
+                drawGrungeCheckbox = new JCheckBox(Localization.get("#DrawGrunge"));
 		drawGrungeCheckbox.setToolTipText("Whether to draw grunge around the edges of the map.");
 		drawGrungeCheckboxActionListener = new ActionListener()
 		{
@@ -717,7 +718,7 @@ public class ThemePanel extends JTabbedPane
 
 		grungeColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-		grungeColorChooseButton = new JButton("Choose");
+                grungeColorChooseButton = new JButton(Localization.get("#Choose"));
 		grungeColorChooseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -738,11 +739,11 @@ public class ThemePanel extends JTabbedPane
 
 		JPanel effectsPanel = organizer.panel;
 
-		jaggedLinesButton = new JRadioButton("Jagged");
+                jaggedLinesButton = new JRadioButton(Localization.get("#Jagged"));
 		createMapChangeListenerForFullRedraw(jaggedLinesButton);
-		splinesLinesButton = new JRadioButton("Splines");
+                splinesLinesButton = new JRadioButton(Localization.get("#Splines"));
 		createMapChangeListenerForFullRedraw(splinesLinesButton);
-		splinesWithSmoothedCoastlinesButton = new JRadioButton("Splines with smoothed coastlines");
+                splinesWithSmoothedCoastlinesButton = new JRadioButton(Localization.get("#SplinesWithSmoothedCoastlines"));
 		createMapChangeListenerForFullRedraw(splinesWithSmoothedCoastlinesButton);
 		ButtonGroup lineStyleButtonGroup = new ButtonGroup();
 		lineStyleButtonGroup.add(jaggedLinesButton);
@@ -768,7 +769,7 @@ public class ThemePanel extends JTabbedPane
 
 		coastlineColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-		JButton buttonChooseCoastlineColor = new JButton("Choose");
+                JButton buttonChooseCoastlineColor = new JButton(Localization.get("#Choose"));
 		buttonChooseCoastlineColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -808,7 +809,7 @@ public class ThemePanel extends JTabbedPane
 		{
 			coastShadingColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-			btnChooseCoastShadingColor = new JButton("Choose");
+                btnChooseCoastShadingColor = new JButton(Localization.get("#Choose"));
 			btnChooseCoastShadingColor.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -845,7 +846,7 @@ public class ThemePanel extends JTabbedPane
 
 		{
 			oceanShadingColorDisplay = SwingHelper.createColorPickerPreviewPanel();
-			btnChooseOceanShadingColor = new JButton("Choose");
+                btnChooseOceanShadingColor = new JButton(Localization.get("#Choose"));
 			btnChooseOceanShadingColor.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -865,7 +866,7 @@ public class ThemePanel extends JTabbedPane
 
 		ButtonGroup oceanEffectButtonGroup = new ButtonGroup();
 
-		concentricWavesButton = new JRadioButton("Concentric waves");
+                concentricWavesButton = new JRadioButton(Localization.get("#ConcentricWaves"));
 		oceanEffectButtonGroup.add(concentricWavesButton);
 		oceanEffectsListener = new ActionListener()
 		{
@@ -883,23 +884,23 @@ public class ThemePanel extends JTabbedPane
 		};
 		concentricWavesButton.addActionListener(oceanEffectsListener);
 
-		ripplesRadioButton = new JRadioButton("Ripples");
+                ripplesRadioButton = new JRadioButton(Localization.get("#Ripples"));
 		oceanEffectButtonGroup.add(ripplesRadioButton);
 		ripplesRadioButton.addActionListener(oceanEffectsListener);
 
-		noneRadioButton = new JRadioButton("None");
+                noneRadioButton = new JRadioButton(Localization.get("#None"));
 		oceanEffectButtonGroup.add(noneRadioButton);
 		noneRadioButton.addActionListener(oceanEffectsListener);
 		organizer.addLabelAndComponentsVertical("Wave type:", "Which type of wave to draw in the ocean along coastlines.",
 				Arrays.asList(concentricWavesButton, ripplesRadioButton, noneRadioButton));
 
-		fadeWavesCheckbox = new JCheckBox("Fade outer waves");
+                fadeWavesCheckbox = new JCheckBox(Localization.get("#FadeOuterWaves"));
 		createMapChangeListenerForTerrainChange(fadeWavesCheckbox);
 
-		jitterWavesCheckbox = new JCheckBox("Jitter");
+                jitterWavesCheckbox = new JCheckBox(Localization.get("#Jitter"));
 		createMapChangeListenerForTerrainChange(jitterWavesCheckbox);
 
-		brokenLinesCheckbox = new JCheckBox("Broken lines");
+                brokenLinesCheckbox = new JCheckBox(Localization.get("#BrokenLines"));
 		createMapChangeListenerForTerrainChange(brokenLinesCheckbox);
 		concentricWavesOptionsHider = organizer.addLabelAndComponentsVertical("Style options:", "Options for how to draw concentric waves.",
 				Arrays.asList(fadeWavesCheckbox, jitterWavesCheckbox, brokenLinesCheckbox));
@@ -930,7 +931,7 @@ public class ThemePanel extends JTabbedPane
 		{
 			oceanWavesColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-			JButton btnChooseOceanEffectsColor = new JButton("Choose");
+                JButton btnChooseOceanEffectsColor = new JButton(Localization.get("#Choose"));
 			btnChooseOceanEffectsColor.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -944,7 +945,7 @@ public class ThemePanel extends JTabbedPane
 					Arrays.asList(oceanWavesColorDisplay, btnChooseOceanEffectsColor), SwingHelper.colorPickerLeftPadding);
 		}
 
-		drawOceanEffectsInLakesCheckbox = new JCheckBox("Draw ocean waves/shading in lakes.");
+                drawOceanEffectsInLakesCheckbox = new JCheckBox(Localization.get("#DrawOceanWavesInLakes"));
 		createMapChangeListenerForTerrainChange(drawOceanEffectsInLakesCheckbox);
 		organizer.addLeftAlignedComponent(drawOceanEffectsInLakesCheckbox);
 
@@ -952,7 +953,7 @@ public class ThemePanel extends JTabbedPane
 			organizer.addSeperator();
 			riverColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-			JButton riverColorChooseButton = new JButton("Choose");
+                JButton riverColorChooseButton = new JButton(Localization.get("#Choose"));
 			riverColorChooseButton.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -966,7 +967,7 @@ public class ThemePanel extends JTabbedPane
 
 		{
 			organizer.addSeperator();
-			drawRoadsCheckbox = new JCheckBox("Draw roads");
+                drawRoadsCheckbox = new JCheckBox(Localization.get("#DrawRoads"));
 			drawRoadsCheckbox.setToolTipText("Whether to show/hide roads");
 			drawRoadsCheckbox.addItemListener(new ItemListener()
 			{
@@ -997,7 +998,7 @@ public class ThemePanel extends JTabbedPane
 			}
 
 			roadColorDisplay = SwingHelper.createColorPickerPreviewPanel();
-			JButton buttonRoadColor = new JButton("Choose");
+                JButton buttonRoadColor = new JButton(Localization.get("#Choose"));
 			buttonRoadColor.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -1312,7 +1313,7 @@ public class ThemePanel extends JTabbedPane
 
 		JPanel fontsPanel = organizer.panel;
 
-		enableTextCheckBox = new JCheckBox("Enable text");
+                enableTextCheckBox = new JCheckBox(Localization.get("#EnableText"));
 		enableTextCheckBox.setToolTipText("Enable/disable drawing text. When unselected, text will still exist, but will not be shown.");
 		organizer.addLeftAlignedComponent(enableTextCheckBox);
 		organizer.addSeperator();
@@ -1340,7 +1341,7 @@ public class ThemePanel extends JTabbedPane
 		organizer.addSeperator();
 		textColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-		btnChooseTextColor = new JButton("Choose");
+                btnChooseTextColor = new JButton(Localization.get("#Choose"));
 		btnChooseTextColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -1352,13 +1353,13 @@ public class ThemePanel extends JTabbedPane
 				SwingHelper.colorPickerLeftPadding);
 
 		organizer.addSeperator();
-		drawBoldBackgroundCheckbox = new JCheckBox("Bold background for region and title names");
+                drawBoldBackgroundCheckbox = new JCheckBox(Localization.get("#BoldBackgroundForRegionAndTitleNames"));
 		drawBoldBackgroundCheckbox.setToolTipText("Whether to draw bolded letters behind region and title text to highlight them.");
 		organizer.addLeftAlignedComponent(drawBoldBackgroundCheckbox);
 
 		boldBackgroundColorDisplay = SwingHelper.createColorPickerPreviewPanel();
 
-		btnChooseBoldBackgroundColor = new JButton("Choose");
+                btnChooseBoldBackgroundColor = new JButton(Localization.get("#Choose"));
 		btnChooseBoldBackgroundColor.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)

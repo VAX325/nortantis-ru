@@ -46,6 +46,7 @@ import nortantis.util.FileHelper;
 import nortantis.util.ImageHelper;
 import nortantis.util.ProbabilityHelper;
 import nortantis.util.Range;
+import nortantis.util.Localization;
 
 @SuppressWarnings("serial")
 public class NewSettingsDialog extends JDialog
@@ -73,7 +74,7 @@ public class NewSettingsDialog extends JDialog
 
 	public NewSettingsDialog(MainWindow mainWindow, MapSettings settingsToKeepThemeFrom)
 	{
-		super(mainWindow, "Create New Map", Dialog.ModalityType.APPLICATION_MODAL);
+                super(mainWindow, Localization.get("#CreateNewMap"), Dialog.ModalityType.APPLICATION_MODAL);
 		this.mainWindow = mainWindow;
 
 		createGUI(mainWindow);
@@ -140,7 +141,7 @@ public class NewSettingsDialog extends JDialog
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 
 		{
-			JButton randomizeThemeButton = new JButton("Randomize Theme");
+                    JButton randomizeThemeButton = new JButton(Localization.get("#RandomizeTheme"));
 			randomizeThemeButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -154,7 +155,7 @@ public class NewSettingsDialog extends JDialog
 		}
 
 		{
-			JButton randomizeLandButton = new JButton("Randomize Land");
+                    JButton randomizeLandButton = new JButton(Localization.get("#RandomizeLand"));
 			randomizeLandButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -168,8 +169,9 @@ public class NewSettingsDialog extends JDialog
 		}
 
 		{
-			JButton flipHorizontallyButton = new JButton("↔ Flip");
-			flipHorizontallyButton.setToolTipText("Flip the land shape horizontally.");
+                    JButton flipHorizontallyButton = new JButton(Localization.get("#FlipHorizontal"));
+                    flipHorizontallyButton
+                                    .setToolTipText(Localization.get("#FlipHorizontalTooltip"));
 			flipHorizontallyButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -192,8 +194,8 @@ public class NewSettingsDialog extends JDialog
 		}
 
 		{
-			JButton flipVerticallyButton = new JButton("↕ Flip");
-			flipVerticallyButton.setToolTipText("Flip the land shape vertically.");
+                    JButton flipVerticallyButton = new JButton(Localization.get("#FlipVertical"));
+                    flipVerticallyButton.setToolTipText(Localization.get("#FlipVerticalTooltip"));
 			flipVerticallyButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -216,8 +218,8 @@ public class NewSettingsDialog extends JDialog
 		}
 
 		{
-			JButton rotateButton = new JButton("↺ Left");
-			rotateButton.setToolTipText("Rotate the land shape counterclockwise by 90°.");
+                    JButton rotateButton = new JButton(Localization.get("#RotateLeft"));
+                    rotateButton.setToolTipText(Localization.get("#RotateLeftTooltip"));
 
 			rotateButton.addActionListener(new ActionListener()
 			{
@@ -240,8 +242,8 @@ public class NewSettingsDialog extends JDialog
 		}
 
 		{
-			JButton rotateButton = new JButton("↻ Right");
-			rotateButton.setToolTipText("Rotate the land shape clockwise by 90°.");
+                    JButton rotateButton = new JButton(Localization.get("#RotateRight"));
+                    rotateButton.setToolTipText(Localization.get("#RotateRightTooltip"));
 			rotateButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -266,7 +268,7 @@ public class NewSettingsDialog extends JDialog
 
 		JPanel bottomButtonsPanel = new JPanel();
 		bottomButtonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		JButton createMapButton = new JButton("<html>C<u>r</u>eate Map</html>");
+            JButton createMapButton = new JButton(Localization.get("#CreateMapButton"));
 		createMapButton.setMnemonic(KeyEvent.VK_R);
 		bottomButtonsPanel.add(createMapButton);
 		createMapButton.addActionListener(new ActionListener()
@@ -391,7 +393,7 @@ public class NewSettingsDialog extends JDialog
 		createMapChangeListener(landColoringMethodComboBox);
 		organizer.addLabelAndComponent("Land coloring method:", "How to color the land.", landColoringMethodComboBox);
 
-		JButton changeButton = new JButton("Change");
+            JButton changeButton = new JButton(Localization.get("#Change"));
 		pathDisplay = new JTextField();
 		pathDisplay.setText(FileHelper.replaceHomeFolderPlaceholder(UserPreferences.getInstance().defaultCustomImagesPath));
 		pathDisplay.setEditable(false);
@@ -462,7 +464,7 @@ public class NewSettingsDialog extends JDialog
 		generatorSettingsPanel.add(rightPanel);
 
 		artPackComboBox = new JComboBox<String>();
-		JLabel artPackLabel = new JLabel("Art pack:");
+            JLabel artPackLabel = new JLabel(Localization.get("#ArtPackLabel"));
 		artPackLabel.setToolTipText(
 				"The set of images and icons to use. '" + Assets.installedArtPack + "' is the images that come installed with Nortantis. '"
 						+ Assets.customArtPack + "' means use the custom images folder, if one is selected.");
@@ -479,7 +481,7 @@ public class NewSettingsDialog extends JDialog
 
 		cityIconsTypeComboBox = new JComboBox<String>();
 		createMapChangeListener(cityIconsTypeComboBox);
-		JLabel cityIconTypeLabel = new JLabel("City icon type:");
+            JLabel cityIconTypeLabel = new JLabel(Localization.get("#CityIconTypeLabel"));
 		cityIconTypeLabel.setToolTipText("The set of city images to use.");
 
 		JPanel rowPanel = new JPanel();
