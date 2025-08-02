@@ -167,7 +167,6 @@ public class FileHelper
 
 		return subFolders;
 	}
-	
 
 	public static void writeToFile(String fileName, String contents)
 	{
@@ -192,7 +191,7 @@ public class FileHelper
 			throw new RuntimeException("Helper.writeToFile caught error: " + ex.getMessage(), ex);
 		}
 	}
-	
+
 	public static void createFolder(String folderName)
 	{
 		File folder = new File(folderName);

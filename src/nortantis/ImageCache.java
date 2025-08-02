@@ -13,6 +13,7 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import nortantis.util.*;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.imgscalr.Scalr.Method;
@@ -20,17 +21,6 @@ import org.imgscalr.Scalr.Method;
 import nortantis.editor.FreeIcon;
 import nortantis.geom.IntDimension;
 import nortantis.platform.Image;
-import nortantis.util.Assets;
-import nortantis.util.ConcurrentHashMapF;
-import nortantis.util.FileHelper;
-import nortantis.util.HashMapF;
-import nortantis.util.Helper;
-import nortantis.util.ImageHelper;
-import nortantis.util.ListMap;
-import nortantis.util.Logger;
-import nortantis.util.Range;
-import nortantis.util.Tuple2;
-import nortantis.util.Tuple3;
 
 /**
  * Caches icons in memory to avoid recreating or reloading them.
@@ -134,7 +124,7 @@ public class ImageCache
 	{
 		return fileCache.containsKey(path.toString());
 	}
-	
+
 	public ImageAndMasks getImageAndMasks(FreeIcon icon)
 	{
 		if (!StringUtils.isEmpty(icon.iconName))
@@ -144,7 +134,7 @@ public class ImageCache
 			{
 				return null;
 			}
-			
+
 			return map.get(icon.iconName);
 		}
 		else
@@ -154,7 +144,7 @@ public class ImageCache
 			{
 				return null;
 			}
-			
+
 			return imagesInGroup.get(icon.iconIndex % imagesInGroup.size());
 		}
 	}
@@ -233,15 +223,14 @@ public class ImageCache
 			{
 				if (nameAndHeight.getSecond() != null)
 				{
-					throw new RuntimeException("The image " + fileName + " has both an encoded height and width. Only one is allowed.");
+					throw new RuntimeException(Localization.get("#ImageHasHeightAndWidth", fileName));
 				}
 			}
 
 			String fileNameBaseWithoutWidth = nameAndWidth.getFirst();
 			if (namesAndWidths.containsKey(fileNameBaseWithoutWidth))
 			{
-				throw new RuntimeException("There are multiple images for " + iconType + " named '" + fileNameBaseWithoutWidth
-						+ "' whose file names only differ by their encoded width or height or extension." + " Rename one of them.");
+				throw new RuntimeException(Localization.get("#MultipleImagesSameName", iconType, fileNameBaseWithoutWidth));
 			}
 
 			namesAndWidths.put(fileNameBaseWithoutWidth, new Tuple3<>(nameAndWidth.getFirst(), nameAndWidth.getSecond(), fileName));
@@ -266,10 +255,8 @@ public class ImageCache
 				width = nameAndWidth.getSecond();
 			}
 
-
 			imagesAndMasks.put(nameAndWidth.getFirst(), new ImageAndMasks(icon, iconType, width));
 		}
-
 
 		return imagesAndMasks;
 	}
@@ -318,18 +305,18 @@ public class ImageCache
 
 			Image icon = iconsByName.get(nameOfWidestOrTallest);
 			double widthOrHeight = getDefaultWidthOrHeight(iconType);
-			double width = isDefaultSizeByWidth(iconType) ? widthOrHeight
+			double width = isDefaultSizeByWidth(iconType)
+					? widthOrHeight
 					: IconDrawer.getDimensionsWhenScaledByHeight(icon.size(), widthOrHeight).width;
 			return new Tuple2<>(icon, width);
 		}
 	}
-	
-	
+
 	private boolean isDefaultSizeByWidth(IconType type)
 	{
 		return type != IconType.trees;
 	}
-	
+
 	private static double getDefaultWidthOrHeight(IconType type)
 	{
 		if (type == IconType.mountains)
@@ -420,9 +407,9 @@ public class ImageCache
 			Double size = (double) Integer.parseInt(matcher.group(2));
 			if (size == 0.0)
 			{
-				throw new RuntimeException("The image '" + fileName + "' has an encoded width or height of 0.");
+				throw new RuntimeException(Localization.get("#ImageSizeZero", fileName));
 			}
-			
+
 			return new Tuple2<>(nameWithoutWidth, size);
 		}
 

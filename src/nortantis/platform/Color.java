@@ -8,7 +8,7 @@ public abstract class Color
 	public abstract int getGreen();
 	public abstract int getBlue();
 	public abstract int getAlpha();
-	
+
 	public boolean hasTransparency()
 	{
 		return getAlpha() < Image.getMaxPixelLevelForType(ImageType.ARGB);

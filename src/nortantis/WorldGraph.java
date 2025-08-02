@@ -1209,8 +1209,7 @@ public class WorldGraph extends VoronoiGraph
 						}
 					}
 				}
-			}
-			while (cornerFound);
+			} while (cornerFound);
 
 		}
 	}
@@ -1716,7 +1715,8 @@ public class WorldGraph extends VoronoiGraph
 				{
 					double scoreFromStartToNeighbor = current.scoreSoFar
 							+ calculateWeight.apply(edge, neighbor, Center.distanceBetween(current.center, end));
-					double neighborCurrentScore = centerNodeMap.containsKey(neighbor) ? centerNodeMap.get(neighbor).scoreSoFar
+					double neighborCurrentScore = centerNodeMap.containsKey(neighbor)
+							? centerNodeMap.get(neighbor).scoreSoFar
 							: Float.POSITIVE_INFINITY;
 					if (scoreFromStartToNeighbor < neighborCurrentScore)
 					{
@@ -1824,7 +1824,7 @@ public class WorldGraph extends VoronoiGraph
 		Point newOriginOffset;
 		assert rightRotationCount <= 3;
 		assert rightRotationCount >= 0;
-		
+
 		if (rightRotationCount == 0)
 		{
 			newOriginOffset = new Point(0, 0);
@@ -1839,7 +1839,7 @@ public class WorldGraph extends VoronoiGraph
 			// The lower-right corner will become the new origin.
 			newOriginOffset = new Point(targetWidth, targetHeight).rotate(mapCenter, angle);
 		}
-		else 
+		else
 		{
 			// The upper-right corner will become the new origin.
 			newOriginOffset = new Point(targetWidth, 0).rotate(mapCenter, angle);
@@ -1847,19 +1847,21 @@ public class WorldGraph extends VoronoiGraph
 
 		for (Center center : centers)
 		{
-			center.loc = scaleFlipAndRotatePoint(center.loc, widthScale, heightScale, angle, mapCenter, newOriginOffset, flipHorizontally, flipVertically);
+			center.loc = scaleFlipAndRotatePoint(center.loc, widthScale, heightScale, angle, mapCenter, newOriginOffset, flipHorizontally,
+					flipVertically);
 		}
 		for (Edge edge : edges)
 		{
 			if (edge.midpoint != null)
 			{
-				edge.midpoint = scaleFlipAndRotatePoint(edge.midpoint, widthScale, heightScale, angle, mapCenter, newOriginOffset, flipHorizontally,
-						flipVertically);
+				edge.midpoint = scaleFlipAndRotatePoint(edge.midpoint, widthScale, heightScale, angle, mapCenter, newOriginOffset,
+						flipHorizontally, flipVertically);
 			}
 		}
 		for (Corner corner : corners)
 		{
-			corner.loc = scaleFlipAndRotatePoint(corner.loc, widthScale, heightScale, angle, mapCenter, newOriginOffset, flipHorizontally, flipVertically);
+			corner.loc = scaleFlipAndRotatePoint(corner.loc, widthScale, heightScale, angle, mapCenter, newOriginOffset, flipHorizontally,
+					flipVertically);
 			if (corner.originalLoc != null)
 			{
 				corner.originalLoc = scaleFlipAndRotatePoint(corner.originalLoc, widthScale, heightScale, angle, mapCenter, newOriginOffset,

@@ -132,8 +132,7 @@ public abstract class VoronoiGraph
 
 		for (Edge e : edges)
 		{
-			e.noisyEdgesSeed = rand.nextLong();
-			;
+			e.noisyEdgesSeed = rand.nextLong();;
 		}
 	}
 
@@ -420,7 +419,7 @@ public abstract class VoronoiGraph
 			g.drawLine((int) e.d0.loc.x, (int) e.d0.loc.y, (int) e.d1.loc.x, (int) e.d1.loc.y);
 		}
 	}
-	
+
 	public void drawEdgeDeluanay(Painter g, Edge e)
 	{
 		if (e.d0 == null || e.d1 == null)
@@ -706,7 +705,8 @@ public abstract class VoronoiGraph
 
 						// One of the corners of the graph is the next point. Determine which corner that is.
 						x[2] = (int) (Math.abs(c.loc.x - bounds.x) < Math.abs(bounds.getRight() - c.loc.x) ? bounds.x : bounds.getRight());
-						y[2] = (int) (Math.abs(c.loc.y - bounds.y) < Math.abs(bounds.getBottom() - c.loc.y) ? bounds.y
+						y[2] = (int) (Math.abs(c.loc.y - bounds.y) < Math.abs(bounds.getBottom() - c.loc.y)
+								? bounds.y
 								: bounds.getBottom());
 
 						x[3] = (int) edgeCorner2.loc.x;
@@ -1045,7 +1045,7 @@ public abstract class VoronoiGraph
 		List<Point> vertices = edgeListToDrawPoints(edges, false, 0.0);
 		p.fillPolygonDouble(vertices);
 	}
-	
+
 	public List<Point> edgeListToDrawPoints(List<Edge> edges)
 	{
 		return edgeListToDrawPoints(edges, false, 0);
@@ -1106,10 +1106,12 @@ public abstract class VoronoiGraph
 		return result;
 	}
 
-	private void addEdgePoints(List<Point> points, Edge edge, boolean reverse, boolean ignoreNoisyEdges, double maxDistanceToIgnoreNoisyEdgesForJaggedLines)
+	private void addEdgePoints(List<Point> points, Edge edge, boolean reverse, boolean ignoreNoisyEdges,
+			double maxDistanceToIgnoreNoisyEdgesForJaggedLines)
 	{
 		List<Point> noisyEdge = noisyEdges.getNoisyEdge(edge.index);
-		if (noisyEdge == null || (ignoreNoisyEdges && (noisyEdges.getLineStyle() != LineStyle.Jagged || edge.v1.loc.distanceTo(edge.v0.loc) <= maxDistanceToIgnoreNoisyEdgesForJaggedLines)))
+		if (noisyEdge == null || (ignoreNoisyEdges && (noisyEdges.getLineStyle() != LineStyle.Jagged
+				|| edge.v1.loc.distanceTo(edge.v0.loc) <= maxDistanceToIgnoreNoisyEdgesForJaggedLines)))
 		{
 			if (reverse)
 			{
@@ -1201,7 +1203,7 @@ public abstract class VoronoiGraph
 			addPointIfNotSameAsLast(points, edge.d1.loc);
 		}
 	}
-	
+
 	private void addPointIfNotSameAsLast(List<Point> points, Point toAdd)
 	{
 		if (points.isEmpty())

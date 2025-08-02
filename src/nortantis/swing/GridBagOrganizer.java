@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import nortantis.geom.Point;
+import nortantis.util.Localization;
 import nortantis.util.Tuple2;
 
 public class GridBagOrganizer
@@ -107,7 +108,8 @@ public class GridBagOrganizer
 	public <T extends Component> RowHider addLabelAndComponentsHorizontal(String labelText, String tooltip, List<T> components,
 			int componentLeftPadding)
 	{
-		return addLabelAndComponents(labelText, tooltip, BoxLayout.X_AXIS, components, componentLeftPadding, defaultHorizontalSpaceBetweenComponentsAddAsList, null);
+		return addLabelAndComponents(labelText, tooltip, BoxLayout.X_AXIS, components, componentLeftPadding,
+				defaultHorizontalSpaceBetweenComponentsAddAsList, null);
 	}
 
 	public <T extends Component> RowHider addLabelAndComponentsHorizontal(String labelText, String tooltip, List<T> components,
@@ -218,7 +220,7 @@ public class GridBagOrganizer
 	{
 		return addLeftAlignedComponent(component, rowVerticalInset, rowVerticalInset);
 	}
-	
+
 	public RowHider addLeftAlignedComponents(List<Component> components)
 	{
 		JPanel compPanel = new JPanel();
@@ -235,7 +237,7 @@ public class GridBagOrganizer
 		}
 		compPanel.add(Box.createHorizontalGlue());
 		return addLeftAlignedComponent(compPanel);
-		
+
 	}
 
 	public RowHider addLeftAlignedComponent(Component component, boolean allowToExpandVertically)
@@ -357,7 +359,7 @@ public class GridBagOrganizer
 		displayHolder.add(fontDisplay);
 		displayHolder.setPreferredSize(new Dimension(displayHolder.getPreferredSize().width, height));
 
-		final JButton chooseButton = new JButton("Choose");
+		final JButton chooseButton = new JButton(Localization.get("#Choose"));
 		chooseButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -423,7 +425,7 @@ public class GridBagOrganizer
 		JPanel brushSizeContainer = new JPanel();
 		brushSizeContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		brushSizeContainer.add(brushSizeComboBox);
-		RowHider brushSizeHider = addLabelAndComponent("Brush size:", "", brushSizeContainer);
+		RowHider brushSizeHider = addLabelAndComponent(Localization.get("#BrushSizeLabel"), "", brushSizeContainer);
 
 		return new Tuple2<>(brushSizeComboBox, brushSizeHider);
 	}

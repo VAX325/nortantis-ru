@@ -1,39 +1,35 @@
 package nortantis;
 
+import nortantis.util.Localization;
+
 public enum IconType
 {
-	// These names must match the folder names in assets\icons.
+	// These names must match the folder names in assets/icons.
 	mountains, hills, sand, trees, cities, decorations;
 
 	public String getSingularName()
 	{
-		switch (this)
-		{
-		case mountains:
-			return "mountain";
-		case hills:
-			return "hill";
-		case sand:
-			return "sand";
-		case trees:
-			return "tree";
-		case cities:
-			return "city";
-		case decorations:
-			return "decoration";
-		default:
-			assert false;
-			return toString();
-		}
+        return switch (this) {
+            case mountains -> Localization.get("#MountainSingular");
+            case hills -> Localization.get("#HillsSingular");
+            case sand -> Localization.get("#SandSingular");
+            case trees -> Localization.get("#TreesSingular");
+            case cities -> Localization.get("#CitiesSingular");
+            case decorations -> Localization.get("#DecorationsSingular");
+            default -> {
+                assert false;
+                yield toString();
+            }
+        };
 	}
-	
+
 	public String getNameForGUI()
 	{
 		if (this == sand)
 		{
-			return "Dunes";
+			return Localization.get("#DunesGUI");
 		}
-		//Capitalize first letter.
+		// Capitalize first letter.
 		return toString().substring(0, 1).toUpperCase() + toString().substring(1);
 	}
 }

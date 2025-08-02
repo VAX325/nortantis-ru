@@ -65,6 +65,7 @@ import nortantis.util.Range;
 import nortantis.util.Tuple2;
 import nortantis.util.Tuple3;
 import nortantis.util.Tuple4;
+import nortantis.util.Localization;
 
 public class IconsTool extends EditorTool
 {
@@ -104,7 +105,7 @@ public class IconsTool extends EditorTool
 	@Override
 	public String getToolbarName()
 	{
-		return "Icons";
+		return Localization.get("#Icons");
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class IconsTool extends EditorTool
 	@Override
 	public String getKeyboardShortcutText()
 	{
-		return "(Alt+X)";
+		return Localization.get("#IconsShortcut");
 	}
 
 	@Override
@@ -154,17 +155,14 @@ public class IconsTool extends EditorTool
 				refreshImagesWithoutClearingCache(mainWindow.getSettingsFromGUI(false));
 			}
 		});
-		organizer.addLabelAndComponent("Art pack:", "For filtering the icons shown in this tool. '" + Assets.installedArtPack
-				+ "' selects art that comes with Nortantis. '" + Assets.customArtPack
-				+ "' selects images from this map's custom images folder, if it has one. Other options are art packs installed on this machine.",
-				artPackComboBox);
+		organizer.addLabelAndComponent(Localization.get("#ArtPackLabel"), Localization.get("#ArtPackTooltip", Assets.installedArtPack, Assets.customArtPack), artPackComboBox);
 
 		// Tools
 		{
 			ButtonGroup group = new ButtonGroup();
 			List<JComponent> radioButtons = new ArrayList<>();
 
-			mountainsButton = new JRadioButton("Mountains");
+			mountainsButton = new JRadioButton(Localization.get("#Mountains"));
 			group.add(mountainsButton);
 			radioButtons.add(mountainsButton);
 			mountainsButton.setSelected(true);
@@ -177,7 +175,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-			hillsButton = new JRadioButton("Hills");
+			hillsButton = new JRadioButton(Localization.get("#Hills"));
 			group.add(hillsButton);
 			radioButtons.add(hillsButton);
 			hillsButton.addActionListener(new ActionListener()
@@ -189,7 +187,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-			dunesButton = new JRadioButton("Dunes");
+			dunesButton = new JRadioButton(Localization.get("#Dunes"));
 			group.add(dunesButton);
 			radioButtons.add(dunesButton);
 			dunesButton.addActionListener(new ActionListener()
@@ -201,7 +199,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-			treesButton = new JRadioButton("Trees");
+			treesButton = new JRadioButton(Localization.get("#Trees"));
 			group.add(treesButton);
 			radioButtons.add(treesButton);
 			treesButton.addActionListener(new ActionListener()
@@ -213,7 +211,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-			citiesButton = new JRadioButton("Cities");
+			citiesButton = new JRadioButton(Localization.get("#Cities"));
 			group.add(citiesButton);
 			radioButtons.add(citiesButton);
 			citiesButton.addActionListener(new ActionListener()
@@ -225,7 +223,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-			decorationsButton = new JRadioButton("Decorations");
+			decorationsButton = new JRadioButton(Localization.get("#Decorations"));
 			group.add(decorationsButton);
 			radioButtons.add(decorationsButton);
 			decorationsButton.addActionListener(new ActionListener()
@@ -237,7 +235,7 @@ public class IconsTool extends EditorTool
 				}
 			});
 
-			allButton = new JRadioButton("All");
+			allButton = new JRadioButton(Localization.get("#All"));
 			group.add(allButton);
 			radioButtons.add(allButton);
 			allButton.addActionListener(new ActionListener()
@@ -359,13 +357,14 @@ public class IconsTool extends EditorTool
 
 		List<? extends Component> listToUse = radioButtons.size() > 0
 				? radioButtons
-				: Arrays.asList(
-						new JLabel("<html>The art pack '" + artPack + "' has no " + iconType.toString().toLowerCase() + ".</html>"));
+				: Arrays.asList(new JLabel(Localization.get("#ArtPackHasNoIcons").replace("{pack}", artPack).replace("{type}",
+						iconType.toString().toLowerCase())));
 		IconTypeButtons result;
 		if (existing == null)
 		{
 			JPanel buttonsPanel = new JPanel();
-			result = new IconTypeButtons(organizer.addLabelAndComponentsVerticalWithComponentPanel(iconType.getNameForGUI() + ":", "", listToUse, buttonsPanel),
+			result = new IconTypeButtons(
+					organizer.addLabelAndComponentsVerticalWithComponentPanel(iconType.getNameForGUI() + ":", "", listToUse, buttonsPanel),
 					radioButtons, buttonsPanel);
 		}
 		else
@@ -493,8 +492,8 @@ public class IconsTool extends EditorTool
 					protected List<Image> doInBackground() throws Exception
 					{
 						List<Image> previewImages = new ArrayList<>();
-						Map<String, ImageAndMasks> iconsInGroup = ImageCache
-								.getInstance(settings.artPack, settings.customImagesPath).getIconsByNameForGroup(selector.type, groupId);
+						Map<String, ImageAndMasks> iconsInGroup = ImageCache.getInstance(settings.artPack, settings.customImagesPath)
+								.getIconsByNameForGroup(selector.type, groupId);
 
 						for (Tuple2<String, UnscaledImageToggleButton> nameAndButton : namesAndButtons)
 						{
@@ -669,7 +668,8 @@ public class IconsTool extends EditorTool
 		}
 		else
 		{
-			selector.typesPanel.add(new JLabel("<html>The art pack '" + artPack + "' has no " + selector.type + ".</html>"));
+			selector.typesPanel.add(new JLabel(
+					Localization.get("#ArtPackHasNoIcons").replace("{pack}", artPack).replace("{type}", selector.type.toString())));
 		}
 	}
 
@@ -692,10 +692,10 @@ public class IconsTool extends EditorTool
 	private Image createIconPreview(MapSettings settings, List<Image> images, int scaledHeight, int padding, IconType iconType)
 	{
 		final double osScaling = SwingHelper.getOSScale();
-		final int maxRowWidth = (int)(168 * osScaling);
-		final int horizontalPaddingBetweenImages = (int)(2 * osScaling);;
-		padding = (int)(padding * osScaling);
-		scaledHeight = (int)(scaledHeight * osScaling);
+		final int maxRowWidth = (int) (168 * osScaling);
+		final int horizontalPaddingBetweenImages = (int) (2 * osScaling);;
+		padding = (int) (padding * osScaling);
+		scaledHeight = (int) (scaledHeight * osScaling);
 
 		// Find the size needed for the preview
 		int rowCount = 1;

@@ -15,6 +15,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import nortantis.util.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,12 +38,6 @@ import nortantis.platform.Color;
 import nortantis.platform.Font;
 import nortantis.platform.FontStyle;
 import nortantis.swing.MapEdits;
-import nortantis.util.Assets;
-import nortantis.util.FileHelper;
-import nortantis.util.Helper;
-import nortantis.util.Logger;
-import nortantis.util.OSHelper;
-import nortantis.util.Tuple2;
 
 /**
  * For parsing and storing map settings.
@@ -217,25 +212,24 @@ public class MapSettings implements Serializable
 	 */
 	public MapSettings(String filePath)
 	{
-		if (FilenameUtils.getExtension(filePath).toLowerCase().equals("nort"))
+		if (FilenameUtils.getExtension(filePath).equalsIgnoreCase("nort"))
 		{
 			String fileContents = Assets.readFileAsString(filePath);
 			parseFromJson(fileContents);
 		}
-		else if (FilenameUtils.getExtension(filePath).toLowerCase().equals("properties"))
+		else if (FilenameUtils.getExtension(filePath).equalsIgnoreCase("properties"))
 		{
 			loadFromOldPropertiesFile(filePath);
 		}
 		else
 		{
-			throw new IllegalArgumentException("The map settings file, '" + filePath
-					+ "', is not a supported file type. It must be either either a json file or a properties file.");
+			throw new IllegalArgumentException(Localization.get("#UnsupportedSettingsFile", filePath));
 		}
 	}
 
 	public static boolean isOldPropertiesFile(String filePath)
 	{
-		return FilenameUtils.getExtension(filePath).toLowerCase().equals("properties");
+		return FilenameUtils.getExtension(filePath).equalsIgnoreCase("properties");
 	}
 
 	public boolean hasOldCustomImagesFolderStructure()
@@ -371,7 +365,7 @@ public class MapSettings implements Serializable
 			root.put("backgroundTextureResource", backgroundTextureResource.toJSon());
 		}
 		root.put("backgroundTextureSource",
-				backgroundTextureSource == null ? TextureSource.Assets.toString() : backgroundTextureSource.toString());
+				backgroundTextureSource == null ? TextureSource.Assets.toStringNonLocalized() : backgroundTextureSource.toStringNonLocalized());
 		root.put("generateBackgroundFromTexture", generateBackgroundFromTexture);
 		root.put("solidColorBackground", solidColorBackground);
 		root.put("colorizeOcean", colorizeOcean);
@@ -420,7 +414,7 @@ public class MapSettings implements Serializable
 			root.put("borderResource", borderResource.toJSon());
 		}
 		root.put("borderWidth", borderWidth);
-		root.put("borderColorOption", borderColorOption.toString());
+		root.put("borderColorOption", borderColorOption.toStringNonLocalized());
 		root.put("borderColor", colorToString(borderColor));
 		root.put("frayedBorderSize", frayedBorderSize);
 		root.put("drawRoads", drawRoads);
@@ -604,7 +598,7 @@ public class MapSettings implements Serializable
 	private JSONObject strokeToJson(Stroke stroke)
 	{
 		JSONObject obj = new JSONObject();
-		obj.put("type", stroke.type.toString());
+		obj.put("type", stroke.type.toStringNonLocalized());
 		obj.put("width", stroke.width);
 		return obj;
 	}
@@ -658,8 +652,7 @@ public class MapSettings implements Serializable
 		version = (String) root.get("version");
 		if (isVersionGreatherThanCurrent(version))
 		{
-			throw new RuntimeException("The map cannot be loaded because it was made in a new version of Nortantis. That map's version is "
-					+ version + ", but you're Nortantis version is " + currentVersion + ". Try again with a newer version of Nortantis.");
+			throw new RuntimeException(Localization.get("#MapFromNewerVersion", version, currentVersion));
 		}
 		randomSeed = (long) root.get("randomSeed");
 		resolution = (double) root.get("resolution");
@@ -1574,7 +1567,7 @@ public class MapSettings implements Serializable
 		String[] parts = str.split("\t");
 		if (parts.length != 3)
 		{
-			throw new IllegalArgumentException("Unable to parse the value of the font: \"" + str + "\"");
+			throw new IllegalArgumentException(Localization.get("#FontParseError", str));
 		}
 		Font font = Font.create(parts[0], FontStyle.fromNumber(Integer.parseInt(parts[1])), Integer.parseInt(parts[2]));
 		if (!Font.isInstalled(font.getName()))
@@ -1738,8 +1731,7 @@ public class MapSettings implements Serializable
 		if (backgroundTextureSource == TextureSource.File && StringUtils.isEmpty(backgroundTextureImage))
 		{
 			return new Tuple2<>(Assets.getBackgroundTextureResourcePath(backgroundTextureResource, customImagesPath),
-					"The selected background texture source is '" + backgroundTextureSource
-							+ "', but no texture image file is selected. An image from assets was used instead.");
+					Localization.get("#NoTextureFileSelected", backgroundTextureSource));
 		}
 		if (backgroundTextureSource == TextureSource.Assets)
 		{
@@ -1794,7 +1786,6 @@ public class MapSettings implements Serializable
 
 	public static final String fileExtension = "nort";
 	public static final String fileExtensionWithDot = "." + fileExtension;
-	
 
 	@Override
 	public boolean equals(Object obj)
@@ -1882,5 +1873,5 @@ public class MapSettings implements Serializable
 				&& Double.doubleToLongBits(treeHeightScale) == Double.doubleToLongBits(other.treeHeightScale)
 				&& Objects.equals(version, other.version) && worldSize == other.worldSize;
 	}
-	
+
 }

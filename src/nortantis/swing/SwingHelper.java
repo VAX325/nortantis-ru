@@ -51,6 +51,7 @@ import org.apache.commons.io.FilenameUtils;
 import nortantis.editor.UserPreferences;
 import nortantis.util.Logger;
 import nortantis.util.OSHelper;
+import nortantis.util.Localization;
 
 public class SwingHelper
 {
@@ -187,7 +188,6 @@ public class SwingHelper
 		});
 	}
 
-
 	public static JColorChooser createColorChooserWithOnlyGoodPanels(Color initialColor)
 	{
 		JColorChooser colorChooser = new JColorChooser(initialColor);
@@ -210,7 +210,6 @@ public class SwingHelper
 
 		return colorChooser;
 	}
-
 
 	@SuppressWarnings("serial")
 	private static class AlphaChooserPanel extends AbstractColorChooserPanel
@@ -244,7 +243,7 @@ public class SwingHelper
 
 			JPanel labelPanel = new JPanel();
 			labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
-			labelPanel.add(new JLabel("Alpha:"));
+			labelPanel.add(new JLabel(Localization.get("#AlphaLabel")));
 			labelPanel.add(Box.createRigidArea(new Dimension(10, 0))); // Adds 10px horizontal space
 
 			JPanel centerPanel = new JPanel(new BorderLayout());
@@ -253,7 +252,6 @@ public class SwingHelper
 
 			add(centerPanel, BorderLayout.CENTER);
 		}
-
 
 		@Override
 		public void updateChooser()
@@ -268,7 +266,7 @@ public class SwingHelper
 		@Override
 		public String getDisplayName()
 		{
-			return "Transparency";
+			return Localization.get("#AlphaLabel");
 		}
 
 		@Override
@@ -396,33 +394,33 @@ public class SwingHelper
 				if (isCausedByOutOfMemoryError(ex))
 				{
 					String message = isExport
-							? "Out of memory. Try exporting at a lower resolution, or decreasing the Display Quality before exporting."
-							: "Out of memory. Try decreasing the Display Quality.";
+							? Localization.get("#OutOfMemoryExport")
+							: Localization.get("#OutOfMemoryDisplay");
 					Logger.printError(message, ex);
-					JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(parent, message, Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				}
 				else
 				{
-					String message = "Error while creating map:";
+					String message = Localization.get("#ErrorCreatingMap");
 					Logger.printError(message, ex.getCause());
-					JOptionPane.showMessageDialog(parent, message + " " + ex.getCause().getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(parent, message + " " + ex.getCause().getMessage(), Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			else
 			{
 				// Should never happen.
 				ex.printStackTrace();
-				String message = "An ExecutionException error occured with no cause: ";
+				String message = Localization.get("#ExecutionExceptionNoCause");
 				Logger.printError(message, ex);
-				JOptionPane.showMessageDialog(parent, message + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(parent, message + ex.getMessage(), Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else
 		{
 			ex.printStackTrace();
-			String message = "An unexpected error occured: ";
+			String message = Localization.get("#UnexpectedError");
 			Logger.printError(message, ex);
-			JOptionPane.showMessageDialog(parent, message + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(parent, message + ex.getMessage(), Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -455,8 +453,11 @@ public class SwingHelper
 	 */
 	public static boolean showDismissibleMessage(String title, String message, Dimension popupSize, Component parentComponent)
 	{
-		JCheckBox checkBox = new JCheckBox("Don't show this message again.");
-		Object[] options = { "OK" };
+		JCheckBox checkBox = new JCheckBox(Localization.get("#DontShowAgain"));
+		Object[] options =
+		{
+				Localization.get("#OK")
+		};
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		JLabel label = new JLabel("<html>" + message + "</html>");

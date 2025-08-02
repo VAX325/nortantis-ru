@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import nortantis.util.*;
 import org.apache.commons.lang3.StringUtils;
 
 import nortantis.geom.Dimension;
@@ -20,11 +21,7 @@ import nortantis.platform.Color;
 import nortantis.platform.Image;
 import nortantis.platform.ImageType;
 import nortantis.platform.Painter;
-import nortantis.util.Assets;
-import nortantis.util.ImageHelper;
 import nortantis.util.ImageHelper.ColorifyAlgorithm;
-import nortantis.util.Range;
-import nortantis.util.Tuple2;
 
 /**
  * An assortment of things needed to draw the background.
@@ -131,7 +128,7 @@ public class Background
 			}
 			catch (RuntimeException e)
 			{
-				throw new RuntimeException("Unable to read the texture image file name \"" + texturePath + "\"", e);
+				throw new RuntimeException(Localization.get("#UnableToReadTexture", e));
 			}
 
 			oceanColorifyAlgorithm = ImageHelper.ColorifyAlgorithm.algorithm3;
@@ -434,15 +431,13 @@ public class Background
 		Path artPackPath = Assets.getArtPackPath(borderResouce.artPack, customImagesPath);
 		if (artPackPath == null)
 		{
-			throw new RuntimeException("Unable to draw the border because the selected border type, '" + borderResouce.name
-					+ "', is from the art pack '" + borderResouce.artPack + "', which does not exist.");
+			throw new RuntimeException(Localization.get("#UnableToDrawBorderArtPackMissing", borderResouce.name, borderResouce.artPack));
 		}
 		Path allBordersPath = Paths.get(artPackPath.toString(), "borders");
 		Path borderPath = Paths.get(allBordersPath.toString(), borderResouce.name);
 		if (!Assets.exists(borderPath.toString()))
 		{
-			throw new RuntimeException(
-					"The selected border type '" + borderResouce + "' does not have a folder for images in " + allBordersPath + ".");
+			throw new RuntimeException(Localization.get("#BorderTypeFolderMissing", borderResouce, allBordersPath));
 		}
 
 		int edgeOriginalWidth = 0;
@@ -488,7 +483,7 @@ public class Background
 			}
 			else
 			{
-				throw new RuntimeException("Border cannot be drawn. Couldn't find any edge images in " + borderPath);
+				throw new RuntimeException(Localization.get("#NoEdgeImagesFound", borderPath));
 			}
 		}
 		if (rightEdge == null)
@@ -530,12 +525,12 @@ public class Background
 
 		if (cornerOriginalWidth == 0)
 		{
-			throw new RuntimeException("Border cannot be drawn. Could not find any corner images in " + borderPath);
+			throw new RuntimeException(Localization.get("#NoCornerImagesFound", borderPath));
 		}
 
 		if (edgeOriginalWidth == 0)
 		{
-			throw new RuntimeException("Border cannot be drawn. Could not find any edge images in " + borderPath);
+			throw new RuntimeException(Localization.get("#NoEdgeImagesFound", borderPath));
 		}
 
 		if (cornerOriginalWidth <= edgeOriginalWidth)
@@ -582,7 +577,7 @@ public class Background
 			}
 			else
 			{
-				throw new RuntimeException("Border cannot be drawn. Couldn't find any corner images in " + borderPath);
+				throw new RuntimeException(Localization.get("#NoCornerImagesFound", borderPath));
 			}
 		}
 		if (upperRightCorner == null)
@@ -602,7 +597,6 @@ public class Background
 		drawUpperRightCorner(result, new IntPoint(0, 0));
 		drawLowerLeftCorner(result, new IntPoint(0, 0));
 		drawLowerRightCorner(result, new IntPoint(0, 0));
-
 
 		// Draw the edges
 
@@ -912,7 +906,7 @@ public class Background
 			if (throwExceptionIfMissing)
 			{
 				throw new RuntimeException(
-						"Unable to find a file containing \"" + inFileName + "\" in the directory " + path.toAbsolutePath());
+						Localization.get("#FileContainingNotFound", inFileName, path.toAbsolutePath()));
 			}
 			else
 			{
@@ -921,7 +915,7 @@ public class Background
 		}
 		if (corners.size() > 1)
 		{
-			throw new RuntimeException("More than one file contains \"" + inFileName + "\" in the directory " + path.toAbsolutePath());
+			throw new RuntimeException(Localization.get("#MultipleFilesContainingFound", inFileName, path.toAbsolutePath()));
 		}
 
 		return Assets.readImage(corners.get(0).toString());

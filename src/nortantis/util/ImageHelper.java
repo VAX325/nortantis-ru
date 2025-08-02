@@ -232,7 +232,12 @@ public class ImageHelper
 	{
 		if (size == 0)
 		{
-			return new float[][] { { 1f } };
+			return new float[][]
+			{
+					{
+							1f
+					}
+			};
 		}
 
 		NormalDistribution dist = createDistributionForSize(size);
@@ -288,7 +293,12 @@ public class ImageHelper
 	{
 		if (size == 0)
 		{
-			return new float[][] { { 1f } };
+			return new float[][]
+			{
+					{
+							1f
+					}
+			};
 		}
 
 		float[][] kernel = new float[size][size];
@@ -312,7 +322,12 @@ public class ImageHelper
 	{
 		if (size == 0)
 		{
-			return new float[][] { { 1f } };
+			return new float[][]
+			{
+					{
+							1f
+					}
+			};
 		}
 
 		Sinc dist = new Sinc();
@@ -883,9 +898,8 @@ public class ImageHelper
 		else
 		{
 			// This version is a little more precise in where it places the mask, but doesn't work if the images already have alpha.
-			
-			Image region = copySnippetRotated(image2, xLoc, yLoc, mask.getWidth(), mask.getHeight(), angle, pivot);
 
+			Image region = copySnippetRotated(image2, xLoc, yLoc, mask.getWidth(), mask.getHeight(), angle, pivot);
 
 			for (int y = 0; y < region.getHeight(); y++)
 				for (int x = 0; x < region.getWidth(); x++)
@@ -1265,8 +1279,7 @@ public class ImageHelper
 		for (int r = 0; r < result.length; r++)
 			for (int c = 0; c < result[0].length; c++)
 			{
-				int arrayRow = (r + rowOffset) % array.length;
-				;
+				int arrayRow = (r + rowOffset) % array.length;;
 				if (((r + rowOffset) / array.length) % 2 == 1)
 					arrayRow = array.length - 1 - arrayRow;
 

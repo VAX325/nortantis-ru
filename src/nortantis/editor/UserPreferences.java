@@ -13,6 +13,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -39,6 +40,7 @@ public class UserPreferences
 	public LookAndFeel lookAndFeel = LookAndFeel.Dark;
 	public int toolsPanelWidth;
 	public int themePanelWidth;
+	public String languageCode = Locale.getDefault().getLanguage();
 
 	public static UserPreferences instance;
 
@@ -108,20 +110,25 @@ public class UserPreferences
 					lastVersionCheckTime = LocalDateTime.parse(props.getProperty("lastVersionCheckTime"),
 							DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 				}
-				
+
 				if (props.containsKey("lookAndFeel") && !StringUtils.isEmpty(props.getProperty("lookAndFeel")))
 				{
 					lookAndFeel = LookAndFeel.valueOf(props.getProperty("lookAndFeel"));
 				}
-				
+
 				if (props.containsKey("toolsPanelWidth"))
 				{
 					toolsPanelWidth = Integer.parseInt(props.getProperty("toolsPanelWidth"));
 				}
-				
+
 				if (props.containsKey("themePanelWidth"))
 				{
 					themePanelWidth = Integer.parseInt(props.getProperty("themePanelWidth"));
+				}
+
+				if (props.containsKey("languageCode"))
+				{
+					languageCode = props.getProperty("languageCode");
 				}
 			}
 		}
@@ -161,6 +168,7 @@ public class UserPreferences
 		props.setProperty("lookAndFeel", lookAndFeel.name());
 		props.setProperty("toolsPanelWidth", toolsPanelWidth + "");
 		props.setProperty("themePanelWidth", themePanelWidth + "");
+		props.setProperty("languageCode", languageCode);
 
 		try
 		{

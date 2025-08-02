@@ -11,13 +11,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
-import nortantis.util.Assets;
-import nortantis.util.ComparableCounter;
-import nortantis.util.Counter;
-import nortantis.util.Function;
-import nortantis.util.Helper;
-import nortantis.util.Pair;
-import nortantis.util.Range;
+import nortantis.util.*;
 
 /**
  * Creates names for rivers and mountains by putting nouns, verbs, and adjectives together.
@@ -51,7 +45,7 @@ public class NameCompiler
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException("Unable to read word dictionary file.", e);
+			throw new RuntimeException(Localization.get("#DictionaryReadError"), e);
 		}
 		dict = new TreeSet<>();
 		for (String line : lines)

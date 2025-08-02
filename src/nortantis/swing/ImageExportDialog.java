@@ -46,6 +46,7 @@ import nortantis.editor.ExportAction;
 import nortantis.platform.Image;
 import nortantis.util.FileHelper;
 import nortantis.util.ImageHelper;
+import nortantis.util.Localization;
 import nortantis.util.Logger;
 
 @SuppressWarnings("serial")
@@ -65,7 +66,8 @@ public class ImageExportDialog extends JDialog
 
 	public ImageExportDialog(MainWindow mainWindow, ImageExportType type)
 	{
-		super(mainWindow, type == ImageExportType.Map ? "Export as Image" : "Export Heightmap", Dialog.ModalityType.APPLICATION_MODAL);
+		super(mainWindow, type == ImageExportType.Map ? Localization.get("#ExportAsImage") : Localization.get("#ExportHeightmap"),
+				Dialog.ModalityType.APPLICATION_MODAL);
 		this.type = type;
 
 		setSize(new Dimension(460, type == ImageExportType.Map ? 293 : 380));
@@ -79,11 +81,7 @@ public class ImageExportDialog extends JDialog
 
 		if (type == ImageExportType.Heightmap)
 		{
-			organizer.addLeftAlignedComponent(
-					new JLabel("<html>This option exports a map's height data as a 16-bit grayscale image for use in"
-							+ " other applications such as creating a videogame world. Note that the heightmap will not"
-							+ " reflect changes made by editing brushes, such as adding or removing land or changing mountain placement.</html>"),
-					false);
+			organizer.addLeftAlignedComponent(new JLabel(Localization.get("#HeightmapExportInfo")), false);
 		}
 
 		resolutionSlider = new JSlider();
@@ -108,13 +106,11 @@ public class ImageExportDialog extends JDialog
 			resolutionSlider.setLabelTable(labelTable);
 		}
 		String tooltip = type == ImageExportType.Map
-				? "This percentage is multiplied by the size of the map to determine "
-						+ "the resolution to draw at. The maximum allowed resolution is determined by the amount of memory on this device."
-				: "This percentage is multiplied by the dimensions of the map to determine the resolution to draw at. Higher resolutions"
-						+ " will give more detailed terrain.";
+				? Localization.get("#MapResolutionTooltip")
+				: Localization.get("#HeightmapResolutionTooltip");
 		resolutionSlider
 				.setValue((int) ((type == ImageExportType.Map ? mainWindow.exportResolution : mainWindow.heightmapExportResolution) * 100));
-		organizer.addLabelAndComponent("Resolution:", tooltip, resolutionSlider);
+		organizer.addLabelAndComponent(Localization.get("#ResolutionLabel"), tooltip, resolutionSlider);
 
 		ActionListener radioButtonListener = new ActionListener()
 		{
@@ -126,17 +122,17 @@ public class ImageExportDialog extends JDialog
 			}
 		};
 
-		fileRadioButton = new JRadioButton("Save to file");
+		fileRadioButton = new JRadioButton(Localization.get("#SaveToFile"));
 		fileRadioButton.addActionListener(radioButtonListener);
 
-		openInViewerRadioButton = new JRadioButton("Open with this device's default image viewer");
+		openInViewerRadioButton = new JRadioButton(Localization.get("#OpenInViewer"));
 		openInViewerRadioButton.addActionListener(radioButtonListener);
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(fileRadioButton);
 		buttonGroup.add(openInViewerRadioButton);
 
-		organizer.addLabelAndComponentsVertical("Export action:", "Select what to do with the generated image.",
+		organizer.addLabelAndComponentsVertical(Localization.get("#ExportActionLabel"), Localization.get("#ExportActionTooltip"),
 				Arrays.asList(fileRadioButton, openInViewerRadioButton));
 
 		JTextField pathField = new JTextField();
@@ -172,7 +168,7 @@ public class ImageExportDialog extends JDialog
 			}
 		}
 
-		JButton browseSavePathButton = new JButton("Browse");
+		JButton browseSavePathButton = new JButton(Localization.get("#Browse"));
 		browseSavePathButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -228,7 +224,7 @@ public class ImageExportDialog extends JDialog
 
 		JPanel bottomButtonsPanel = new JPanel();
 		bottomButtonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		exportButton = new JButton("<html><u>E</u>xport</html>");
+		exportButton = new JButton(Localization.get("#ExportButton"));
 		exportButton.setMnemonic(KeyEvent.VK_E);
 		exportButton.addActionListener(new ActionListener()
 		{
@@ -245,7 +241,7 @@ public class ImageExportDialog extends JDialog
 					{
 						if (pathField.getText() == null || pathField.getText().isEmpty())
 						{
-							JOptionPane.showMessageDialog(getContentPane(), "Export file path is required.", "Error",
+							JOptionPane.showMessageDialog(getContentPane(), Localization.get("#ExportPathRequired"), Localization.get("#ErrorTitle"),
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
@@ -260,7 +256,7 @@ public class ImageExportDialog extends JDialog
 						}
 						else if (!allowedExtension.contains(extension.toLowerCase()))
 						{
-							JOptionPane.showMessageDialog(getContentPane(), "The export file must be a png or jpeg image.", "Error",
+							JOptionPane.showMessageDialog(getContentPane(), Localization.get("#ExportFileMustBeImage"), Localization.get("#ErrorTitle"),
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
@@ -268,21 +264,21 @@ public class ImageExportDialog extends JDialog
 						if (new File(exportPath).isDirectory())
 						{
 							JOptionPane.showMessageDialog(getContentPane(),
-									"There is a directory with the same name as the export file, in the same folder.", "Error",
+									Localization.get("#ExportFileIsDir"), Localization.get("#ErrorTitle"),
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
 
 						if (!new File(new File(exportPath).getParent()).exists())
 						{
-							JOptionPane.showMessageDialog(getContentPane(), "The export file folder does not exist.", "Error",
+							JOptionPane.showMessageDialog(getContentPane(), Localization.get("#ExportFolderNotExist"), Localization.get("#ErrorTitle"),
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
 					}
 					catch (InvalidPathException ex)
 					{
-						JOptionPane.showMessageDialog(getContentPane(), "The export file path is invalid.", "Error",
+						JOptionPane.showMessageDialog(getContentPane(), Localization.get("#ExportPathInvalid"), Localization.get("#ErrorTitle"),
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
@@ -325,7 +321,7 @@ public class ImageExportDialog extends JDialog
 		});
 		bottomButtonsPanel.add(exportButton);
 
-		cancelButton = new JButton("<html><u>C</u>ancel</html>");
+		cancelButton = new JButton(Localization.get("#CancelButton"));
 		cancelButton.setMnemonic(KeyEvent.VK_C);
 		cancelButton.addActionListener(new ActionListener()
 		{
@@ -423,7 +419,7 @@ public class ImageExportDialog extends JDialog
 				}
 				catch (CancelledException e)
 				{
-					Logger.println((type == ImageExportType.Map ? "Map" : "Heightmap") + " creation cancelled.");
+					Logger.println(Localization.get("#{0}CreationCancelled", (type == ImageExportType.Map ? "Map" : "Heightmap")));
 					return null;
 				}
 
@@ -431,15 +427,14 @@ public class ImageExportDialog extends JDialog
 
 				if (isCanceled)
 				{
-					Logger.println((type == ImageExportType.Map ? "Map" : "Heightmap") + " creation cancelled.");
+					Logger.println(Localization.get("#{0}CreationCancelled", (type == ImageExportType.Map ? "Map" : "Heightmap")));
 					return null;
 				}
 
 				String fileName;
 				if (exportAction == ExportAction.OpenInDefaultImageViewer)
 				{
-					Logger.println("Opening the " + (type == ImageExportType.Map ? "map" : "heightmap")
-							+ " in your system's default image editor.");
+					Logger.println(Localization.get("#{0}OpeningInViewer", (type == ImageExportType.Map ? "map" : "heightmap")));
 					fileName = ImageHelper.openImageInSystemDefaultEditor(result, "map_" + settings.randomSeed);
 				}
 				else
@@ -447,7 +442,7 @@ public class ImageExportDialog extends JDialog
 					fileName = pathToSaveTo;
 					ImageHelper.write(result, fileName);
 				}
-				Logger.println("Map written to " + fileName);
+				Logger.println(Localization.get("#MapWrittenTo", fileName));
 				ImageCache.clear();
 				return result;
 			}
@@ -469,8 +464,10 @@ public class ImageExportDialog extends JDialog
 				if (exportAction == ExportAction.SaveToFile && !isError && !isCanceled)
 				{
 					progressBar.setVisible(false);
-					JOptionPane.showMessageDialog(getContentPane(),
-							(type == ImageExportType.Map ? "Map" : "Heightmap") + " successfully exported.", "Success",
+					String message = type == ImageExportType.Map
+							? Localization.get("#MapExported")
+							: Localization.get("#HeightmapExported");
+					JOptionPane.showMessageDialog(getContentPane(), message, Localization.get("#SuccessTitle"),
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 
@@ -505,7 +502,7 @@ public class ImageExportDialog extends JDialog
 			fileChooser.setSelectedFile(new File(filePath));
 		}
 
-		int status = fileChooser.showDialog(parent, "Select");
+		int status = fileChooser.showDialog(parent, Localization.get("#Select"));
 		if (status == JFileChooser.APPROVE_OPTION)
 		{
 			return fileChooser.getSelectedFile().toString();

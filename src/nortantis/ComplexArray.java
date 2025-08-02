@@ -32,7 +32,7 @@ public class ComplexArray
 	{
 		assert height == other.height;
 		assert width == other.width;
-		
+
 		float[][] otherArray = other.array;
 
 		for (int r = 0; r < height; r++)
@@ -50,7 +50,7 @@ public class ComplexArray
 				array[r][colR + 1] = imaginary;
 			}
 	}
-	
+
 	public void moveRealToLeftSide()
 	{
 		for (int r = 0; r < height; r++)
@@ -88,7 +88,7 @@ public class ComplexArray
 			}
 		}
 	}
-	
+
 	/*
 	 * Scales values in the given array such that the minimum is targetMin, and the maximum is targetMax.
 	 */
@@ -96,7 +96,7 @@ public class ComplexArray
 	{
 		setContrast(targetMin, targetMax, 0, height, 0, width);
 	}
-	
+
 	public void setContrast(float targetMin, float targetMax, int rowStart, int rows, int colStart, int cols)
 	{
 		float min = Float.POSITIVE_INFINITY;
@@ -125,7 +125,7 @@ public class ComplexArray
 			}
 		}
 	}
-	
+
 	public void scale(float scale, int rowStart, int rows, int colStart, int cols)
 	{
 		for (int r = rowStart; r < rowStart + rows; r++)
@@ -196,7 +196,7 @@ public class ComplexArray
 
 	public float[][] getArrayJTransformsFormat()
 	{
-		return array; 
+		return array;
 	}
 
 	public int getWidth()

@@ -16,6 +16,7 @@ import java.util.concurrent.Future;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import nortantis.util.*;
 import org.apache.commons.lang3.StringUtils;
 
 import nortantis.editor.CenterEdit;
@@ -39,14 +40,6 @@ import nortantis.platform.Image;
 import nortantis.platform.ImageType;
 import nortantis.platform.Painter;
 import nortantis.swing.MapEdits;
-import nortantis.util.Assets;
-import nortantis.util.FileHelper;
-import nortantis.util.ImageHelper;
-import nortantis.util.Logger;
-import nortantis.util.Range;
-import nortantis.util.ThreadHelper;
-import nortantis.util.Tuple2;
-import nortantis.util.Tuple4;
 
 public class MapCreator implements WarningLogger
 {
@@ -610,7 +603,7 @@ public class MapCreator implements WarningLogger
 			String pathWithHomeReplaced = FileHelper.replaceHomeFolderPlaceholder(settings.customImagesPath);
 			if (!new File(pathWithHomeReplaced).exists())
 			{
-				throw new RuntimeException("The custom images folder '" + pathWithHomeReplaced + "' does not exist.");
+				throw new RuntimeException(Localization.get("#CustomImagesFolderNotExist", pathWithHomeReplaced));
 			}
 			Logger.println("Using custom images folder: " + settings.customImagesPath);
 		}
@@ -891,7 +884,6 @@ public class MapCreator implements WarningLogger
 			map = ImageHelper.setAlphaFromMask(map, frayedBorderMask, true);
 		}
 
-
 		if (nameCreatorTask != null)
 		{
 			NameCreator nameCreator = ThreadHelper.getInstance().getResult(nameCreatorTask);
@@ -1106,7 +1098,7 @@ public class MapCreator implements WarningLogger
 			if (background.ocean.getWidth() != graph.getWidth() || background.ocean.getHeight() != graph.getHeight())
 			{
 				throw new IllegalArgumentException(
-						"The given ocean background image does not" + " have the same aspect ratio as the given land background image.");
+						Localization.get("#OceanBackgroundAspectRatioMismatch"));
 			}
 
 			map = ImageHelper.maskWithImage(map, background.ocean, landMask);
@@ -1382,7 +1374,6 @@ public class MapCreator implements WarningLogger
 		Painter g = coastlineMask.createPainter();
 		g.setColor(Color.white);
 
-
 		if (settings.drawOceanEffectsInLakes)
 		{
 			graph.drawCoastlineWithLakeShores(g, targetStrokeWidth, centersToDraw, drawBounds);
@@ -1467,10 +1458,10 @@ public class MapCreator implements WarningLogger
 				final double minNotDrawLength = 2 * scaleForAll;
 				final double maxDrawLength = 24 * scaleForAll;
 				final double minDrawLength = 19 * scaleForAll;
-				return isDrawing ? rand.nextDouble(minDrawLength, maxDrawLength + 1)
+				return isDrawing
+						? rand.nextDouble(minDrawLength, maxDrawLength + 1)
 						: rand.nextDouble(minNotDrawLength, maxNotDrawLength + 1);
 			};
-
 
 			int level = (int) (oceanEffects.getMaxPixelLevel() * waveOpacity);
 			p.setColor(Color.create(level, level, level));
@@ -1680,7 +1671,7 @@ public class MapCreator implements WarningLogger
 		if (edits.centerEdits.size() != graph.centers.size())
 		{
 			throw new IllegalArgumentException(
-					"The map edits have " + edits.centerEdits.size() + " polygons, but the world size is " + graph.centers.size());
+					Localization.get("#MismatchedPolygonCount", edits.centerEdits.size(), graph.centers.size()));
 		}
 
 		if (centerEditChanges == null)
@@ -1758,7 +1749,7 @@ public class MapCreator implements WarningLogger
 		if (edits.edgeEdits.size() != graph.edges.size())
 		{
 			throw new IllegalArgumentException(
-					"The map edits have " + edits.edgeEdits.size() + " edges, but graph has " + graph.edges.size() + " edges.");
+					Localization.get("#MismatchedEdgeCount", edits.edgeEdits.size(), graph.edges.size()));
 		}
 
 		if (edgeChanges == null)
@@ -2089,8 +2080,7 @@ public class MapCreator implements WarningLogger
 			p.setAlphaComposite(AlphaComposite.SrcAtop, alpha);
 
 			p.drawImage(overlayImage, x, y, overlayPosition.width, overlayPosition.height);
-		}
-		finally
+		} finally
 		{
 			p.dispose();
 		}
@@ -2108,11 +2098,11 @@ public class MapCreator implements WarningLogger
 		File file = new File(overlayPath);
 		if (!file.exists())
 		{
-			throw new RuntimeException("The overlay image '" + overlayPath + "' does not exist.");
+			throw new RuntimeException(Localization.get("#OverlayImageNotExist", overlayPath));
 		}
 		if (file.isDirectory())
 		{
-			throw new RuntimeException("The overlay image '" + overlayPath + "' is a folder. It should be a JPG or PNG image file.");
+			throw new RuntimeException(Localization.get("#OverlayImageIsFolder", overlayPath));
 		}
 
 		Image overlayImage = ImageCache.getInstance(Assets.installedArtPack, null).getImageFromFile(file.toPath());

@@ -3,6 +3,7 @@ package nortantis;
 import java.io.Serializable;
 import java.util.Objects;
 
+import nortantis.util.Localization;
 import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONObject;
 
@@ -69,7 +70,7 @@ public class NamedResource implements Serializable
 	@Override
 	public String toString()
 	{
-		return FilenameUtils.getBaseName(name) + " [" + artPack + "]";
+		return Localization.get("#ResourceInArtPack", FilenameUtils.getBaseName(name), artPack);
 	}
 
 }

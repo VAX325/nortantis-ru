@@ -3,6 +3,8 @@
  ************************************************************/
 package nortantis.swing;
 
+import nortantis.util.Localization;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -591,7 +593,7 @@ public class JFontChooser extends JComponent
 			this.dialog = dialog;
 			putValue(Action.DEFAULT, ACTION_NAME);
 			putValue(Action.ACTION_COMMAND_KEY, ACTION_NAME);
-			putValue(Action.NAME, (ACTION_NAME));
+			putValue(Action.NAME, Localization.get("#OKButton"));
 		}
 
 		public void actionPerformed(ActionEvent e)
@@ -611,7 +613,7 @@ public class JFontChooser extends JComponent
 			this.dialog = dialog;
 			putValue(Action.DEFAULT, ACTION_NAME);
 			putValue(Action.ACTION_COMMAND_KEY, ACTION_NAME);
-			putValue(Action.NAME, (ACTION_NAME));
+			putValue(Action.NAME, Localization.get("#CancelButton"));
 		}
 
 		public void actionPerformed(ActionEvent e)
@@ -624,7 +626,7 @@ public class JFontChooser extends JComponent
 	protected JDialog createDialog(Component parent)
 	{
 		Frame frame = parent instanceof Frame ? (Frame) parent : (Frame) SwingUtilities.getAncestorOfClass(Frame.class, parent);
-		JDialog dialog = new JDialog(frame, ("Select Font"), true);
+		JDialog dialog = new JDialog(frame, Localization.get("#SelectFont"), true);
 
 		Action okAction = new DialogOKAction(dialog);
 		Action cancelAction = new DialogCancelAction(dialog);
@@ -682,7 +684,7 @@ public class JFontChooser extends JComponent
 			p.add(getFontFamilyTextField(), BorderLayout.NORTH);
 			p.add(scrollPane, BorderLayout.CENTER);
 
-			JLabel label = new JLabel(("Font Name"));
+			JLabel label = new JLabel(Localization.get("#FontName"));
 			label.setHorizontalAlignment(JLabel.LEFT);
 			label.setHorizontalTextPosition(JLabel.LEFT);
 			label.setLabelFor(getFontFamilyTextField());
@@ -713,7 +715,7 @@ public class JFontChooser extends JComponent
 			p.add(getFontStyleTextField(), BorderLayout.NORTH);
 			p.add(scrollPane, BorderLayout.CENTER);
 
-			JLabel label = new JLabel(("Font Style"));
+			JLabel label = new JLabel(Localization.get("#FontStyle"));
 			label.setHorizontalAlignment(JLabel.LEFT);
 			label.setHorizontalTextPosition(JLabel.LEFT);
 			label.setLabelFor(getFontStyleTextField());
@@ -743,7 +745,7 @@ public class JFontChooser extends JComponent
 			p.add(getFontSizeTextField(), BorderLayout.NORTH);
 			p.add(scrollPane, BorderLayout.CENTER);
 
-			JLabel label = new JLabel(("Font Size"));
+			JLabel label = new JLabel(Localization.get("#FontSize"));
 			label.setHorizontalAlignment(JLabel.LEFT);
 			label.setHorizontalTextPosition(JLabel.LEFT);
 			label.setLabelFor(getFontSizeTextField());
@@ -759,7 +761,7 @@ public class JFontChooser extends JComponent
 	{
 		if (samplePanel == null)
 		{
-			Border titledBorder = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ("Sample"));
+			Border titledBorder = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), Localization.get("#Sample"));
 			Border empty = BorderFactory.createEmptyBorder(5, 10, 10, 10);
 			Border border = BorderFactory.createCompoundBorder(titledBorder, empty);
 
@@ -801,10 +803,10 @@ public class JFontChooser extends JComponent
 		{
 			int i = 0;
 			fontStyleNames = new String[4];
-			fontStyleNames[i++] = ("Plain");
-			fontStyleNames[i++] = ("Bold");
-			fontStyleNames[i++] = ("Italic");
-			fontStyleNames[i++] = ("BoldItalic");
+			fontStyleNames[i++] = (Localization.get("#Plain"));
+			fontStyleNames[i++] = (Localization.get("#Bold"));
+			fontStyleNames[i++] = (Localization.get("#Italic"));
+			fontStyleNames[i++] = (Localization.get("#BoldItalic"));
 		}
 		return fontStyleNames;
 	}

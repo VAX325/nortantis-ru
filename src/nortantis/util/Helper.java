@@ -285,7 +285,7 @@ public class Helper
 		}
 		return result;
 	}
-	
+
 	public static void copyArray1DTo2D(float[][] array2D, float[] array1D)
 	{
 		if (array2D == null)
@@ -296,12 +296,12 @@ public class Helper
 		{
 			return;
 		}
-		
+
 		if (array1D.length != array2D.length * array2D[0].length)
 		{
 			throw new IllegalArgumentException("Invalid input array2D length");
 		}
-		
+
 		for (int r = 0; r < array2D.length; r++)
 		{
 			for (int c = 0; c < array2D[0].length; c++)
@@ -310,7 +310,7 @@ public class Helper
 			}
 		}
 	}
-	
+
 	public static void copyArray2DTo1D(float[] array1D, float[][] array2D)
 	{
 		if (array2D == null)
@@ -321,12 +321,12 @@ public class Helper
 		{
 			return;
 		}
-		
+
 		if (array1D.length != array2D.length * array2D[0].length)
 		{
 			throw new IllegalArgumentException("Invalid input array2D length");
 		}
-		
+
 		for (int r = 0; r < array2D.length; r++)
 		{
 			for (int c = 0; c < array2D[0].length; c++)
@@ -350,12 +350,12 @@ public class Helper
 		result.removeAll(intersection);
 		return result;
 	}
-	
+
 	public static double linearCombo(double weight, double value1, double value2)
 	{
 		return (weight * value1) + ((1.0 - weight) * value2);
 	}
-	
+
 	public static int linearComboBase255(int weightFrom0To255, int value1From0To255, int value2From0To255)
 	{
 		return ((weightFrom0To255 * value1From0To255) + ((255 - weightFrom0To255) * value2From0To255)) / 255;
