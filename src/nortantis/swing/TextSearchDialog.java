@@ -27,6 +27,7 @@ import nortantis.MapText;
 import nortantis.editor.UserPreferences;
 import nortantis.geom.Rectangle;
 import nortantis.platform.awt.AwtFactory;
+import nortantis.util.Localization;
 import nortantis.util.OSHelper;
 
 @SuppressWarnings("serial")
@@ -40,7 +41,7 @@ public class TextSearchDialog extends JDialog
 
 	public TextSearchDialog(MainWindow mainWindow)
 	{
-		super(mainWindow, "Search Text", Dialog.ModalityType.MODELESS);
+               super(mainWindow, Localization.get("#SearchTextDialogTitle"), Dialog.ModalityType.MODELESS);
 		setSize(450, 70);
 		setResizable(false);
 
@@ -52,7 +53,7 @@ public class TextSearchDialog extends JDialog
 		final int padding = 4;
 		container.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
 
-		notFoundLabel = new JLabel("Not found");
+               notFoundLabel = new JLabel(Localization.get("#NotFound"));
 		notFoundLabel.setForeground(getColorForNotFoundMessage());
 		notFoundLabel.setVisible(false);
 
@@ -110,8 +111,8 @@ public class TextSearchDialog extends JDialog
 
 		boolean needsSpecialHandling = OSHelper.isLinux() && UserPreferences.getInstance().lookAndFeel == LookAndFeel.System;
 		final int fontSize = 24;
-		searchForward = new JButton(needsSpecialHandling ? "Next" : "→");
-		searchForward.setToolTipText("Search forward (enter key)");
+               searchForward = new JButton(needsSpecialHandling ? Localization.get("#Next") : "→");
+               searchForward.setToolTipText(Localization.get("#SearchForwardTooltip"));
 		if (!needsSpecialHandling)
 		{
 			searchForward.setFont(new java.awt.Font(searchForward.getFont().getName(), searchForward.getFont().getStyle(), fontSize));
@@ -128,8 +129,8 @@ public class TextSearchDialog extends JDialog
 			}
 		});
 
-		searchBackward = new JButton(needsSpecialHandling ? "Prev" : "←");
-		searchBackward.setToolTipText("Search backward");
+               searchBackward = new JButton(needsSpecialHandling ? Localization.get("#Prev") : "←");
+               searchBackward.setToolTipText(Localization.get("#SearchBackwardTooltip"));
 		if (!needsSpecialHandling)
 		{
 			searchBackward.setFont(new java.awt.Font(searchBackward.getFont().getName(), searchBackward.getFont().getStyle(), fontSize));
