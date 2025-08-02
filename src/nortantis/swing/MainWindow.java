@@ -92,6 +92,7 @@ import nortantis.util.ILoggerTarget;
 import nortantis.util.ImageHelper;
 import nortantis.util.Logger;
 import nortantis.util.OSHelper;
+import nortantis.util.Localization;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ILoggerTarget
@@ -101,7 +102,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 	private boolean forceSaveAs;
 	MapSettings lastSettingsLoadedOrSaved;
 	boolean hasDrawnCurrentMapAtLeastOnce;
-	static final String frameTitleBase = "Nortantis";
+        private String frameTitleBase;
 	public MapEdits edits;
 	public JMenuItem clearEditsMenuItem;
 
@@ -148,9 +149,10 @@ public class MainWindow extends JFrame implements ILoggerTarget
 	private JMenu highlightIconsInArtPackMenu;
 	private List<JCheckBoxMenuItem> artPacksToHighlight;
 
-	public MainWindow(String fileToOpen) throws Exception
-	{
-		super(frameTitleBase);
+        public MainWindow(String fileToOpen) throws Exception
+        {
+                super(Localization.get("#FrameTitle"));
+                frameTitleBase = Localization.get("#FrameTitle");
 
 		Logger.setLoggerTarget(this);
 
@@ -163,9 +165,12 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			try
 			{
 				JOptionPane.showMessageDialog(null,
-						"Unnable to create GUI because of error: " + ex.getMessage() + "\nVersion: " + MapSettings.currentVersion
-								+ "\nOS Name: " + System.getProperty("os.name") + "\nStack trace: " + ExceptionUtils.getStackTrace(ex),
-						"Error", JOptionPane.ERROR_MESSAGE);
+                                Localization.get("#ErrorCreatingGUI")
+                                                .replace("{error}", ex.getMessage())
+                                                .replace("{version}", MapSettings.currentVersion)
+                                                .replace("{os}", System.getProperty("os.name"))
+                                                .replace("{stacktrace}", ExceptionUtils.getStackTrace(ex)),
+                                Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 			catch (Exception inner)
 			{
@@ -192,7 +197,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 
 		if (!isMapOpen)
 		{
-			setPlaceholderImage(new String[] { "Welcome to Nortantis. To create or open a map,", "use the File menu." });
+                        setPlaceholderImage(Localization.get("#WelcomeMessage").replace("{file}", fileMenu.getText()).split("\n"));
 			enableOrDisableFieldsThatRequireMap(false, null);
 		}
 
@@ -232,7 +237,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 							UserPreferences.getInstance().lastVersionFromCheck = latestVersion;
 							UserPreferences.getInstance().lastVersionCheckTime = currentTime;
 
-							String message = "Version " + latestVersion + " is now available. You can download it at";
+							String message = Localization.get("#UpdateAvailableMessage").replace("{version}", latestVersion);
 							String url = "https://jandjheydorn.com/nortantis";
 
 							JPanel messagePanel = new JPanel();
@@ -244,8 +249,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 							JLabel hyperlink = SwingHelper.createHyperlink(url, url);
 							messagePanel.add(hyperlink);
 
-							JOptionPane.showMessageDialog(MainWindow.this, messagePanel, "Update Available",
-									JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(MainWindow.this, messagePanel, Localization.get("#UpdateAvailableTitle"),
+                                                                        JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
 					catch (Exception e)
@@ -352,7 +357,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 				catch (Exception ex)
 				{
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, ex.getMessage(), Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 					Logger.printError("Error while closing:", ex);
 				}
 			}
@@ -617,7 +622,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 					JScrollPane scrollPane = new JScrollPane(textArea);
 					scrollPane.setPreferredSize(new Dimension(500, 150));
 
-					JOptionPane.showMessageDialog(MainWindow.this, scrollPane, "Map Drew With Warnings", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(MainWindow.this, scrollPane, Localization.get("#MapDrewWithWarningsTitle"), JOptionPane.WARNING_MESSAGE);
 
 				}
 
@@ -630,8 +635,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			{
 				showAsDrawing(false);
 				mapEditingPanel.clearAllSelectionsAndHighlights();
-				setPlaceholderImage(new String[] { "Map failed to draw due to an error.",
-						"To retry, use " + fileMenu.getText() + " -> " + refreshMenuItem.getText() + "." });
+                            setPlaceholderImage(Localization.get("#MapDrawError").replace("{file}", fileMenu.getText()).replace("{refresh}", refreshMenuItem.getText()).split("\n"));
 
 				// In theory, enabling fields now could lead to the undoer not
 				// working quite right since edits might not have been created.
@@ -674,11 +678,11 @@ public class MainWindow extends JFrame implements ILoggerTarget
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		fileMenu = new JMenu("File");
-		menuBar.add(fileMenu);
+                fileMenu = new JMenu(Localization.get("#FileMenu"));
+                menuBar.add(fileMenu);
 
-		final JMenuItem newRandomMapMenuItem = new JMenuItem("New Random Map");
-		newRandomMapMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+                final JMenuItem newRandomMapMenuItem = new JMenuItem(Localization.get("#NewRandomMap"));
+                newRandomMapMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
 		fileMenu.add(newRandomMapMenuItem);
 		newRandomMapMenuItem.addActionListener(new ActionListener()
 		{
@@ -693,7 +697,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		newMapWithSameThemeMenuItem = new JMenuItem("New Map With Same Theme");
+                newMapWithSameThemeMenuItem = new JMenuItem(Localization.get("#NewMapWithSameTheme"));
 		fileMenu.add(newMapWithSameThemeMenuItem);
 		newMapWithSameThemeMenuItem.addActionListener(new ActionListener()
 		{
@@ -724,8 +728,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		final JMenuItem loadSettingsMenuItem = new JMenuItem("Open");
-		loadSettingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+                final JMenuItem loadSettingsMenuItem = new JMenuItem(Localization.get("#Open"));
+                loadSettingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
 		fileMenu.add(loadSettingsMenuItem);
 		loadSettingsMenuItem.addActionListener(new ActionListener()
 		{
@@ -763,9 +767,11 @@ public class MainWindow extends JFrame implements ILoggerTarget
 
 					if (openSettingsFilePath != null && MapSettings.isOldPropertiesFile(openSettingsFilePath.toString()))
 					{
-						JOptionPane.showMessageDialog(MainWindow.this, FilenameUtils.getName(openSettingsFilePath.toString())
-								+ " is an older format '.properties' file. When you save, it will be converted to the newer format, a '"
-								+ MapSettings.fileExtensionWithDot + "' file.", "File Converted", JOptionPane.INFORMATION_MESSAGE);
+                                               JOptionPane.showMessageDialog(MainWindow.this,
+                                                               Localization.get("#OldPropertiesFileConverted")
+                                                                               .replace("{file}", FilenameUtils.getName(openSettingsFilePath.toString()))
+                                                                               .replace("{extension}", MapSettings.fileExtensionWithDot),
+                                                               Localization.get("#FileConvertedTitle"), JOptionPane.INFORMATION_MESSAGE);
 						openSettingsFilePath = Paths.get(FilenameUtils.getFullPath(openSettingsFilePath.toString()),
 								FilenameUtils.getBaseName(openSettingsFilePath.toString()) + MapSettings.fileExtensionWithDot);
 						forceSaveAs = true;
@@ -776,13 +782,13 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		recentSettingsMenuItem = new JMenu("Open Recent");
-		fileMenu.add(recentSettingsMenuItem);
-		createOrUpdateRecentMapMenuButtons();
+                recentSettingsMenuItem = new JMenu(Localization.get("#OpenRecent"));
+                fileMenu.add(recentSettingsMenuItem);
+                createOrUpdateRecentMapMenuButtons();
 
-		saveMenuItem = new JMenuItem("Save");
-		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
-		fileMenu.add(saveMenuItem);
+                saveMenuItem = new JMenuItem(Localization.get("#Save"));
+                saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+                fileMenu.add(saveMenuItem);
 		saveMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -792,8 +798,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		saveAsMenItem = new JMenuItem("Save As...");
-		fileMenu.add(saveAsMenItem);
+                saveAsMenItem = new JMenuItem(Localization.get("#SaveAs"));
+                fileMenu.add(saveAsMenItem);
 		saveAsMenItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -803,8 +809,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		exportMapAsImageMenuItem = new JMenuItem("Export as Image");
-		fileMenu.add(exportMapAsImageMenuItem);
+                exportMapAsImageMenuItem = new JMenuItem(Localization.get("#ExportAsImage"));
+                fileMenu.add(exportMapAsImageMenuItem);
 		exportMapAsImageMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -814,8 +820,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		exportHeightmapMenuItem = new JMenuItem("Export Heightmap");
-		fileMenu.add(exportHeightmapMenuItem);
+                exportHeightmapMenuItem = new JMenuItem(Localization.get("#ExportHeightmap"));
+                fileMenu.add(exportHeightmapMenuItem);
 		exportHeightmapMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -825,8 +831,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		refreshMenuItem = new JMenuItem("Refresh Images and Redraw");
-		refreshMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK));
+                refreshMenuItem = new JMenuItem(Localization.get("#RefreshImagesAndRedraw"));
+                refreshMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK));
 		fileMenu.add(refreshMenuItem);
 		refreshMenuItem.addActionListener(new ActionListener()
 		{
@@ -838,10 +844,10 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		editMenu = new JMenu("Edit");
-		menuBar.add(editMenu);
+                editMenu = new JMenu(Localization.get("#EditMenu"));
+                menuBar.add(editMenu);
 
-		undoButton = new JMenuItem("Undo");
+                undoButton = new JMenuItem(Localization.get("#Undo"));
 		undoButton.setEnabled(false);
 		editMenu.add(undoButton);
 		undoButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
@@ -860,7 +866,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		redoButton = new JMenuItem("Redo");
+                redoButton = new JMenuItem(Localization.get("#Redo"));
 		redoButton.setEnabled(false);
 		editMenu.add(redoButton);
 		redoButton.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
@@ -879,8 +885,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		clearEntireMapButton = new JMenuItem("Clear Entire Map");
-		editMenu.add(clearEntireMapButton);
+                clearEntireMapButton = new JMenuItem(Localization.get("#ClearEntireMap"));
+                editMenu.add(clearEntireMapButton);
 		clearEntireMapButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -891,8 +897,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 		});
 		clearEntireMapButton.setEnabled(false);
 
-		customImagesMenuItem = new JMenuItem("Custom Images Folder");
-		editMenu.add(customImagesMenuItem);
+                customImagesMenuItem = new JMenuItem(Localization.get("#CustomImagesFolder"));
+                editMenu.add(customImagesMenuItem);
 		customImagesMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -902,11 +908,11 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		viewMenu = new JMenu("View");
-		menuBar.add(viewMenu);
+                viewMenu = new JMenu(Localization.get("#ViewMenu"));
+                menuBar.add(viewMenu);
 
-		highlightLakesButton = new JCheckBoxMenuItem("Highlight Lakes");
-		highlightLakesButton.setToolTipText("Highlight lakes to make them easier to see.");
+                highlightLakesButton = new JCheckBoxMenuItem(Localization.get("#HighlightLakes"));
+                highlightLakesButton.setToolTipText(Localization.get("#HighlightLakesTooltip"));
 		highlightLakesButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -918,8 +924,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 		});
 		viewMenu.add(highlightLakesButton);
 
-		highlightRiversButton = new JCheckBoxMenuItem("Highlight Rivers");
-		highlightRiversButton.setToolTipText("Highlight rivers to make them easier to see.");
+                highlightRiversButton = new JCheckBoxMenuItem(Localization.get("#HighlightRivers"));
+                highlightRiversButton.setToolTipText(Localization.get("#HighlightRiversTooltip"));
 		highlightRiversButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -933,11 +939,11 @@ public class MainWindow extends JFrame implements ILoggerTarget
 
 		{
 			// Create the theme menu
-			JMenu themeMenu = new JMenu("Theme");
+                        JMenu themeMenu = new JMenu(Localization.get("#ThemeMenu"));
 
-			JRadioButtonMenuItem darkTheme = new JRadioButtonMenuItem("Dark");
-			JRadioButtonMenuItem lightTheme = new JRadioButtonMenuItem("Light");
-			JRadioButtonMenuItem systemTheme = new JRadioButtonMenuItem("System");
+                        JRadioButtonMenuItem darkTheme = new JRadioButtonMenuItem(Localization.get("#DarkTheme"));
+                        JRadioButtonMenuItem lightTheme = new JRadioButtonMenuItem(Localization.get("#LightTheme"));
+                        JRadioButtonMenuItem systemTheme = new JRadioButtonMenuItem(Localization.get("#SystemTheme"));
 
 			ButtonGroup themeGroup = new ButtonGroup();
 			themeGroup.add(darkTheme);
@@ -995,11 +1001,11 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			viewMenu.add(themeMenu);
 		}
 
-		toolsMenu = new JMenu("Tools");
-		menuBar.add(toolsMenu);
+                toolsMenu = new JMenu(Localization.get("#ToolsMenu"));
+                menuBar.add(toolsMenu);
 
-		nameGeneratorMenuItem = new JMenuItem("Name Generator");
-		toolsMenu.add(nameGeneratorMenuItem);
+                nameGeneratorMenuItem = new JMenuItem(Localization.get("#NameGenerator"));
+                toolsMenu.add(nameGeneratorMenuItem);
 		nameGeneratorMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -1009,8 +1015,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		searchTextMenuItem = new JMenuItem("Search Text");
-		searchTextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK));
+                searchTextMenuItem = new JMenuItem(Localization.get("#SearchText"));
+                searchTextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK));
 		toolsMenu.add(searchTextMenuItem);
 		searchTextMenuItem.addActionListener(new ActionListener()
 		{
@@ -1021,11 +1027,11 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		JMenu artPacksMenu = new JMenu("Art Packs");
-		toolsMenu.add(artPacksMenu);
+                JMenu artPacksMenu = new JMenu(Localization.get("#ArtPacksMenu"));
+                toolsMenu.add(artPacksMenu);
 
-		JMenuItem addArtPackItem = new JMenuItem("Add Art Pack");
-		artPacksMenu.add(addArtPackItem);
+                JMenuItem addArtPackItem = new JMenuItem(Localization.get("#AddArtPack"));
+                artPacksMenu.add(addArtPackItem);
 		addArtPackItem.addActionListener(new ActionListener()
 		{
 
@@ -1036,8 +1042,8 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 		});
 
-		JMenuItem openArtPacksFolderItem = new JMenuItem("Open Art Packs Folder");
-		artPacksMenu.add(openArtPacksFolderItem);
+                JMenuItem openArtPacksFolderItem = new JMenuItem(Localization.get("#OpenArtPacksFolder"));
+                artPacksMenu.add(openArtPacksFolderItem);
 		openArtPacksFolderItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -1048,30 +1054,54 @@ public class MainWindow extends JFrame implements ILoggerTarget
 		});
 
 		artPacksToHighlight = new ArrayList<>();
-		highlightIconsInArtPackMenu = new JMenu("Highlight Icons in Art Packs");
-		artPacksMenu.add(highlightIconsInArtPackMenu);
+                highlightIconsInArtPackMenu = new JMenu(Localization.get("#HighlightIconsInArtPacks"));
+                artPacksMenu.add(highlightIconsInArtPackMenu);
 		updateArtPackHighlightOptions();
 
-		helpMenu = new JMenu("Help");
-		menuBar.add(helpMenu);
+                // Language selection menu
+                JMenu languageMenu = new JMenu(Localization.get("#LanguageMenu"));
+                menuBar.add(languageMenu);
+                JRadioButtonMenuItem englishLanguage = new JRadioButtonMenuItem(Localization.get("#English"));
+                JRadioButtonMenuItem russianLanguage = new JRadioButtonMenuItem(Localization.get("#Russian"));
+                ButtonGroup languageGroup = new ButtonGroup();
+                languageGroup.add(englishLanguage);
+                languageGroup.add(russianLanguage);
+                if (Localization.getLanguage().equals("ru")) {
+                        russianLanguage.setSelected(true);
+                } else {
+                        englishLanguage.setSelected(true);
+                }
+                ActionListener languageListener = new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                if (englishLanguage.isSelected()) {
+                                        switchLanguage("en");
+                                } else if (russianLanguage.isSelected()) {
+                                        switchLanguage("ru");
+                                }
+                        }
+                };
+                englishLanguage.addActionListener(languageListener);
+                russianLanguage.addActionListener(languageListener);
+                languageMenu.add(englishLanguage);
+                languageMenu.add(russianLanguage);
 
-		JMenuItem keyboardShortcutsItem = new JMenuItem("Keyboard Shortcuts");
-		helpMenu.add(keyboardShortcutsItem);
+                helpMenu = new JMenu(Localization.get("#HelpMenu"));
+                menuBar.add(helpMenu);
+
+                JMenuItem keyboardShortcutsItem = new JMenuItem(Localization.get("#KeyboardShortcuts"));
+                helpMenu.add(keyboardShortcutsItem);
 		keyboardShortcutsItem.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(MainWindow.this, "<html>Keyboard shortcuts for navigating the map:" + "<ul>"
-						+ "<li>Zoom: Mouse wheel</li>" + "<li>Pan: Hold mouse middle button or CTRL and mouse left click, then drag</li>"
-						+ "</ul>"
-						+ "<br>Each editor tool has a keyboard shortcut for switching to it. Hover over the tool's icon to see the shortcut."
-						+ "</html>", "Keyboard Shortcuts", JOptionPane.INFORMATION_MESSAGE);
+                                  JOptionPane.showMessageDialog(MainWindow.this, Localization.get("#KeyboardShortcutsMessage"), Localization.get("#KeyboardShortcuts"), JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
-		JMenuItem aboutNortantisItem = new JMenuItem("About Nortantis");
-		helpMenu.add(aboutNortantisItem);
+                JMenuItem aboutNortantisItem = new JMenuItem(Localization.get("#AboutNortantis"));
+                helpMenu.add(aboutNortantisItem);
 		aboutNortantisItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -1082,17 +1112,31 @@ public class MainWindow extends JFrame implements ILoggerTarget
 		});
 	}
 
-	private void handleLookAndFeelChange(LookAndFeel lookAndFeel)
-	{
-		setLookAndFeel(lookAndFeel);
-		UserPreferences.getInstance().lookAndFeel = lookAndFeel;
-		SwingUtilities.updateComponentTreeUI(this);
-		toolsPanel.handleLookAndFeelChange(lookAndFeel);
-		if (textSearchDialog != null)
-		{
-			textSearchDialog.handleLookAndFeelChange();
-		}
-	}
+        private void handleLookAndFeelChange(LookAndFeel lookAndFeel)
+        {
+                setLookAndFeel(lookAndFeel);
+                UserPreferences.getInstance().lookAndFeel = lookAndFeel;
+                SwingUtilities.updateComponentTreeUI(this);
+                toolsPanel.handleLookAndFeelChange(lookAndFeel);
+                if (textSearchDialog != null)
+                {
+                        textSearchDialog.handleLookAndFeelChange();
+                }
+        }
+
+        private void switchLanguage(String langCode)
+        {
+                Localization.load(langCode);
+                UserPreferences.getInstance().languageCode = langCode;
+                UserPreferences.getInstance().save();
+                frameTitleBase = Localization.get("#FrameTitle");
+                setTitle(frameTitleBase);
+                createMenuBar();
+                if (mapEditingPanel != null && mapEditingPanel.mapFromMapCreator == null)
+                {
+                        setPlaceholderImage(Localization.get("#WelcomeMessage").replace("{file}", fileMenu.getText()).split("\n"));
+                }
+        }
 
 	private static void setLookAndFeel(LookAndFeel lookAndFeel)
 	{
@@ -1113,11 +1157,11 @@ public class MainWindow extends JFrame implements ILoggerTarget
 		}
 		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e)
 		{
-			String message = "Error while setting look and feel: " + e.getMessage();
+			String message = Localization.get("#ErrorSettingLookAndFeel").replace("{error}", e.getMessage());
 			System.out.println(message);
 			e.printStackTrace();
 			Logger.printError(message, e);
-			JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, message, Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 	}
@@ -1184,9 +1228,9 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 			catch (IOException ex)
 			{
-				String message = "An error occurred while creating the folder: " + ex.getMessage();
+				String message = Localization.get("#FolderCreationError").replace("{error}", ex.getMessage());
 				Logger.printError(message, ex);
-				JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, message, Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		}
@@ -1198,13 +1242,13 @@ public class MainWindow extends JFrame implements ILoggerTarget
 	{
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fileChooser.setDialogTitle("Select Art Pack (ZIP File)");
+                fileChooser.setDialogTitle(Localization.get("#SelectArtPackZip"));
 		fileChooser.setFileFilter(new FileFilter()
 		{
 			@Override
 			public String getDescription()
 			{
-				return "Art Pack (ZIP File)";
+                                return Localization.get("#ArtPackZipFileFilter");
 			}
 
 			@Override
@@ -1228,26 +1272,25 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			}
 			catch (IOException ex)
 			{
-				String message = "Error while reading zip file '" + selectedFile + "': " + ex.getMessage();
+				String message = Localization.get("#ErrorReadingZipFile").replace("{file}", selectedFile.toString()).replace("{error}", ex.getMessage());
 				Logger.printError(message, ex);
-				JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, message, Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
 			if (subfolderNames.isEmpty())
 			{
-				JOptionPane.showMessageDialog(this,
-						"Invalid art pack. It's empty. It should have exactly one top-level folder, the name of which is the name of the art pack.",
-						"Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this,
+                                                Localization.get("#InvalidArtPackEmpty"),
+                                                Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
 			if (subfolderNames.size() > 1)
 			{
-				JOptionPane.showMessageDialog(this,
-						"Invalid art pack. It should have exactly one top-level folder, the name of which will be the name of the art pack. It has "
-								+ subfolderNames.size() + " top-level folders.",
-						"Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this,
+                                                Localization.get("#InvalidArtPackMultipleFolders").replace("{count}", String.valueOf(subfolderNames.size())),
+                                                Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -1255,8 +1298,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 
 			if (Assets.reservedArtPacks.contains(artPackName.toLowerCase()))
 			{
-				JOptionPane.showMessageDialog(this, "The art pack name '" + artPackName + "' is not allowed.", "Invalid Art Pack Name",
-						JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, Localization.get("#InvalidArtPackName").replace("{name}", artPackName), Localization.get("#InvalidArtPackNameTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -1264,10 +1306,9 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			if (artPackFolderAsFile.exists() && artPackFolderAsFile.isDirectory())
 			{
 				// Show the dialog
-				int response = JOptionPane.showOptionDialog(this,
-						"The art pack '" + artPackName + "' already exists. Do you wish to overwrite it?", "Overwrite Art Pack",
-						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] { "Overwrite", "Cancel" }, "Cancel");
-
+                                int response = JOptionPane.showOptionDialog(this,
+                                                Localization.get("#OverwriteArtPackMessage").replace("{name}", artPackName), Localization.get("#OverwriteArtPackTitle"),
+                                                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] { Localization.get("#Overwrite"), Localization.get("#Cancel") }, Localization.get("#Cancel"));
 				if (response == 0)
 				{
 					// Overwrite
@@ -1293,12 +1334,11 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			try
 			{
 				FileHelper.unzip(selectedFile, artPacksFolder, true);
-				JOptionPane.showMessageDialog(MainWindow.this, "Art pack added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                  JOptionPane.showMessageDialog(MainWindow.this, Localization.get("#ArtPackAddedSuccessfully"), Localization.get("#SuccessTitle"), JOptionPane.INFORMATION_MESSAGE);
 			}
 			catch (IOException ex)
 			{
-				JOptionPane.showMessageDialog(MainWindow.this, "Error uncompressing the zip file: " + ex.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
+                                  JOptionPane.showMessageDialog(MainWindow.this, Localization.get("#ErrorUncompressingZip").replace("{error}", ex.getMessage()), Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 			handleImagesRefresh();
 		}
@@ -1360,8 +1400,9 @@ public class MainWindow extends JFrame implements ILoggerTarget
 	{
 		if (!(new File(absolutePath).exists()))
 		{
-			JOptionPane.showMessageDialog(null, "The map '" + absolutePath + "' cannot be opened because it does not exist.",
-					"Unable to Open Map", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null,
+                                                Localization.get("#MapDoesNotExist").replace("{path}", absolutePath),
+                                                Localization.get("#UnableToOpenMapTitle"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
@@ -1386,9 +1427,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error while opening '" + absolutePath + "': " + e.getMessage(), "Error While Opening Map",
-					JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, Localization.get("#ErrorWhileOpeningMap").replace("{path}", absolutePath).replace("{error}", e.getMessage()), Localization.get("#ErrorWhileOpeningMapTitle"), JOptionPane.ERROR_MESSAGE);
 			Logger.printError("Unable to open '" + absolutePath + "' due to an error:", e);
 		}
 	}
@@ -1401,15 +1440,17 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			{
 				MapSettings.convertOldCustomImagesFolder(settings.customImagesPath);
 
-				JOptionPane.showMessageDialog(null, "Your custom images folder has been automatically converted to the new structure.",
-						"Custom Images Folder Converted", JOptionPane.INFORMATION_MESSAGE);
-			}
+                                JOptionPane.showMessageDialog(null,
+                                                Localization.get("#CustomImagesFolderConvertedMessage"),
+                                                Localization.get("#CustomImagesFolderConvertedTitle"), JOptionPane.INFORMATION_MESSAGE);
+                        }
 			catch (IOException ex)
 			{
-				String errorMessage = "Error while restructuring custom images folder for " + settings.customImagesPath + ": "
-						+ ex.getMessage();
+                                String errorMessage = Localization.get("#ErrorRestructuringCustomImages")
+                                                .replace("{path}", settings.customImagesPath)
+                                                .replace("{error}", ex.getMessage());
 				Logger.printError(errorMessage, ex);
-				JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, errorMessage, Localization.get("#ErrorTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -1755,7 +1796,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 
 		if (settingsHaveUnsavedChanges())
 		{
-			int n = JOptionPane.showConfirmDialog(this, "Settings have been modfied. Save changes?", "", JOptionPane.YES_NO_CANCEL_OPTION);
+                        int n = JOptionPane.showConfirmDialog(this, Localization.get("#SettingsModifiedSavePrompt"), "", JOptionPane.YES_NO_CANCEL_OPTION);
 			if (n == JOptionPane.YES_OPTION)
 			{
 				saveSettings(this);
@@ -1825,7 +1866,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			{
 				e.printStackTrace();
 				Logger.printError("Error while saving map.", e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Unable to save settings.", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(), Localization.get("#UnableToSaveSettingsTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 			updateFrameTitle(false, true);
 		}
@@ -1886,7 +1927,7 @@ public class MainWindow extends JFrame implements ILoggerTarget
 			{
 				e.printStackTrace();
 				Logger.printError("Erorr while saving settings to a new file:", e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Unable to save settings.", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(), Localization.get("#UnableToSaveSettingsTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 
 			updateFrameTitle(false, true);
@@ -2127,9 +2168,10 @@ public class MainWindow extends JFrame implements ILoggerTarget
 		// Tell drawing code to use AWT.
 		PlatformFactory.setInstance(new AwtFactory());
 
-		setLookAndFeel(UserPreferences.getInstance().lookAndFeel);
+                setLookAndFeel(UserPreferences.getInstance().lookAndFeel);
+                Localization.load(UserPreferences.getInstance().languageCode);
 
-		String fileToOpen = args.length > 0 ? args[0] : "";
+                String fileToOpen = args.length > 0 ? args[0] : "";
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
