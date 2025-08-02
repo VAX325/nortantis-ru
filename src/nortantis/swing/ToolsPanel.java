@@ -35,6 +35,7 @@ import nortantis.editor.UserPreferences;
 import nortantis.platform.awt.AwtFactory;
 import nortantis.util.Assets;
 import nortantis.util.Logger;
+import nortantis.util.Localization;
 
 @SuppressWarnings("serial")
 public class ToolsPanel extends JPanel
@@ -49,7 +50,7 @@ public class ToolsPanel extends JPanel
 	private TitledBorder toolOptionsPanelBorder;
 	private JProgressBar progressBar;
 	private JPanel bottomPanel;
-	static final String fitToWindowZoomLevel = "Fit to Window";
+        static final String fitToWindowZoomLevel = Localization.get("#FitToWindow");
 	private final String defaultZoomLevel = fitToWindowZoomLevel;
 	private Timer progressBarTimer;
 	MainWindow mainWindow;
@@ -148,9 +149,8 @@ public class ToolsPanel extends JPanel
 				BorderFactory.createEmptyBorder(SwingHelper.borderWidthBetweenComponents, SwingHelper.borderWidthBetweenComponents,
 						SwingHelper.borderWidthBetweenComponents, SwingHelper.borderWidthBetweenComponents));
 
-		JLabel lblZoom = new JLabel("Zoom");
-		lblZoom.setToolTipText(
-				"Zoom the map in or out (mouse wheel). To view more details at higher zoom levels," + " adjust the 'Display quality'.");
+                JLabel lblZoom = new JLabel(Localization.get("#ZoomLabel"));
+                lblZoom.setToolTipText(Localization.get("#ZoomTooltip"));
 
 		zoomLevels = Arrays.asList(new String[] { fitToWindowZoomLevel, "50%", "75%", "100%", "150%", "200%", "275%" });
 		zoomComboBox = new JComboBoxFixed<>();
@@ -173,9 +173,8 @@ public class ToolsPanel extends JPanel
 		// bottomPanel.add(Box.createHorizontalGlue());
 		bottomPanel.add(Box.createRigidArea(new Dimension(12, 4)));
 
-		JLabel lblDisplayQuality = new JLabel("Display Quality");
-		lblDisplayQuality.setToolTipText(
-				"Change the quality of the map displayed in the editor. Does not apply when exporting the map to an image. Higher values make the editor slower.");
+                JLabel lblDisplayQuality = new JLabel(Localization.get("#DisplayQualityLabel"));
+                lblDisplayQuality.setToolTipText(Localization.get("#DisplayQualityTooltip"));
 
 		displayQualityComboBox = new JComboBoxFixed<>();
 		for (DisplayQuality quality : DisplayQuality.values())

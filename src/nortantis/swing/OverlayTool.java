@@ -33,6 +33,7 @@ import nortantis.swing.MapEditingPanel.IconEditToolsMode;
 import nortantis.util.Assets;
 import nortantis.util.FileHelper;
 import nortantis.util.Tuple2;
+import nortantis.util.Localization;
 
 public class OverlayTool extends EditorTool
 {
@@ -163,9 +164,9 @@ public class OverlayTool extends EditorTool
 		toolOptionsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
 
-		{
-			drawOverlayImageCheckbox = new JCheckBox("Enable overlay image");
-			drawOverlayImageCheckbox.setToolTipText("Show or hide the selected overlay image, if any.");
+                {
+                        drawOverlayImageCheckbox = new JCheckBox(Localization.get("#EnableOverlayImage"));
+                        drawOverlayImageCheckbox.setToolTipText(Localization.get("#EnableOverlayImageTooltip"));
 			drawOverlayImageCheckbox.addActionListener(new ActionListener()
 			{
 				@Override
@@ -206,7 +207,7 @@ public class OverlayTool extends EditorTool
 				}
 			});
 
-			btnsBrowseOverlayImage = new JButton("Browse");
+                        btnsBrowseOverlayImage = new JButton(Localization.get("#Browse"));
 			btnsBrowseOverlayImage.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -244,8 +245,8 @@ public class OverlayTool extends EditorTool
 		}
 
 		{
-			fitToMapButton = new JButton("Fit to Map");
-			fitToMapButton.setToolTipText("Resize and position the overlay image to fit the entire map, including borders.");
+                        fitToMapButton = new JButton(Localization.get("#FitToMap"));
+                        fitToMapButton.setToolTipText(Localization.get("#FitToMapTooltip"));
 			fitToMapButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -258,9 +259,9 @@ public class OverlayTool extends EditorTool
 			});
 
 
-			fitInsideBorderButton = new JButton("Fit Inside Border");
-			fitInsideBorderButton.setToolTipText(
-					"Resize and position the overlay image to fit the drawable space on the map (the ocean/land), not including the border.");
+                        fitInsideBorderButton = new JButton(Localization.get("#FitInsideBorder"));
+                        fitInsideBorderButton.setToolTipText(
+                                        Localization.get("#FitInsideBorderTooltip"));
 			fitInsideBorderButton.addActionListener(new ActionListener()
 			{
 				@Override

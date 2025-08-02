@@ -13,6 +13,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import nortantis.util.Localization;
+
 import nortantis.SettingsGenerator;
 
 public class BooksWidget
@@ -31,9 +33,9 @@ public class BooksWidget
 			booksScrollPane.getVerticalScrollBar().setUnitIncrement(SwingHelper.sidePanelScrollSpeed);
 		}
 
-		JPanel buttonsPanel = new JPanel();
-		buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		JButton checkAll = new JButton("Check All");
+                JPanel buttonsPanel = new JPanel();
+                buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+                JButton checkAll = new JButton(Localization.get("#CheckAll"));
 		checkAll.addActionListener(new ActionListener()
 		{
 			@Override
@@ -44,7 +46,7 @@ public class BooksWidget
 			}
 		});
 
-		JButton uncheckAll = new JButton("Uncheck All");
+                JButton uncheckAll = new JButton(Localization.get("#UncheckAll"));
 		uncheckAll.addActionListener(new ActionListener()
 		{
 			@Override

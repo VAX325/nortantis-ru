@@ -102,4 +102,21 @@
   "#NameGenErrorGeneral": "Error: Unable to generate enough names. Try including more books.",
   "#NameGenErrorException": "Error: {error}",
   "#NameGenConstraintError": "Unable to generate enough names with the given constraints. Try using more books or reducing the suffix."
+  ,"#CheckAll": "Check All"
+  ,"#UncheckAll": "Uncheck All"
+  ,"#ZoomLabel": "Zoom"
+  ,"#ZoomTooltip": "Zoom the map in or out (mouse wheel). To view more details at higher zoom levels, adjust the 'Display quality'."
+  ,"#DisplayQualityLabel": "Display Quality"
+  ,"#DisplayQualityTooltip": "Change the quality of the map displayed in the editor. Does not apply when exporting the map to an image. Higher values make the editor slower."
+  ,"#FitToWindow": "Fit to Window"
+  ,"#EnableOverlayImage": "Enable overlay image"
+  ,"#EnableOverlayImageTooltip": "Show or hide the selected overlay image, if any."
+  ,"#Browse": "Browse"
+  ,"#FitToMap": "Fit to Map"
+  ,"#FitToMapTooltip": "Resize and position the overlay image to fit the entire map, including borders."
+  ,"#FitInsideBorder": "Fit Inside Border"
+  ,"#FitInsideBorderTooltip": "Resize and position the overlay image to fit the drawable space on the map (the ocean/land), not including the border."
+  ,"#AlphaLabel": "Alpha:"
+  ,"#DontShowAgain": "Don't show this message again."
+  ,"#OK": "OK"
 }

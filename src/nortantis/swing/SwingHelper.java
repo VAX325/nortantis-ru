@@ -51,6 +51,7 @@ import org.apache.commons.io.FilenameUtils;
 import nortantis.editor.UserPreferences;
 import nortantis.util.Logger;
 import nortantis.util.OSHelper;
+import nortantis.util.Localization;
 
 public class SwingHelper
 {
@@ -244,7 +245,7 @@ public class SwingHelper
 
 			JPanel labelPanel = new JPanel();
 			labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
-			labelPanel.add(new JLabel("Alpha:"));
+                        labelPanel.add(new JLabel(Localization.get("#AlphaLabel")));
 			labelPanel.add(Box.createRigidArea(new Dimension(10, 0))); // Adds 10px horizontal space
 
 			JPanel centerPanel = new JPanel(new BorderLayout());
@@ -455,8 +456,8 @@ public class SwingHelper
 	 */
 	public static boolean showDismissibleMessage(String title, String message, Dimension popupSize, Component parentComponent)
 	{
-		JCheckBox checkBox = new JCheckBox("Don't show this message again.");
-		Object[] options = { "OK" };
+                JCheckBox checkBox = new JCheckBox(Localization.get("#DontShowAgain"));
+                Object[] options = { Localization.get("#OK") };
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		JLabel label = new JLabel("<html>" + message + "</html>");
